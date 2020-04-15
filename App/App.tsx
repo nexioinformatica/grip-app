@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Header,
-  Body,
-  Title,
-  Text,
-  Right,
-  Button,
-  Icon,
-} from "native-base";
+import { Text } from "native-base";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
+import { Splash as SplashScreen } from "./Screens/Splash";
+import { Screens } from "./Screens";
 
 const App = () => {
+  const [isFontReady, setFontReady] = useState(false);
   const [isReady, setReady] = useState(false);
 
   useEffect(() => {
@@ -23,32 +17,16 @@ const App = () => {
         ...Ionicons.font,
       });
     })();
-    setReady(true);
+    setFontReady(true);
+  }, [setFontReady]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setReady(true);
+    }, 0);
   }, [setReady]);
 
-  return isReady ? (
-    <Container>
-      <Header>
-        <Body>
-          <Title>Header</Title>
-        </Body>
-        <Right>
-          <Button transparent>
-            <Icon name="search" />
-          </Button>
-          <Button transparent>
-            <Icon name="heart" />
-          </Button>
-          <Button transparent>
-            <Icon name="more" />
-          </Button>
-        </Right>
-      </Header>
-      <Text>Welcome to Grip App</Text>
-    </Container>
-  ) : (
-    <Text>Not ready!</Text>
-  );
+  return isFontReady && isReady ? <Screens /> : <SplashScreen />;
 };
 
 export { App };
