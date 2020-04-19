@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Text } from "native-base";
 import * as Font from "expo-font";
+import { ThemeProvider } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import { Splash as SplashScreen } from "./Screens/Splash";
 import { Screens } from "./Screens";
+import { theme } from "./util/theme";
 
 const App = () => {
   const [isFontReady, setFontReady] = useState(false);
@@ -16,8 +18,8 @@ const App = () => {
         Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
         ...Ionicons.font,
       });
+      setFontReady(true);
     })();
-    setFontReady(true);
   }, [setFontReady]);
 
   useEffect(() => {
@@ -26,7 +28,11 @@ const App = () => {
     }, 0);
   }, [setReady]);
 
-  return isFontReady && isReady ? <Screens /> : <SplashScreen />;
+  return (
+    <ThemeProvider theme={theme}>
+      {isFontReady && isReady ? <Screens /> : <SplashScreen />}
+    </ThemeProvider>
+  );
 };
 
 export { App };
