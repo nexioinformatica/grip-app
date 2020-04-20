@@ -41,7 +41,10 @@ export function Home(props: HomeProps): React.ReactElement {
     <>
       <Content padder>
         <SimpleCard>
-          <H1 style={styles.title}>Azioni</H1>
+          <H1>Azioni</H1>
+          <Text>Inizia scegliendo una delle azioni elencate qui sotto.</Text>
+        </SimpleCard>
+        <SimpleCard>
           <StartProcessingButton
             full
             style={styles.action}
