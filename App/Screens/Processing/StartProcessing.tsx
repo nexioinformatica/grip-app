@@ -15,7 +15,7 @@ import {
   Button,
 } from "native-base";
 import { RootStackParamList } from "../Screens";
-import { ScanInput } from "../../components";
+import { ScanInput, SimpleCard } from "../../components";
 import { BarCodeEvent } from "expo-barcode-scanner";
 // import { Button } from "react-native-elements";
 
@@ -82,35 +82,26 @@ export function StartProcessing(
 
   return (
     <Content padder>
-      <Card>
-        <CardItem>
-          <Body>
-            <H1>Inizio Lavorazione</H1>
-            <Text>Notifica l'inizio della lavorazione al gestionale.</Text>
-          </Body>
-        </CardItem>
-      </Card>
-      <Card>
-        <CardItem>
-          <Body>
-            <H2>Dati</H2>
-            {data.map((d, i) => (
-              <ScanInput
-                key={d.key}
-                placeholder={d.title}
-                value={d.value}
-                onChangeText={d.onChangeText}
-                onIconPress={() => navigation.navigate("Scan", d.params)}
-                containerStyle={styles.item}
-              />
-            ))}
-            <Button full>
-              <Text>Invia</Text>
-            </Button>
-            {/* </View> */}
-          </Body>
-        </CardItem>
-      </Card>
+      <SimpleCard>
+        <H1>Inizio Lavorazione</H1>
+        <Text>Notifica l'inizio della lavorazione al gestionale.</Text>
+      </SimpleCard>
+      <SimpleCard>
+        <H2>Dati</H2>
+        {data.map((d, i) => (
+          <ScanInput
+            key={d.key}
+            placeholder={d.title}
+            value={d.value}
+            onChangeText={d.onChangeText}
+            onIconPress={() => navigation.navigate("Scan", d.params)}
+            containerStyle={styles.item}
+          />
+        ))}
+        <Button full>
+          <Text>Invia</Text>
+        </Button>
+      </SimpleCard>
     </Content>
   );
 }

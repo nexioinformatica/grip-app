@@ -1,16 +1,9 @@
 import React from "react";
+import { StyleSheet } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Screens";
-import {
-  Container,
-  Content,
-  Card,
-  CardItem,
-  Body,
-  Button,
-  Text,
-} from "native-base";
-import { Col, Row, Grid } from "react-native-easy-grid";
+import { Content, Button, Text, H1 } from "native-base";
+import { SimpleCard } from "../../components";
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 type HomeProps = {
@@ -47,22 +40,29 @@ export function Home(props: HomeProps): React.ReactElement {
   return (
     <>
       <Content padder>
-        <Card>
-          <CardItem>
-            <Body>
-              <StartProcessingButton
-                full
-                onPress={handleStartProcessingButtonPress}
-              />
-              <ScrapToWarehouseButton
-                full
-                style={{ marginTop: 20 }}
-                onPress={() => handleScrapToWarehouseButtonPress()}
-              />
-            </Body>
-          </CardItem>
-        </Card>
+        <SimpleCard>
+          <H1 style={styles.title}>Azioni</H1>
+          <StartProcessingButton
+            full
+            style={styles.action}
+            onPress={handleStartProcessingButtonPress}
+          />
+          <ScrapToWarehouseButton
+            full
+            style={styles.action}
+            onPress={() => handleScrapToWarehouseButtonPress()}
+          />
+        </SimpleCard>
       </Content>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  title: {
+    marginBottom: 10,
+  },
+  action: {
+    marginBottom: 5,
+  },
+});
