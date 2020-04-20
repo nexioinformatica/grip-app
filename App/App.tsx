@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Splash as SplashScreen } from "./Screens/Splash";
 import { Screens } from "./Screens";
 import { theme } from "./util/theme";
+import { ErrorContextProvider, AuthContextProvider } from "./stores";
 
 const App = () => {
   const [isFontReady, setFontReady] = useState(false);
@@ -29,9 +30,13 @@ const App = () => {
   }, [setReady]);
 
   return (
-    <ThemeProvider theme={theme}>
-      {isFontReady && isReady ? <Screens /> : <SplashScreen />}
-    </ThemeProvider>
+    <ErrorContextProvider>
+      <ThemeProvider theme={theme}>
+        <AuthContextProvider>
+          {isFontReady && isReady ? <Screens /> : <SplashScreen />}
+        </AuthContextProvider>
+      </ThemeProvider>
+    </ErrorContextProvider>
   );
 };
 

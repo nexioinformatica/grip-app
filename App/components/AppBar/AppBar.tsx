@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Header,
   Body,
@@ -10,11 +10,13 @@ import {
   Text,
 } from "native-base";
 import { StackHeaderProps } from "@react-navigation/stack";
+import { AuthData, AuthContext } from "../../stores";
 
 type AppBarProps = StackHeaderProps;
 
 const AppBar = (props: AppBarProps) => {
   const { navigation } = props;
+  const { logout } = useContext(AuthContext);
   const canGoBack = navigation.canGoBack();
 
   const BackButton = () => (
@@ -37,7 +39,7 @@ const AppBar = (props: AppBarProps) => {
       </Body>
       <Right>
         <Button transparent>
-          <Icon name="person" />
+          <Icon name="person" onPress={() => logout()} />
         </Button>
         <Button transparent>
           <Icon name="settings" />
