@@ -62,7 +62,7 @@ export function StartProcessing(
       onIconPress: () =>
         navigation.navigate("Scan", {
           onBarcodeScanned: (barcodeEvent: BarCodeEvent) =>
-            setJob(barcodeEvent.data),
+            setMachine(barcodeEvent.data),
         }),
     },
     {
@@ -73,7 +73,7 @@ export function StartProcessing(
       onIconPress: () =>
         navigation.navigate("Scan", {
           onBarcodeScanned: (barcodeEvent: BarCodeEvent) =>
-            setJob(barcodeEvent.data),
+            setSheetMetal(barcodeEvent.data),
         }),
     },
   ];
