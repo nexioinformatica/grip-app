@@ -12,6 +12,6 @@ insert_final_newline = true
 [Makefile]
 indent_style = tab
 
-[*.{ts, tsx}]
+[*.{ts,tsx}]
 indent_style = space
 indent_size = 2
