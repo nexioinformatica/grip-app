@@ -10,13 +10,11 @@ import {
   Text,
 } from "native-base";
 import { StackHeaderProps } from "@react-navigation/stack";
-import { AuthData, AuthContext } from "../../stores";
 
 type AppBarProps = StackHeaderProps;
 
 const AppBar = (props: AppBarProps) => {
   const { navigation } = props;
-  const { logout } = useContext(AuthContext);
   const canGoBack = navigation.canGoBack();
 
   const BackButton = () => (
@@ -31,15 +29,17 @@ const AppBar = (props: AppBarProps) => {
     </Button>
   );
 
+  const title = props.scene.descriptor.options.title ?? props.scene.route.name;
+
   return (
     <Header>
       <Left>{canGoBack ? <BackButton /> : <HomeButton />}</Left>
       <Body>
-        <Title>{props.scene.route.name}</Title>
+        <Title>{title}</Title>
       </Body>
       <Right>
         <Button transparent>
-          <Icon name="person" onPress={() => logout()} />
+          <Icon name="person" onPress={() => navigation.navigate("Profile")} />
         </Button>
         <Button transparent>
           <Icon name="settings" />

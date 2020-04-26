@@ -10,7 +10,7 @@ import { StartProcessing } from "./Processing";
 import { ScrapToWarehouse } from "./Warehouse";
 import { BarCodeEvent } from "expo-barcode-scanner";
 import { Scan } from "./Scan";
-import { Login } from "./Auth";
+import { Login, Profile } from "./Auth";
 import { ErrorContext, AuthContext, AuthData } from "../stores";
 
 export type RootStackParamList = {
@@ -18,6 +18,7 @@ export type RootStackParamList = {
   StartProcessing: undefined;
   ScrapToWarehouse: undefined;
   Scan: { onBarcodeScanned?: (barcode: BarCodeEvent) => void };
+  Profile: undefined;
 };
 
 const RootStack = (() => {
@@ -34,6 +35,7 @@ const RootStack = (() => {
         <Stack.Screen name="StartProcessing" component={StartProcessing} />
         <Stack.Screen name="ScrapToWarehouse" component={ScrapToWarehouse} />
         <Stack.Screen name="Scan" component={Scan} />
+        <Stack.Screen name="Profile" component={Profile} options={{title: "Profilo"}} />
       </Stack.Navigator>
     </>
   );
