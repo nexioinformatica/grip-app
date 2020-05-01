@@ -42,7 +42,15 @@ export const Login = (props: LoginProps): React.ReactElement => {
           validationSchema={validationSchema}
           onSubmit={(values) => login(values.username, values.password)}
         >
-          {({ handleSubmit, errors, isSubmitting, isValid, touched }) => {
+          {({
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            errors,
+            isSubmitting,
+            isValid,
+            touched,
+          }) => {
             // TODO: use reflection to get props automatically (maybe?)
             const isTouched = touched.password || touched.username;
             return (
@@ -50,16 +58,20 @@ export const Login = (props: LoginProps): React.ReactElement => {
                 <View style={styles.item}>
                   <Field
                     name="username"
-                    placeholder="Username"
                     as={Input}
+                    placeholder="Username"
+                    onChangeText={handleChange("username")}
+                    onBlur={handleBlur("username")}
                     errorMessage={errors.username}
                   />
                 </View>
                 <View style={styles.last}>
                   <Field
                     name="password"
-                    placeholder="Password"
                     as={Input}
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                    placeholder="Password"
                     secureTextEntry={true}
                     errorMessage={errors.password}
                   />

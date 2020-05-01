@@ -7,6 +7,7 @@ import { Splash as SplashScreen } from "./Screens/Splash";
 import { Screens } from "./Screens";
 import { theme } from "./util/theme";
 import { ErrorContextProvider, AuthContextProvider } from "./stores";
+import { ApiContextProvider } from "./stores/api";
 
 const App = () => {
   const [isFontReady, setFontReady] = useState(false);
@@ -32,9 +33,11 @@ const App = () => {
   return (
     <ErrorContextProvider>
       <ThemeProvider theme={theme}>
-        <AuthContextProvider>
-          {isFontReady && isReady ? <Screens /> : <SplashScreen />}
-        </AuthContextProvider>
+        <ApiContextProvider>
+          <AuthContextProvider>
+            {isFontReady && isReady ? <Screens /> : <SplashScreen />}
+          </AuthContextProvider>
+        </ApiContextProvider>
       </ThemeProvider>
     </ErrorContextProvider>
   );

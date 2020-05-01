@@ -7,6 +7,7 @@ import * as TE from "fp-ts/lib/TaskEither";
 import { noop } from "../util/noop";
 import { AsyncStorage } from "react-native";
 import { ErrorContext } from "./error";
+import { ApiContext } from "./api";
 // import { ErrorContext } from "./error";
 
 /**
@@ -40,29 +41,6 @@ export interface Context {
   login: (username: string, password: string) => void;
 }
 
-/**
- * Authenticate the user with associated credential.
- * @param username The username
- * @param password The password
- */
-// TODO: export in api store, and change name
-const loginApi = (
-  username: string,
-  password: string
-): TE.TaskEither<Error, AuthToken> => {
-  // TODO: login function
-
-  if (username === "test" && password !== "secret")
-    return TE.left(new Error("Credentials are not valid."));
-
-  return TE.right({
-    access_token: "AAABBBCCC1234",
-    token_type: "bearer",
-    expires_in: "123",
-    refresh_token: "DDDRRRFFF4565",
-  });
-};
-
 const buildUser = (username: string, authToken: AuthToken): AuthData => ({
   authToken: authToken,
   timestamp: new Date().getMilliseconds(),
@@ -82,10 +60,13 @@ export function AuthContextProvider({
 }): React.ReactElement {
   const [auth, setAuth] = useState<AuthData | undefined>(undefined);
   const { setError } = useContext(ErrorContext);
+  const { api } = useContext(ApiContext);
 
-  const loginPipe = (username: string, password: string) => {
+  if (!api) throw new Error("ApiContext needs to be initialized.");
+
+  const login = (username: string, password: string) => {
     pipe(
-      loginApi(username, password),
+      api.token(username, password),
       TE.fold(
         (err) => {
           setError(err);
@@ -99,12 +80,11 @@ export function AuthContextProvider({
     )();
   };
 
-  useEffect(() => {
-    loginPipe("test", "secret"); // TODO: change hardcoded login
-  }, []);
+  // useEffect(() => {
+  //   loginPipe("test", "secret"); // TODO: change hardcoded login
+  // }, []);
 
   const logout = () => setAuth(undefined);
-  const login = loginPipe;
 
   return (
     <AuthContext.Provider value={{ auth, logout, login }}>
