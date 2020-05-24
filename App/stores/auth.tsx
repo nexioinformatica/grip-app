@@ -1,56 +1,35 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, { createContext, useState, useContext } from "react";
+
+import moment from "moment";
 
 import { pipe } from "fp-ts/lib/pipeable";
-import * as T from "fp-ts/lib/Task";
-import * as TE from "fp-ts/lib/TaskEither";
+import * as E from "fp-ts/lib/Either";
 
 import { noop } from "../util/noop";
-import { AsyncStorage } from "react-native";
 import { ErrorContext } from "./error";
-import { ApiContext } from "./api";
-// import { ErrorContext } from "./error";
+import { Login, Token, User } from "../types";
+import { token as tokenApi } from "../data/auth";
 
-/**
- * The JWT token interface.
- */
-export interface AuthToken {
-  access_token: string;
-  token_type: string;
-  expires_in: string;
-  refresh_token: string;
-}
-
-/**
- * The authentication data, i.e.,
- *  - the authentication token,
- *  - the timestamp of the last successful authentication,
- *  - the username of the user logged in.
- */
-export interface AuthData {
-  authToken: AuthToken;
-  timestamp: number;
-  username: string;
-}
-
-/**
- * The authentication context.
- */
 export interface Context {
-  auth?: AuthData;
+  user?: User;
   logout: () => void;
-  login: (username: string, password: string) => void;
+  login: (data: E.Either<Login, Token>) => void;
+  // auth: () => void;
 }
 
-const buildUser = (username: string, authToken: AuthToken): AuthData => ({
-  authToken: authToken,
-  timestamp: new Date().getMilliseconds(),
-  username: username,
-});
+const buildUser = (username: string) => (token: Token): User => {
+  return {
+    username: username,
+    timestamp: moment(),
+    token: token,
+  };
+};
 
 export const AuthContext = createContext<Context>({
-  auth: undefined,
+  user: undefined,
   logout: noop,
   login: noop,
+  // auth: noop,
 });
 
 export function AuthContextProvider({
@@ -58,36 +37,23 @@ export function AuthContextProvider({
 }: {
   children: JSX.Element;
 }): React.ReactElement {
-  const [auth, setAuth] = useState<AuthData | undefined>(undefined);
+  const [user, setUser] = useState<undefined | User>(undefined);
+
   const { setError } = useContext(ErrorContext);
-  const { api } = useContext(ApiContext);
 
-  if (!api) throw new Error("ApiContext needs to be initialized.");
-
-  const login = (username: string, password: string) => {
+  const login = (data: E.Either<Login, Token>) =>
     pipe(
-      api.token(username, password),
-      TE.fold(
-        (err) => {
-          setError(err);
-          return T.of(undefined);
-        },
-        (authToken) => {
-          setAuth(buildUser(username, authToken));
-          return T.of(undefined);
-        }
+      data,
+      E.fold(
+        (data) =>
+          pipe(tokenApi(E.left(data)), buildUser(data.username), setUser),
+        (data) => 1
       )
-    )();
-  };
-
-  // useEffect(() => {
-  //   loginPipe("test", "secret"); // TODO: change hardcoded login
-  // }, []);
-
-  const logout = () => setAuth(undefined);
+    );
+  const logout = () => setUser(undefined);
 
   return (
-    <AuthContext.Provider value={{ auth, logout, login }}>
+    <AuthContext.Provider value={{ user: user, logout: logout, login: login }}>
       {children}
     </AuthContext.Provider>
   );

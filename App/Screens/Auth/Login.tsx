@@ -1,28 +1,11 @@
 import React, { useState, useContext } from "react";
-import {
-  Container,
-  Header,
-  Button,
-  Text,
-  Body,
-  Form,
-  Item as FormItem,
-  Label,
-  Title,
-  Content,
-  Item,
-} from "native-base";
+import { Container, Button, Text, Content } from "native-base";
 import { Input } from "react-native-elements";
-import Constants from "expo-constants";
-import {
-  StyleSheet,
-  View,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Formik, Field } from "formik";
 import * as Yup from "yup";
 import { AuthContext } from "../../stores";
+import * as E from "fp-ts/lib/Either";
 
 interface LoginProps {}
 
@@ -40,7 +23,11 @@ export const Login = (props: LoginProps): React.ReactElement => {
         <Formik
           initialValues={{ username: "", password: "" }}
           validationSchema={validationSchema}
-          onSubmit={(values) => login(values.username, values.password)}
+          onSubmit={(values) =>
+            login(
+              E.left({ username: values.username, password: values.password })
+            )
+          }
         >
           {({
             handleSubmit,

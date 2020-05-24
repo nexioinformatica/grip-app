@@ -24,6 +24,7 @@
     "formik": "^2.1.4",
     "fp-ts": "^2.5.3",
     "hoist-non-react-statics": "^3.3.2",
+    "moment": "^2.26.0",
     "native-base": "2.13.8",
     "p-any": "^3.0.0",
     "react": "~16.9.0",

@@ -31,15 +31,15 @@ const App = () => {
   }, [setReady]);
 
   return (
-    <ErrorContextProvider>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <ErrorContextProvider>
         <ApiContextProvider>
           <AuthContextProvider>
             {isFontReady && isReady ? <Screens /> : <SplashScreen />}
           </AuthContextProvider>
         </ApiContextProvider>
-      </ThemeProvider>
-    </ErrorContextProvider>
+      </ErrorContextProvider>
+    </ThemeProvider>
   );
 };
 
