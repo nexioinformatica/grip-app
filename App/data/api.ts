@@ -1,16 +1,6 @@
-import { Token } from "../types";
-import { Operators } from "../types/Api";
-import { req } from "../util/api";
-import { AxiosPromise, AxiosInstance, AxiosResponse } from "axios";
-import { pipe } from "fp-ts/lib/pipeable";
-import { flow } from "fp-ts/lib/function";
-import { failure } from "io-ts/lib/PathReporter";
-import * as T from "fp-ts/lib/Task";
+import { Operators, Reasons, NewMovement, Movement } from "../types/Api";
+import { AxiosInstance, AxiosResponse } from "axios";
 import * as TE from "fp-ts/lib/TaskEither";
-import * as E from "fp-ts/lib/Either";
-import * as O from "fp-ts/lib/Option";
-import * as t from "io-ts";
-import { noop } from "../util/noop";
 
 export const getOperators = (i: AxiosInstance) => (
   isApiEnabled: boolean,
@@ -28,12 +18,21 @@ export const getOperators = (i: AxiosInstance) => (
   );
 };
 
-// export const operators = (token: Token) => (
-//   isApiEnabled: boolean = true,
-//   isDepartmentEnabled: boolean = true
-// ): TE.TaskEither<Error, Operators> => {
-//   return pipe(
-//     pipe(token, req, getOperators)(isApiEnabled, isDepartmentEnabled),
-//     TE.map((x) => x.data)
-//   );
-// };
+export const getReasons = (i: AxiosInstance) => (): TE.TaskEither<
+  Error,
+  AxiosResponse<Reasons>
+> => {
+  return TE.tryCatch<Error, AxiosResponse>(
+    () => i.get<Reasons>("api/v1/causali-magazzino"),
+    (reason) => new Error(String(reason))
+  );
+};
+
+export const postMovement = (i: AxiosInstance) => (
+  movement: NewMovement
+): TE.TaskEither<Error, AxiosResponse<Movement>> => {
+  return TE.tryCatch<Error, AxiosResponse>(
+    () => i.get<Reasons>("api/v1/movimenti-magazzino", { data: movement }),
+    (reason) => new Error(String(reason))
+  );
+};

@@ -10,10 +10,11 @@ import * as O from "fp-ts/lib/Option";
 
 import { ErrorContext } from "./error";
 import { AuthContext } from "./auth";
-import { Operators } from "../types/Api";
+import { Operators, Reasons } from "../types/Api";
 import { noop } from "../util/noop";
-import { getOperators } from "../data/api";
+import { getOperators, getReasons } from "../data/api";
 import { req, neededLogin, errorOccurred } from "../util/api";
+import { Token } from "../types";
 
 interface Context {
   api: {
@@ -21,6 +22,7 @@ interface Context {
       isApiEnabled: boolean,
       isDepartmentEnabled: boolean
     ) => T.Task<Operators>;
+    movementReasons: () => T.Task<Reasons>;
   };
 }
 
@@ -28,6 +30,7 @@ export const ApiContext = createContext<Context>({
   api: {
     operators: (isApiEnabled: boolean, isDepartmentEnabled: boolean) =>
       T.of([]),
+    movementReasons: () => T.of([]),
   },
 });
 
@@ -55,8 +58,28 @@ export function ApiContextProvider({
       )
     );
 
+  const movementReasons = () =>
+    pipe(
+      O.fromNullable(user?.token),
+      O.fold(
+        () => neededLogin(setError, []),
+        (token) =>
+          pipe(
+            pipe(token, req, getReasons)(),
+            TE.fold(
+              (err) => errorOccurred(setError, err, []),
+              (res) => T.of(res.data)
+            )
+          )
+      )
+    );
+
   return (
-    <ApiContext.Provider value={{ api: { operators: operators } }}>
+    <ApiContext.Provider
+      value={{
+        api: { operators: operators, movementReasons: movementReasons },
+      }}
+    >
       {children}
     </ApiContext.Provider>
   );

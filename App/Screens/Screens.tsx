@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { Text } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { AppBar } from "../components";
 import { Home } from "./Home";
-import { Container } from "native-base";
+import { Container, Button } from "native-base";
 import { StartProcessing } from "./Processing";
 import { ScrapToWarehouse } from "./Warehouse";
 import { BarCodeEvent } from "expo-barcode-scanner";
@@ -49,7 +49,15 @@ const RootStack = (() => {
 const LoginStack = (() => <Login />)();
 
 const ErrorStack = (error: Error) => {
-  return <Text>Si è verificato un errore! (Messaggio: {error.message})</Text>;
+  console.error(error);
+  return (
+    <>
+      <Text>Si è verificato un errore!</Text>
+      <Text>Nome: {error.name}</Text>
+      <Text>Messaggio: {error.message}</Text>
+      <Text>{error.stack}</Text>
+    </>
+  );
 };
 
 const renderScreens = (error?: Error, user?: User) => {

@@ -21,7 +21,7 @@ export const Login = (props: LoginProps): React.ReactElement => {
     <Container>
       <Content padder>
         <Formik
-          initialValues={{ username: "", password: "" }}
+          initialValues={{ username: "test", password: "test" }} // TODO: remove defaults
           validationSchema={validationSchema}
           onSubmit={(values) =>
             login(
@@ -69,7 +69,7 @@ export const Login = (props: LoginProps): React.ReactElement => {
                     full
                     primary
                     onPress={handleSubmit}
-                    disabled={!isTouched || isSubmitting || !isValid}
+                    disabled={isSubmitting || !isValid}
                   >
                     <Text>Login</Text>
                   </Button>
