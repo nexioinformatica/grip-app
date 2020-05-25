@@ -52,7 +52,7 @@ const ErrorStack = (error: Error) => {
   return <Text>Si è verificato un errore! (Messaggio: {error.message})</Text>;
 };
 
-const renderScreens = (user?: User, error?: Error) => {
+const renderScreens = (error?: Error, user?: User) => {
   if (error) return ErrorStack(error);
 
   if (!user) return LoginStack;
@@ -66,7 +66,7 @@ const Screens = (): React.ReactElement => {
 
   return (
     <Container style={{ backgroundColor: "red", flex: 1 }}>
-      <NavigationContainer>{renderScreens(user, error)}</NavigationContainer>
+      <NavigationContainer>{renderScreens(error, user)}</NavigationContainer>
     </Container>
   );
 };

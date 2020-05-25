@@ -1,128 +1,63 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useContext } from "react";
 
-import { noop } from "../util/noop";
-import { Config } from "react-native-config";
-import { API_KEY, BASE_URL } from "../constants";
-import { promiseToTE } from "../util/fp";
-import promise, { AggregateError } from "p-any";
-import { TaskEither } from "fp-ts/lib/TaskEither";
+import moment from "moment";
+
+import { pipe } from "fp-ts/lib/pipeable";
+import * as E from "fp-ts/lib/Either";
 import * as TE from "fp-ts/lib/TaskEither";
-import { AuthToken } from "./auth";
-import { buildPostReq } from "../util/req";
+import * as T from "fp-ts/lib/Task";
+import * as O from "fp-ts/lib/Option";
 
-interface Api {
-  token: (
-    username: string,
-    password: string
-  ) => TE.TaskEither<Error, AuthToken>;
-  refreshToken: (token: AuthToken) => TE.TaskEither<Error, AuthToken>;
-}
+import { ErrorContext } from "./error";
+import { AuthContext } from "./auth";
+import { Operators } from "../types/Api";
+import { noop } from "../util/noop";
+import { getOperators } from "../data/api";
+import { req, neededLogin, errorOccurred } from "../util/api";
 
 interface Context {
-  api?: Api;
+  api: {
+    operators: (
+      isApiEnabled: boolean,
+      isDepartmentEnabled: boolean
+    ) => T.Task<Operators>;
+  };
 }
 
 export const ApiContext = createContext<Context>({
-  api: undefined,
-});
-
-const apiConfig: RequestInit = {
-  headers: {
-    "X-ApiKey": API_KEY,
+  api: {
+    operators: (isApiEnabled: boolean, isDepartmentEnabled: boolean) =>
+      T.of([]),
   },
-};
-
-// function toJson<T>(res: Response): T {
-//   const obj:T = JSON.parse(res.)
-//   return obj;
-// }
-function toJson(res: Response) {
-  return res.json();
-}
-
-const logAny = (obj: any) => {
-  console.log(obj);
-  return obj;
-};
+});
 
 export function ApiContextProvider({
   children,
 }: {
   children: JSX.Element;
 }): React.ReactElement {
-  const [authToken, setAuthToken] = useState<AuthToken | undefined>(undefined);
+  const { setError } = useContext(ErrorContext);
+  const { user } = useContext(AuthContext);
 
-  const token = (
-    username: string,
-    password: string
-  ): TE.TaskEither<Error, AuthToken> => {
-    const tokenPromise = fetch(
-      // make the request and get the promise
-      BASE_URL + "/token",
-      buildPostReq({
-        body: new URLSearchParams({
-          client_id: API_KEY,
-          username: username,
-          password: password,
-          grant_type: "password",
-        }),
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-          ...apiConfig.headers,
-        },
-      })
+  const operators = (isApiEnabled: boolean, isDepartmentEnabled: boolean) =>
+    pipe(
+      O.fromNullable(user?.token),
+      O.fold(
+        () => neededLogin(setError, []),
+        (token) =>
+          pipe(
+            pipe(token, req, getOperators)(isApiEnabled, isDepartmentEnabled),
+            TE.fold(
+              (err) => errorOccurred(setError, err, []),
+              (res) => T.of(res.data)
+            )
+          )
+      )
     );
-    return promiseToTE(
-      // get the result
-      () =>
-        tokenPromise
-          .then(toJson)
-          .then((token: AuthToken) => {
-            setAuthToken(token);
-            return token;
-          })
-          .catch((errors: AggregateError) => {
-            throw new Error(errors.message);
-          }),
-      "ApiContext"
-    );
-  };
 
-  const refreshToken = (token: AuthToken) => {
-    const refreshTokenPromise = fetch(
-      BASE_URL + "/token",
-      buildPostReq({
-        body: new URLSearchParams({
-          refresh_token: token.toString(),
-          grant_type: "refresh_token",
-        }),
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-          Authorization: "Bearer " + token.toString(),
-          ...apiConfig.headers,
-        },
-      })
-    );
-    return promiseToTE(
-      // get the result
-      () =>
-        refreshTokenPromise
-          .then(logAny)
-          .then(toJson)
-          .then((token: AuthToken) => {
-            setAuthToken(token);
-            return token;
-          })
-          .catch((errors: AggregateError) => {
-            throw new Error(errors.message);
-          }),
-      "ApiContext"
-    );
-  };
-
-  const api = {
-    token: token,
-    refreshToken: refreshToken,
-  };
-  return <ApiContext.Provider value={{ api }}>{children}</ApiContext.Provider>;
+  return (
+    <ApiContext.Provider value={{ api: { operators: operators } }}>
+      {children}
+    </ApiContext.Provider>
+  );
 }

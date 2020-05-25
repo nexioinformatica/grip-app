@@ -12,7 +12,7 @@ import * as O from "fp-ts/lib/Option";
 import * as t from "io-ts";
 import { noop } from "../util/noop";
 
-const getOperators = (i: AxiosInstance) => (
+export const getOperators = (i: AxiosInstance) => (
   isApiEnabled: boolean,
   isDepartmentEnabled: boolean
 ): TE.TaskEither<Error, AxiosResponse<Operators>> => {
@@ -28,12 +28,12 @@ const getOperators = (i: AxiosInstance) => (
   );
 };
 
-export const operators = (token: Token) => (
-  isApiEnabled: boolean = true,
-  isDepartmentEnabled: boolean = true
-): TE.TaskEither<Error, Operators> => {
-  return pipe(
-    pipe(token, req, getOperators)(isApiEnabled, isDepartmentEnabled),
-    TE.map((x) => x.data)
-  );
-};
+// export const operators = (token: Token) => (
+//   isApiEnabled: boolean = true,
+//   isDepartmentEnabled: boolean = true
+// ): TE.TaskEither<Error, Operators> => {
+//   return pipe(
+//     pipe(token, req, getOperators)(isApiEnabled, isDepartmentEnabled),
+//     TE.map((x) => x.data)
+//   );
+// };

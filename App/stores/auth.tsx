@@ -10,7 +10,7 @@ import { ErrorContext } from "./error";
 import { Login, Token, User } from "../types";
 import { token as tokenApi } from "../data/auth";
 
-export interface Context {
+interface Context {
   user?: User;
   logout: () => void;
   login: (data: E.Either<Login, Token>) => void;
