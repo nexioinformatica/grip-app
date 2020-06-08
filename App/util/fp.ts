@@ -1,5 +1,8 @@
 import { Lazy } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
+import * as O from "fp-ts/lib/Option";
+import * as A from "fp-ts/lib/Array";
+import { pipe } from "fp-ts/lib/pipeable";
 
 /**
  * Convert a Promise<A> into a TaskEither<Error, A>
@@ -28,3 +31,23 @@ export function promiseToTE<A>(
     return error;
   });
 }
+
+export const foldDefaultMap = <T, U>(z: U, f: (x: T) => U) => (
+  o: O.Option<T>
+): U =>
+  pipe(
+    o,
+    O.fold(
+      () => z,
+      (x) => f(x)
+    )
+  );
+
+export const foldDefault = <T>(z: T) => (o: O.Option<T>): T =>
+  pipe(
+    o,
+    O.fold(
+      () => z,
+      (x) => x
+    )
+  );

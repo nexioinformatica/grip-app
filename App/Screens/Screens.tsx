@@ -48,11 +48,17 @@ const RootStack = (() => {
 
 const LoginStack = (() => <Login />)();
 
-const ErrorStack = (error: Error) => {
+const ErrorStack = (
+  error: Error,
+  setError: (err: Error | undefined) => void
+) => {
   console.error(error);
   return (
     <>
       <Text>Si è verificato un errore!</Text>
+      <Button onPress={() => setError(undefined)}>
+        <Text>Ok</Text>
+      </Button>
       <Text>Nome: {error.name}</Text>
       <Text>Messaggio: {error.message}</Text>
       <Text>{error.stack}</Text>
@@ -60,8 +66,11 @@ const ErrorStack = (error: Error) => {
   );
 };
 
-const renderScreens = (error?: Error, user?: User) => {
-  if (error) return ErrorStack(error);
+const renderScreens = () => {
+  const { error, setError } = useContext(ErrorContext);
+  const { user } = useContext(AuthContext);
+
+  if (error) return ErrorStack(error, setError);
 
   if (!user) return LoginStack;
 
@@ -69,12 +78,9 @@ const renderScreens = (error?: Error, user?: User) => {
 };
 
 const Screens = (): React.ReactElement => {
-  const { error } = useContext(ErrorContext);
-  const { user } = useContext(AuthContext);
-
   return (
     <Container style={{ backgroundColor: "red", flex: 1 }}>
-      <NavigationContainer>{renderScreens(error, user)}</NavigationContainer>
+      <NavigationContainer>{renderScreens()}</NavigationContainer>
     </Container>
   );
 };

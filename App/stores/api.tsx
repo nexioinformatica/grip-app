@@ -10,11 +10,22 @@ import * as O from "fp-ts/lib/Option";
 
 import { ErrorContext } from "./error";
 import { AuthContext } from "./auth";
-import { Operators, Reasons } from "../types/Api";
+import {
+  Operators,
+  // Reasons,
+  NewMovement,
+  Movement,
+  ReasonTypes,
+  ReasonType,
+} from "../types/Api";
 import { noop } from "../util/noop";
-import { getOperators, getReasons } from "../data/api";
+import {
+  getOperators,
+  // getReasons,
+  postMovement,
+} from "../data/api";
 import { req, neededLogin, errorOccurred } from "../util/api";
-import { Token } from "../types";
+import { Entry, Data } from "../types/Util";
 
 interface Context {
   api: {
@@ -22,7 +33,9 @@ interface Context {
       isApiEnabled: boolean,
       isDepartmentEnabled: boolean
     ) => T.Task<Operators>;
-    movementReasons: () => T.Task<Reasons>;
+    // movementReasons: () => T.Task<Reasons>;
+    newMovement: (movement: NewMovement) => T.Task<O.Option<Movement>>;
+    reasonTypes: () => T.Task<O.Option<Data<ReasonType, string>>>;
   };
 }
 
@@ -30,7 +43,9 @@ export const ApiContext = createContext<Context>({
   api: {
     operators: (isApiEnabled: boolean, isDepartmentEnabled: boolean) =>
       T.of([]),
-    movementReasons: () => T.of([]),
+    // movementReasons: () => T.of([]),
+    newMovement: (movement: NewMovement) => T.of(O.none),
+    reasonTypes: () => T.of(O.none),
   },
 });
 
@@ -58,17 +73,48 @@ export function ApiContextProvider({
       )
     );
 
-  const movementReasons = () =>
+  // const movementReasons = () =>
+  //   pipe(
+  //     O.fromNullable(user?.token),
+  //     O.fold(
+  //       () => neededLogin(setError, []),
+  //       (token) =>
+  //         pipe(
+  //           pipe(token, req, getReasons)(),
+  //           TE.fold(
+  //             (err) => errorOccurred(setError, err, []),
+  //             (res) => T.of(res.data)
+  //           )
+  //         )
+  //     )
+  //   );
+
+  // TODO: change the any type
+  const reasonTypes = (): T.Task<O.Option<Data<ReasonType, string>>> =>
+    T.of(
+      O.some({
+        data: [
+          { key: ReasonType.Specified, value: "Specificato" },
+          { key: ReasonType.LoadProd, value: "Carico per produzione" },
+          { key: ReasonType.UnloadProd, value: "Scarico da produzione" },
+          { key: ReasonType.LoadRemnant, value: "Carico avanzo" },
+          { key: ReasonType.LoadScrap, value: "Carico scarto" },
+        ],
+        default: O.some(ReasonType.Specified),
+      })
+    );
+
+  const newMovement = (movement: NewMovement): T.Task<O.Option<Movement>> =>
     pipe(
       O.fromNullable(user?.token),
       O.fold(
-        () => neededLogin(setError, []),
+        () => neededLogin(setError, O.none),
         (token) =>
           pipe(
-            pipe(token, req, getReasons)(),
+            pipe(token, req, postMovement)(movement),
             TE.fold(
-              (err) => errorOccurred(setError, err, []),
-              (res) => T.of(res.data)
+              (err) => errorOccurred(setError, err, O.none),
+              (res) => T.of(O.some(res.data))
             )
           )
       )
@@ -77,7 +123,12 @@ export function ApiContextProvider({
   return (
     <ApiContext.Provider
       value={{
-        api: { operators: operators, movementReasons: movementReasons },
+        api: {
+          operators: operators,
+          // movementReasons: movementReasons,
+          newMovement: newMovement,
+          reasonTypes: reasonTypes,
+        },
       }}
     >
       {children}

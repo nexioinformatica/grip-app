@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Picker } from "native-base";
+import { Entry, Entries } from "../../types/Util";
+import * as A from "fp-ts/lib/Array";
+import { pipe } from "fp-ts/lib/pipeable";
 
 export type Key = string | number | undefined;
 
@@ -14,6 +17,19 @@ interface DropdownProps<T> {
   def?: Key;
   onValueChange?: (x: T) => void;
 }
+
+export const toItems = <T,>(data: Entry<T, string>[]): Item<T>[] => {
+  return pipe(
+    data,
+    A.mapWithIndex((i, x) => {
+      return {
+        label: x.value,
+        value: x.key,
+        key: i,
+      };
+    })
+  );
+};
 
 export const Dropdown = ({
   items,

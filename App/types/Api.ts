@@ -17,13 +17,13 @@ export interface Operator {
 
 export type Operators = Operator[];
 
-export interface Reason {
-  IdCausale: number;
-  Codice: string;
-  Descrizione: string;
-}
+// export interface Reason {
+//   IdCausale: number;
+//   Codice: string;
+//   Descrizione: string;
+// }
 
-export type Reasons = Reason[];
+// export type Reasons = Reason[];
 
 export interface Movement {
   IdMovimento: number;
@@ -36,7 +36,7 @@ export enum ReasonType {
   UnloadProd = 1,
   LoadProd = 2,
   LoadRemnant = 3,
-  LoadScrap = 3,
+  LoadScrap = 4,
   // 0 = Specificata (valorizzare il campo IdCausale con la causale desiderata),
   // 1 = Scarico per Produzione,
   // 2 = Carico da Produzione,
@@ -44,8 +44,20 @@ export enum ReasonType {
   // 4 = Carico Scarto
 }
 
+export type ReasonTypes = SelectList<
+  SelectListItem<ReasonType, string>,
+  ReasonType
+>;
+
+export type Freshman = string; // it: Matricola
+
+export type Quantity = number;
+
 export interface NewMovement {
   TipoCausale: ReasonType;
-  IdCausale: number;
-  // TODO: to complete
+  Matricole: Freshman[];
+  Quantita: Quantity[];
 }
+
+export type SelectList<T, K> = { data: T[]; default: K };
+export type SelectListItem<K, V> = { key: K; value: V };
