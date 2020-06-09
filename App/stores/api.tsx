@@ -34,18 +34,17 @@ interface Context {
       isDepartmentEnabled: boolean
     ) => T.Task<Operators>;
     // movementReasons: () => T.Task<Reasons>;
-    newMovement: (movement: NewMovement) => T.Task<O.Option<Movement>>;
+    newMovement: (movement: NewMovement) => T.Task<Movement>;
     reasonTypes: () => T.Task<Entries<ReasonType, string>>;
   };
 }
 
 export const ApiContext = createContext<Context>({
   api: {
-    operators: (isApiEnabled: boolean, isDepartmentEnabled: boolean) =>
-      T.of([]),
+    operators: (isApiEnabled: boolean, isDepartmentEnabled: boolean) => T.never,
     // movementReasons: () => T.of([]),
-    newMovement: (movement: NewMovement) => T.of(O.none),
-    reasonTypes: () => T.of([]),
+    newMovement: (movement: NewMovement) => T.never,
+    reasonTypes: () => T.never,
   },
 });
 
@@ -61,12 +60,12 @@ export function ApiContextProvider({
     pipe(
       O.fromNullable(user?.token),
       O.fold(
-        () => neededLogin(setError, []),
+        () => neededLogin<Operators>(setError),
         (token) =>
           pipe(
             pipe(token, req, getOperators)(isApiEnabled, isDepartmentEnabled),
             TE.fold(
-              (err) => errorOccurred(setError, err, []),
+              (err) => errorOccurred<Operators>(setError, err),
               (res) => T.of(res.data)
             )
           )
@@ -99,17 +98,17 @@ export function ApiContextProvider({
       { key: ReasonType.LoadScrap, value: "Carico scarto" },
     ]);
 
-  const newMovement = (movement: NewMovement): T.Task<O.Option<Movement>> =>
+  const newMovement = (movement: NewMovement): T.Task<Movement> =>
     pipe(
       O.fromNullable(user?.token),
       O.fold(
-        () => neededLogin(setError, O.none),
+        () => neededLogin(setError),
         (token) =>
           pipe(
             pipe(token, req, postMovement)(movement),
             TE.fold(
-              (err) => errorOccurred(setError, err, O.none),
-              (res) => T.of(O.some(res.data))
+              (err) => errorOccurred(setError, err),
+              (res) => T.of(res.data)
             )
           )
       )

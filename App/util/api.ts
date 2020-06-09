@@ -13,19 +13,15 @@ export const req = (token: Token): AxiosInstance => {
   });
 };
 
-export const neededLogin = <Default>(
-  setError: (err: Error) => void,
-  def: Default
-): T.Task<Default> => {
+export const neededLogin = <T>(setError: (err: Error) => void): T.Task<T> => {
   setError(new Error("You should be signed in"));
-  return T.of(def);
+  return T.never;
 };
 
-export const errorOccurred = <Default>(
+export const errorOccurred = <T>(
   setError: (err: Error) => void,
-  err: Error,
-  def: Default
-): T.Task<Default> => {
+  err: Error
+): T.Task<T> => {
   setError(err);
-  return T.of(def);
+  return T.never;
 };

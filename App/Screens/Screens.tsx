@@ -58,7 +58,8 @@ const ErrorStack = (
   error: Error,
   setError: (err: Error | undefined) => void
 ) => {
-  console.error(error);
+  console.error("ErrorStack", error);
+
   return (
     <>
       <Text>Si è verificato un errore!</Text>

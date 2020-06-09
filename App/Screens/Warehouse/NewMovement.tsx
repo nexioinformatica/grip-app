@@ -38,14 +38,13 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
   const getReasonTypes = () =>
     api
       .reasonTypes()()
-      .then((data) => setReasonTypes(data))
-      .catch((err) => console.log(err));
+      .then((data) => setReasonTypes(data));
 
   const postMovement = (movement: NewMovement) =>
     api
       .newMovement(movement)()
-      .then((data) => console.log(foldDefault({})(data)))
-      .catch((err) => console.log("REERRORE", err));
+      .then((data) => console.log(data))
+      .catch((err) => console.log("REERRORE"));
 
   // Handlers
   const handleScan = (setter: (barcodeValue: string) => void): void => {
