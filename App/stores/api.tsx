@@ -25,7 +25,7 @@ import {
   postMovement,
 } from "../data/api";
 import { req, neededLogin, errorOccurred } from "../util/api";
-import { Entry, Data } from "../types/Util";
+import { Entry, Data, Entries } from "../types/Util";
 
 interface Context {
   api: {
@@ -35,7 +35,7 @@ interface Context {
     ) => T.Task<Operators>;
     // movementReasons: () => T.Task<Reasons>;
     newMovement: (movement: NewMovement) => T.Task<O.Option<Movement>>;
-    reasonTypes: () => T.Task<O.Option<Data<ReasonType, string>>>;
+    reasonTypes: () => T.Task<Entries<ReasonType, string>>;
   };
 }
 
@@ -45,7 +45,7 @@ export const ApiContext = createContext<Context>({
       T.of([]),
     // movementReasons: () => T.of([]),
     newMovement: (movement: NewMovement) => T.of(O.none),
-    reasonTypes: () => T.of(O.none),
+    reasonTypes: () => T.of([]),
   },
 });
 
@@ -90,19 +90,14 @@ export function ApiContextProvider({
   //   );
 
   // TODO: change the any type
-  const reasonTypes = (): T.Task<O.Option<Data<ReasonType, string>>> =>
-    T.of(
-      O.some({
-        data: [
-          { key: ReasonType.Specified, value: "Specificato" },
-          { key: ReasonType.LoadProd, value: "Carico per produzione" },
-          { key: ReasonType.UnloadProd, value: "Scarico da produzione" },
-          { key: ReasonType.LoadRemnant, value: "Carico avanzo" },
-          { key: ReasonType.LoadScrap, value: "Carico scarto" },
-        ],
-        default: O.some(ReasonType.Specified),
-      })
-    );
+  const reasonTypes = (): T.Task<Entries<ReasonType, string>> =>
+    T.of([
+      { key: ReasonType.Specified, value: "Specificato" },
+      { key: ReasonType.LoadProd, value: "Carico per produzione" },
+      { key: ReasonType.UnloadProd, value: "Scarico da produzione" },
+      { key: ReasonType.LoadRemnant, value: "Carico avanzo" },
+      { key: ReasonType.LoadScrap, value: "Carico scarto" },
+    ]);
 
   const newMovement = (movement: NewMovement): T.Task<O.Option<Movement>> =>
     pipe(

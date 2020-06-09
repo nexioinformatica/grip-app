@@ -2,62 +2,39 @@ import React, { useState, useContext, Key, useEffect } from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Screens";
 import { Content, Button, Text, H2, H3 } from "native-base";
-import {
-  SimpleCard,
-  ScanInputListData,
-  ScanInputList,
-  Dropdown,
-  toItems,
-  Item,
-} from "../../components";
-import {
-  BarcodeEvent,
-  ReasonTypes,
-  NewMovement,
-  ReasonType,
-  SelectListItem,
-} from "../../types";
+import { SimpleCard, Dropdown, toItems, ScanInput } from "../../components";
+import { BarcodeEvent, NewMovement, ReasonType } from "../../types";
 import { ApiContext } from "../../stores";
 import { pipe } from "fp-ts/lib/pipeable";
-import * as A from "fp-ts/lib/Array";
 import * as O from "fp-ts/lib/Option";
-import { Entry, Data } from "../../types/Util";
+import { Data, Entries } from "../../types/Util";
 import { foldDefaultMap, foldDefault } from "../../util/fp";
-import { identity } from "fp-ts/lib/function";
 
-type ScrapToWarehouseNavigationProp = StackNavigationProp<RootStackParamList>;
-type ScrapToWarehouseProps = {
-  navigation: ScrapToWarehouseNavigationProp;
+type NewMovementNavigationProp = StackNavigationProp<RootStackParamList>;
+type NewMovementProps = {
+  navigation: NewMovementNavigationProp;
+  reasonTypeDefault?: ReasonType;
 };
 
-export function ScrapToWarehouse(
-  props: ScrapToWarehouseProps
-): React.ReactElement {
+function NewMovementComponent(props: NewMovementProps): React.ReactElement {
   const { navigation } = props;
+  const { reasonTypeDefault } = props;
 
   const { api } = useContext(ApiContext);
 
+  // Movement Object
   const [sheetMetal, setSheetMetal] = useState<string>("");
-  const [reasonType, setReasonType] = useState<O.Option<ReasonType>>(O.none);
+  const [quantity, setQuantity] = useState<number | undefined>();
+  const [reasonType, setReasonType] = useState<ReasonType | undefined>(
+    reasonTypeDefault
+  );
 
-  const [reasonTypes, setReasonTypes] = useState<
-    O.Option<Data<ReasonType, string>>
-  >(O.none);
+  // UI Form Data
+  const [reasonTypes, setReasonTypes] = useState<Entries<ReasonType, string>>(
+    []
+  );
 
-  const data: ScanInputListData = [
-    {
-      key: "sheet_metal",
-      value: sheetMetal,
-      onChangeText: (t: string) => setSheetMetal(t),
-      title: "Lamiera",
-      onIconPress: () =>
-        navigation.navigate("Scan", {
-          onBarcodeScanned: (barcodeEvent: BarcodeEvent) =>
-            setSheetMetal(barcodeEvent.data),
-        }),
-    },
-  ];
-
+  // Api Wrappers
   const getReasonTypes = () =>
     api
       .reasonTypes()()
@@ -70,6 +47,14 @@ export function ScrapToWarehouse(
       .then((data) => console.log(foldDefault({})(data)))
       .catch((err) => console.log("REERRORE", err));
 
+  // Handlers
+  const handleScan = (setter: (barcodeValue: string) => void): void => {
+    navigation.navigate("Scan", {
+      onBarcodeScanned: (barcodeEvent: BarcodeEvent) =>
+        setter(barcodeEvent.data),
+    });
+  };
+
   useEffect(() => {
     getReasonTypes();
   }, []);
@@ -77,30 +62,37 @@ export function ScrapToWarehouse(
   return (
     <Content padder>
       <SimpleCard>
-        <H2>Scarto a Magazzino</H2>
-        <Text>Notifica lo scarto di lamiera al gestionale.</Text>
+        <H2>Nuovo Movimento Magazzino</H2>
+        <Text>
+          Notifica un nuovo movimento al magazzino indicando matricola del
+          materiale, quantità e tipo del movimento.
+        </Text>
       </SimpleCard>
       <SimpleCard>
         <H3>Dati</H3>
-        <ScanInputList scanInputList={data} />
+        <ScanInput
+          key="sheet_metal"
+          placeholder="Lamiera"
+          value={sheetMetal}
+          onChangeText={(t: string) => setSheetMetal(t)}
+          onIconPress={() => handleScan(setSheetMetal)}
+          containerStyle={{ marginBottom: 10 }}
+        />
+        <ScanInput
+          key="quantity"
+          placeholder="Quantità"
+          value={quantity ? quantity.toString() : ""}
+          onChangeText={(t: string) => setQuantity(Number.parseInt(t))}
+          onIconPress={() =>
+            handleScan((b: string) => setQuantity(Number.parseInt(b)))
+          }
+          containerStyle={{ marginBottom: 10 }}
+        />
         <Dropdown
-          items={toItems(
-            pipe(
-              reasonTypes,
-              foldDefaultMap([], (x) => x.data)
-            )
-          )}
-          def={pipe(
-            reasonTypes,
-            foldDefaultMap(undefined, (x) =>
-              pipe(
-                x.default,
-                foldDefaultMap(undefined, (y) => y)
-              )
-            )
-          )}
+          items={toItems(reasonTypes, (k) => k as number)}
+          selected={(reasonType && (reasonType as number)) || undefined}
           onValueChange={(x) => {
-            setReasonType(O.some(x as ReasonType));
+            setReasonType(x.key);
           }}
         />
         <Button
@@ -109,7 +101,7 @@ export function ScrapToWarehouse(
             // () => console.log("Fatto")
             postMovement({
               TipoCausale: pipe(
-                reasonType,
+                O.fromNullable(reasonType),
                 foldDefault<ReasonType>(ReasonType.Specified)
               ),
               Matricole: [],
@@ -123,3 +115,5 @@ export function ScrapToWarehouse(
     </Content>
   );
 }
+
+export { NewMovementComponent as NewMovement };

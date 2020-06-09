@@ -7,17 +7,19 @@ import { AppBar } from "../components";
 import { Home } from "./Home";
 import { Container, Button } from "native-base";
 import { StartProcessing } from "./Processing";
-import { ScrapToWarehouse } from "./Warehouse";
+import { NewMovement } from "./Warehouse";
 import { BarCodeEvent } from "expo-barcode-scanner";
 import { Scan } from "./Scan";
 import { Login, Profile } from "./Auth";
 import { ErrorContext, AuthContext } from "../stores";
-import { User } from "../types";
+import { User, ReasonType } from "../types";
+
+import * as O from "fp-ts/lib/Option";
 
 export type RootStackParamList = {
   Home: undefined;
   StartProcessing: undefined;
-  ScrapToWarehouse: undefined;
+  NewMovement: { reasonTypeDefault: ReasonType | undefined };
   Scan: { onBarcodeScanned?: (barcode: BarCodeEvent) => void };
   Profile: undefined;
 };
@@ -34,7 +36,11 @@ const RootStack = (() => {
       >
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="StartProcessing" component={StartProcessing} />
-        <Stack.Screen name="ScrapToWarehouse" component={ScrapToWarehouse} />
+        <Stack.Screen
+          name="NewMovement"
+          options={{ title: "Nuovo Movimento" }}
+          component={NewMovement}
+        />
         <Stack.Screen name="Scan" component={Scan} />
         <Stack.Screen
           name="Profile"

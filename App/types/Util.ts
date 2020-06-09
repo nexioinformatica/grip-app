@@ -7,7 +7,10 @@ export interface Entry<K, V> {
 
 export type Entries<K, V> = Entry<K, V>[];
 
-export interface Data<K, V> {
-  data: Entries<K, V>;
+/**
+ * An array of entries with a default value.
+ */
+export interface Data<K, T> {
+  data: Entries<K, T>;
   default: O.Option<K>;
 }

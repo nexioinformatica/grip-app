@@ -4,6 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Screens";
 import { Content, Button, Text, H1 } from "native-base";
 import { SimpleCard } from "../../components";
+import { ReasonType } from "../../types";
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 type HomeProps = {
@@ -34,7 +35,9 @@ export function Home(props: HomeProps): React.ReactElement {
   };
 
   const handleScrapToWarehouseButtonPress = () => {
-    navigation.navigate("ScrapToWarehouse");
+    navigation.navigate("NewMovement", {
+      reasonTypeDefault: ReasonType.LoadRemnant,
+    });
   };
 
   return (

@@ -43,6 +43,11 @@ export const foldDefaultMap = <T, U>(z: U, f: (x: T) => U) => (
     )
   );
 
+/**
+ * @param z Default value.
+ * @param o An option value.
+ * @returns The value in the option `o` if any, the one in `z` otherwise.
+ */
 export const foldDefault = <T>(z: T) => (o: O.Option<T>): T =>
   pipe(
     o,

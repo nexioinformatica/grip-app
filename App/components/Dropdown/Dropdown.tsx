@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Picker } from "native-base";
-import { Entry, Entries } from "../../types/Util";
+import { Entry, Entries, Data } from "../../types/Util";
 import * as A from "fp-ts/lib/Array";
+import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
+import { foldDefault } from "../../util/fp";
 
-export type Key = string | number | undefined;
+export type Key = string | number;
 
 export interface Item<T> {
   label: string;
@@ -12,34 +14,35 @@ export interface Item<T> {
   key: Key;
 }
 
-interface DropdownProps<T> {
-  items: Item<T>[];
-  def?: Key;
-  onValueChange?: (x: T) => void;
-}
-
-export const toItems = <T,>(data: Entry<T, string>[]): Item<T>[] => {
+export const toItems = <K,>(
+  data: Entries<K, string>,
+  f: (k: K) => Key
+): Item<Entry<K, string>>[] => {
   return pipe(
     data,
     A.mapWithIndex((i, x) => {
       return {
+        key: f(x.key),
         label: x.value,
-        value: x.key,
-        key: i,
+        value: x,
       };
     })
   );
 };
 
-export const Dropdown = ({
+interface DropdownProps<T> {
+  items: Item<T>[];
+  selected?: Key;
+  onValueChange: (x: T) => void;
+}
+
+export const Dropdown = <T,>({
   items,
-  def,
+  selected,
   onValueChange,
-}: DropdownProps<any>): React.ReactElement => {
-  const [selected, setSelected] = useState<Key>(def);
+}: DropdownProps<T>) => {
   const handleValueChanged = (itemValue: any, itemPosition: number) => {
-    setSelected(itemValue);
-    if (onValueChange) onValueChange(itemValue);
+    onValueChange(itemValue);
   };
 
   return (
