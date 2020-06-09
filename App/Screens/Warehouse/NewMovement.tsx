@@ -9,16 +9,18 @@ import { pipe } from "fp-ts/lib/pipeable";
 import * as O from "fp-ts/lib/Option";
 import { Data, Entries } from "../../types/Util";
 import { foldDefaultMap, foldDefault } from "../../util/fp";
+import { RouteProp } from "@react-navigation/native";
 
 type NewMovementNavigationProp = StackNavigationProp<RootStackParamList>;
+type NewMovementRouteProp = RouteProp<RootStackParamList, "NewMovement">;
 type NewMovementProps = {
   navigation: NewMovementNavigationProp;
-  reasonTypeDefault?: ReasonType;
+  route: NewMovementRouteProp;
 };
 
 function NewMovementComponent(props: NewMovementProps): React.ReactElement {
-  const { navigation } = props;
-  const { reasonTypeDefault } = props;
+  const { navigation, route } = props;
+  const { reasonTypeDefault } = route.params;
 
   const { api } = useContext(ApiContext);
 
@@ -87,11 +89,13 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
           }
           containerStyle={{ marginBottom: 10 }}
         />
-        <Dropdown
-          items={toItems(reasonTypes, (k) => k as number)}
+        <Dropdown<ReasonType>
+          items={toItems(
+            reasonTypes.map((x, i) => ({ label: x.value, key: x.key }))
+          )}
           selected={(reasonType && (reasonType as number)) || undefined}
           onValueChange={(x) => {
-            setReasonType(x.key);
+            setReasonType(x);
           }}
         />
         <Button

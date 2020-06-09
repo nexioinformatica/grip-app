@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Picker } from "native-base";
-import { Entry, Entries, Data } from "../../types/Util";
 import * as A from "fp-ts/lib/Array";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
-import { foldDefault } from "../../util/fp";
+import { ReasonType } from "../../types";
 
 export type Key = string | number;
 
@@ -14,17 +13,19 @@ export interface Item<T> {
   key: Key;
 }
 
-export const toItems = <K,>(
-  data: Entries<K, string>,
-  f: (k: K) => Key
-): Item<Entry<K, string>>[] => {
+interface Labellable<T> {
+  label: string;
+  key: T;
+}
+
+export const toItems = <U, T extends Labellable<U>>(data: T[]): Item<U>[] => {
   return pipe(
     data,
     A.mapWithIndex((i, x) => {
       return {
-        key: f(x.key),
-        label: x.value,
-        value: x,
+        key: i,
+        label: x.label,
+        value: x.key,
       };
     })
   );
@@ -45,16 +46,18 @@ export const Dropdown = <T,>({
     onValueChange(itemValue);
   };
 
+  console.log(selected);
+
   return (
     <Picker
       note
       mode="dropdown"
       style={{ width: "100%" }}
-      selectedValue={selected}
+      selectedValue={ReasonType.LoadRemnant}
       onValueChange={handleValueChanged}
     >
       {items.map((x, i) => (
-        <Picker.Item label={x.label} value={x.value} key={x.key} />
+        <Picker.Item label={x.label} value={x.key} key={x.key} />
       ))}
     </Picker>
   );
