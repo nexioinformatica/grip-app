@@ -18,13 +18,13 @@ const AppBar = (props: AppBarProps) => {
   const canGoBack = navigation.canGoBack();
 
   const BackButton = () => (
-    <Button onPress={() => navigation.goBack()}>
+    <Button onPress={() => navigation.goBack()} transparent>
       <Icon name="arrow-back" />
     </Button>
   );
 
   const HomeButton = () => (
-    <Button onPress={() => navigation.navigate("Home")}>
+    <Button onPress={() => navigation.navigate("Home")} transparent>
       <Icon name="home" />
     </Button>
   );
