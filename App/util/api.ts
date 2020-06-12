@@ -1,11 +1,12 @@
 import axios, { AxiosInstance } from "axios";
-import { BASE_URL, API_KEY } from "../constants";
+import { BASE_URL, API_KEY, API_CLIENT_TIMEOUT } from "../constants";
 import { Token } from "../types";
 import * as T from "fp-ts/lib/Task";
 
 export const req = (token: Token): AxiosInstance => {
   return axios.create({
     baseURL: BASE_URL,
+    timeout: API_CLIENT_TIMEOUT,
     headers: {
       "X-ApiKey": API_KEY,
       Authorization: "Bearer " + token.access_token,
