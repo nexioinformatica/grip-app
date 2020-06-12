@@ -16,7 +16,7 @@ import { log } from "../../util/fp";
 export interface ScanFreshmanProps extends InputProps {
   value?: string | undefined;
   onChangeValue: (value: string | undefined) => void;
-  onValueDecoded: (decodedValue: BarcodeDecode) => void;
+  onValueDecoded: (decodedValue: BarcodeDecode[]) => void;
 }
 
 export const ScanFreshman = ({
@@ -37,7 +37,7 @@ export const ScanFreshman = ({
     // TODO: popup error
   };
 
-  const onDecodeSuccess = (res: BarcodeDecode): T.Task<undefined> => {
+  const onDecodeSuccess = (res: BarcodeDecode[]): T.Task<undefined> => {
     console.log("SUCCESS!");
     setDecoding(false);
     onValueDecoded(res);

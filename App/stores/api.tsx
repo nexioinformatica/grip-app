@@ -38,7 +38,7 @@ interface Context {
     // movementReasons: () => T.Task<Reasons>;
     newMovement: (movement: NewMovement) => T.Task<Movement>;
     reasonTypes: () => T.Task<Entries<ReasonType, string>>;
-    barcodeDecode: (barcode: string) => TE.TaskEither<Error, BarcodeDecode>;
+    barcodeDecode: (barcode: string) => TE.TaskEither<Error, BarcodeDecode[]>;
   };
 }
 
@@ -120,7 +120,7 @@ export function ApiContextProvider({
 
   const barcodeDecode = (
     barcode: string
-  ): TE.TaskEither<Error, BarcodeDecode> =>
+  ): TE.TaskEither<Error, BarcodeDecode[]> =>
     pipe(
       O.fromNullable(user?.token),
       O.fold(

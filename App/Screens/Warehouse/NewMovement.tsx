@@ -37,7 +37,6 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
   const { api } = useContext(ApiContext);
 
   // Movement Object
-  const [sheetMetal, setSheetMetal] = useState<string>("");
   const [freshman, setFreshman] = useState<string | undefined>();
   const [freshmanId, setFreshmanId] = useState<number | undefined>();
   const [quantity, setQuantity] = useState<number | undefined>();
@@ -90,8 +89,8 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
           placeholder="Matricola"
           value={freshman}
           onChangeValue={setFreshman}
-          onValueDecoded={(decodedValue: BarcodeDecode) =>
-            setFreshmanId(decodedValue.Id)
+          onValueDecoded={
+            (decodedValue: BarcodeDecode[]) => setFreshmanId(decodedValue[0].Id) // TODO: change this!!!
           }
           containerStyle={{ marginBottom: 10 }}
         />

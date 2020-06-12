@@ -39,9 +39,9 @@ export const postMovement = (i: AxiosInstance) => (
 
 export const postBarcodeDecode = (i: AxiosInstance) => (
   barcode: string
-): TE.TaskEither<Error, AxiosResponse<BarcodeDecode>> => {
-  return TE.tryCatch<Error, AxiosResponse<BarcodeDecode>>(
-    () => i.post<BarcodeDecode>("api/v1/barcode-decode", { Codice: barcode }),
+): TE.TaskEither<Error, AxiosResponse<BarcodeDecode[]>> => {
+  return TE.tryCatch<Error, AxiosResponse<BarcodeDecode[]>>(
+    () => i.post<BarcodeDecode[]>("api/v1/barcode-decode", { Codice: barcode }),
     (reason) => new Error(String(reason))
   );
 };
