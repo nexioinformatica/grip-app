@@ -12,3 +12,4 @@ export interface ScanInputData {
 
 export * from "./ScanInput";
 export * from "./ScanInputList";
+export * from "./ScanFreshman";

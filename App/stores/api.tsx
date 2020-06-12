@@ -17,12 +17,14 @@ import {
   Movement,
   ReasonTypes,
   ReasonType,
+  BarcodeDecode,
 } from "../types/Api";
 import { noop } from "../util/noop";
 import {
   getOperators,
   // getReasons,
   postMovement,
+  postBarcodeDecode,
 } from "../data/api";
 import { req, neededLogin, errorOccurred } from "../util/api";
 import { Entry, Data, Entries } from "../types/Util";
@@ -36,6 +38,7 @@ interface Context {
     // movementReasons: () => T.Task<Reasons>;
     newMovement: (movement: NewMovement) => T.Task<Movement>;
     reasonTypes: () => T.Task<Entries<ReasonType, string>>;
+    barcodeDecode: (barcode: string) => TE.TaskEither<Error, BarcodeDecode>;
   };
 }
 
@@ -45,6 +48,7 @@ export const ApiContext = createContext<Context>({
     // movementReasons: () => T.of([]),
     newMovement: (movement: NewMovement) => T.never,
     reasonTypes: () => T.never,
+    barcodeDecode: (barcode: string) => T.never,
   },
 });
 
@@ -114,6 +118,24 @@ export function ApiContextProvider({
       )
     );
 
+  const barcodeDecode = (
+    barcode: string
+  ): TE.TaskEither<Error, BarcodeDecode> =>
+    pipe(
+      O.fromNullable(user?.token),
+      O.fold(
+        () => neededLogin(setError),
+        (token) =>
+          pipe(
+            pipe(token, req, postBarcodeDecode)(barcode),
+            TE.fold(
+              (err) => TE.left(err),
+              (res) => TE.right(res.data)
+            )
+          )
+      )
+    );
+
   return (
     <ApiContext.Provider
       value={{
@@ -122,6 +144,7 @@ export function ApiContextProvider({
           // movementReasons: movementReasons,
           newMovement: newMovement,
           reasonTypes: reasonTypes,
+          barcodeDecode: barcodeDecode,
         },
       }}
     >

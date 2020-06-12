@@ -1,4 +1,4 @@
-import { Operators, NewMovement, Movement } from "../types/Api";
+import { Operators, NewMovement, Movement, BarcodeDecode } from "../types/Api";
 import { AxiosInstance, AxiosResponse } from "axios";
 import * as TE from "fp-ts/lib/TaskEither";
 
@@ -33,6 +33,15 @@ export const postMovement = (i: AxiosInstance) => (
 ): TE.TaskEither<Error, AxiosResponse<Movement>> => {
   return TE.tryCatch<Error, AxiosResponse<Movement>>(
     () => i.post<Movement>("api/v1/movimenti-magazzino", { data: movement }),
+    (reason) => new Error(String(reason))
+  );
+};
+
+export const postBarcodeDecode = (i: AxiosInstance) => (
+  barcode: string
+): TE.TaskEither<Error, AxiosResponse<BarcodeDecode>> => {
+  return TE.tryCatch<Error, AxiosResponse<BarcodeDecode>>(
+    () => i.post<BarcodeDecode>("api/v1/barcode-decode", { Codice: barcode }),
     (reason) => new Error(String(reason))
   );
 };

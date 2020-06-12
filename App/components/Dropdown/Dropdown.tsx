@@ -46,8 +46,6 @@ export const Dropdown = <T,>({
     onValueChange(itemValue);
   };
 
-  console.log(selected);
-
   return (
     <Picker
       note

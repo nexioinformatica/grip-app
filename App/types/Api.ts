@@ -61,3 +61,8 @@ export interface NewMovement {
 
 export type SelectList<T, K> = { data: T[]; default: K };
 export type SelectListItem<K, V> = { key: K; value: V };
+
+export interface BarcodeDecode {
+  Tipo: string;
+  Id: number;
+}

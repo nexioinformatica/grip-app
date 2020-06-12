@@ -2,13 +2,25 @@ import React, { useState, useContext, Key, useEffect } from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Screens";
 import { Content, Button, Text, H2, H3 } from "native-base";
-import { SimpleCard, Dropdown, toItems, ScanInput } from "../../components";
-import { BarcodeEvent, NewMovement, ReasonType } from "../../types";
+import {
+  SimpleCard,
+  Dropdown,
+  toItems,
+  ScanInput,
+  ScanFreshman,
+} from "../../components";
+import {
+  BarcodeEvent,
+  NewMovement,
+  ReasonType,
+  Movement,
+  BarcodeDecode,
+} from "../../types";
 import { ApiContext } from "../../stores";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as O from "fp-ts/lib/Option";
-import { Data, Entries } from "../../types/Util";
-import { foldDefaultMap, foldDefault } from "../../util/fp";
+import { Entries } from "../../types/Util";
+import { foldDefault } from "../../util/fp";
 import { RouteProp } from "@react-navigation/native";
 
 type NewMovementNavigationProp = StackNavigationProp<RootStackParamList>;
@@ -26,6 +38,8 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
 
   // Movement Object
   const [sheetMetal, setSheetMetal] = useState<string>("");
+  const [freshman, setFreshman] = useState<string | undefined>();
+  const [freshmanId, setFreshmanId] = useState<number | undefined>();
   const [quantity, setQuantity] = useState<number | undefined>();
   const [reasonType, setReasonType] = useState<ReasonType | undefined>(
     reasonTypeDefault
@@ -40,13 +54,13 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
   const getReasonTypes = () =>
     api
       .reasonTypes()()
-      .then((data) => setReasonTypes(data));
+      .then((data: Entries<ReasonType, string>) => setReasonTypes(data));
 
   const postMovement = (movement: NewMovement) =>
     api
       .newMovement(movement)()
-      .then((data) => console.log(data))
-      .catch((err) => console.log("REERRORE"));
+      .then((data: Movement) => console.log(data))
+      .catch((err: Error) => console.log("REERRORE"));
 
   // Handlers
   const handleScan = (setter: (barcodeValue: string) => void): void => {
@@ -71,12 +85,14 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
       </SimpleCard>
       <SimpleCard>
         <H3>Dati</H3>
-        <ScanInput
-          key="sheet_metal"
-          placeholder="Lamiera"
-          value={sheetMetal}
-          onChangeText={(t: string) => setSheetMetal(t)}
-          onIconPress={() => handleScan(setSheetMetal)}
+        <ScanFreshman
+          key="freshman"
+          placeholder="Matricola"
+          value={freshman}
+          onChangeValue={setFreshman}
+          onValueDecoded={(decodedValue: BarcodeDecode) =>
+            setFreshmanId(decodedValue.Id)
+          }
           containerStyle={{ marginBottom: 10 }}
         />
         <ScanInput
