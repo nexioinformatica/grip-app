@@ -1,28 +1,34 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Input, InputProps } from "react-native-elements";
-import { View } from "react-native";
-import { Spinner, Toast, Text } from "native-base";
+import { Spinner } from "native-base";
 import { Icon } from "../Icon/Icon";
-import { noop } from "../../util/noop";
-import { ScanInputProps } from "./ScanInput";
 import { BarcodeEvent, BarcodeDecode } from "../../types";
 import { ApiContext } from "../../stores/api";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as T from "fp-ts/lib/Task";
-import { log } from "../../util/fp";
 
 export interface ScanFreshmanProps extends InputProps {
   value?: string | undefined;
   onChangeValue: (value: string | undefined) => void;
-  onValueDecoded: (decodedValue: BarcodeDecode[]) => void;
+  onDecodeValue: (decodedValue: BarcodeDecode[]) => void;
 }
 
+/**
+ * Collect user input as text or 2D code and provide the decoded object using
+ * `barcode-decode` api.
+ *
+ * @param key
+ * @param placeholder
+ * @param value The value for the input component.
+ * @param onChangeValue Callback for updating the input value.
+ * @param onDecodeValue Callback providing the decoded value of the input value.
+ */
 export const ScanFreshman = ({
   value,
   onChangeValue,
-  onValueDecoded,
+  onDecodeValue,
   ...rest
 }: ScanFreshmanProps): React.ReactElement => {
   const navigation = useNavigation();
@@ -42,7 +48,7 @@ export const ScanFreshman = ({
   const onDecodeSuccess = (res: BarcodeDecode[]): T.Task<undefined> => {
     setDecoding(false);
     setDecodingFailed(false);
-    onValueDecoded(res);
+    onDecodeValue(res);
     return T.of(undefined);
   };
 

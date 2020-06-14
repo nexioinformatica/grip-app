@@ -19,6 +19,8 @@ import {
 import { ApiContext } from "../../stores";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as O from "fp-ts/lib/Option";
+import * as T from "fp-ts/lib/Task";
+import * as TE from "fp-ts/lib/TaskEither";
 import { Entries } from "../../types/Util";
 import { foldDefault } from "../../util/fp";
 import { RouteProp } from "@react-navigation/native";
@@ -56,10 +58,21 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
       .then((data: Entries<ReasonType, string>) => setReasonTypes(data));
 
   const postMovement = (movement: NewMovement) =>
-    api
-      .newMovement(movement)()
-      .then((data: Movement) => console.log(data))
-      .catch((err: Error) => console.log("REERRORE"));
+    pipe(
+      movement,
+      api.newMovement,
+      TE.fold(
+        (err) => {
+          console.log("ERRORE");
+          return T.never;
+        },
+        (res) => {
+          // TODO: use the value.
+          console.log(res);
+          return T.of(undefined);
+        }
+      )
+    );
 
   // Handlers
   const handleScan = (setter: (barcodeValue: string) => void): void => {
@@ -89,7 +102,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
           placeholder="Matricola"
           value={freshman}
           onChangeValue={setFreshman}
-          onValueDecoded={
+          onDecodeValue={
             (decodedValue: BarcodeDecode[]) => setFreshmanId(decodedValue[0].Id) // TODO: change this!!!
           }
           containerStyle={{ marginBottom: 10 }}
