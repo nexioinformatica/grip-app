@@ -20,7 +20,12 @@ export function ErrorContextProvider({
   const [error, setError] = useState<Error | undefined>(undefined);
 
   return (
-    <ErrorContext.Provider value={{ error, setError }}>
+    <ErrorContext.Provider
+      value={{
+        error: error,
+        setError: setError,
+      }}
+    >
       {children}
     </ErrorContext.Provider>
   );

@@ -1,20 +1,18 @@
 import React, { useContext } from "react";
-import { Text } from "react-native";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { AppBar } from "../components";
 import { Home } from "./Home";
-import { Container, Button } from "native-base";
+import { Container, Root } from "native-base";
 import { StartProcessing } from "./Processing";
 import { NewMovement } from "./Warehouse";
 import { BarCodeEvent } from "expo-barcode-scanner";
 import { Scan } from "./Scan";
 import { Login, Profile } from "./Auth";
 import { ErrorContext, AuthContext } from "../stores";
-import { User, ReasonType } from "../types";
-
-import * as O from "fp-ts/lib/Option";
+import { ReasonType } from "../types";
+import { Error } from "./Error";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -24,8 +22,17 @@ export type RootStackParamList = {
   Profile: undefined;
 };
 
-const RootStack = (() => {
+export type LoginStackParamList = {
+  Login: undefined;
+};
+
+export type ErrorStackParamList = {
+  Error: { error: Error; onClear: () => void };
+};
+
+const RootStack = ((): React.ReactElement => {
   const Stack = createStackNavigator<RootStackParamList>();
+
   return (
     <>
       <Stack.Navigator
@@ -52,44 +59,56 @@ const RootStack = (() => {
   );
 })();
 
-const LoginStack = (() => <Login />)();
-
-const ErrorStack = (
-  error: Error,
-  setError: (err: Error | undefined) => void
-) => {
-  console.error("ErrorStack", error);
+const LoginStack = ((): React.ReactElement => {
+  const Stack = createStackNavigator<LoginStackParamList>();
 
   return (
     <>
-      <Text>Si è verificato un errore!</Text>
-      <Button onPress={() => setError(undefined)}>
-        <Text>Ok</Text>
-      </Button>
-      <Text>Nome: {error.name}</Text>
-      <Text>Messaggio: {error.message}</Text>
-      <Text>{error.stack}</Text>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={Login} />
+      </Stack.Navigator>
     </>
   );
-};
+})();
 
-const renderScreens = () => {
-  const { error, setError } = useContext(ErrorContext);
-  const { user } = useContext(AuthContext);
+const ErrorStack = ((): React.ReactElement => {
+  const Stack = createStackNavigator<ErrorStackParamList>();
 
-  if (error) return ErrorStack(error, setError);
+  return (
+    <>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Error" component={Error} />
+      </Stack.Navigator>
+    </>
+  );
+})();
 
-  if (!user) return LoginStack;
-
-  return RootStack;
+/**
+ * Wrap content into the basic structure.
+ * @param children The content to wrap.
+ */
+const wrap = (children: any): React.ReactElement => {
+  return (
+    <Root>
+      <Container style={{ flex: 1 }}>
+        <NavigationContainer>{children}</NavigationContainer>
+      </Container>
+    </Root>
+  );
 };
 
 const Screens = (): React.ReactElement => {
-  return (
-    <Container style={{ backgroundColor: "red", flex: 1 }}>
-      <NavigationContainer>{renderScreens()}</NavigationContainer>
-    </Container>
-  );
+  const { error, setError } = useContext(ErrorContext);
+  const { user } = useContext(AuthContext);
+
+  // Login Stack
+  if (!user) return wrap(LoginStack);
+
+  // Error Stack
+  if (error) return wrap(ErrorStack);
+
+  // Root Stack
+  return wrap(RootStack);
 };
 
 export { Screens };
