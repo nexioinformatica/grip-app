@@ -29,17 +29,19 @@ export const ScanFreshman = ({
   const { api } = useContext(ApiContext);
 
   const [isDecoding, setDecoding] = useState(false);
+  const [isDecodingFailed, setDecodingFailed] = useState(false);
+
+  const [statusIcon, setStatusIcon] = useState(<></>); // default icon setted in use effect
 
   const onDecodeError = (err: Error): T.Task<never> => {
-    console.log("ERROR");
     setDecoding(false);
+    setDecodingFailed(true);
     return T.never;
-    // TODO: popup error
   };
 
   const onDecodeSuccess = (res: BarcodeDecode[]): T.Task<undefined> => {
-    console.log("SUCCESS!");
     setDecoding(false);
+    setDecodingFailed(false);
     onValueDecoded(res);
     return T.of(undefined);
   };
@@ -57,15 +59,28 @@ export const ScanFreshman = ({
         onChangeValue(barcodeEvent.data),
     });
 
+  useEffect(() => {
+    if (isDecodingFailed)
+      setStatusIcon(
+        <Icon
+          name="alert-circle"
+          onPress={() => {
+            onIconPress();
+          }}
+        />
+      );
+
+    if (isDecoding) setStatusIcon(<Spinner />);
+
+    if (!isDecoding && !isDecodingFailed)
+      setStatusIcon(<Icon name="camera" onPress={onIconPress} />);
+  }, [isDecoding, isDecodingFailed]);
+
   return (
     <Input
       value={value}
       onChangeText={onChangeValue}
-      rightIcon={
-        (!isDecoding && <Icon name="camera" onPress={onIconPress} />) || (
-          <Spinner onTouchStart={onIconPress} />
-        )
-      }
+      rightIcon={statusIcon}
       containerStyle={{ width: "100%" }}
       {...rest}
     />
