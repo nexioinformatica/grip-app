@@ -42,9 +42,15 @@ interface Context {
   };
 }
 
+export interface OperatorsParam {
+  // TODO: move away
+  isApiEnabled: boolean;
+  isDepartmentEnabled: boolean;
+}
+
 export const ApiContext = createContext<Context>({
   api: {
-    operators: (isApiEnabled: boolean, isDepartmentEnabled: boolean) => T.never,
+    operators: (params: OperatorsParam) => T.never,
     // movementReasons: () => T.of([]),
     newMovement: (movement: NewMovement) => T.never,
     reasonTypes: () => T.never,
@@ -60,10 +66,10 @@ export function ApiContextProvider({
   const { setError } = useContext(ErrorContext);
   const { user } = useContext(AuthContext);
 
-  const operators = (
-    isApiEnabled: boolean,
-    isDepartmentEnabled: boolean
-  ): TE.TaskEither<Error, Operators> =>
+  const operators = ({
+    isApiEnabled,
+    isDepartmentEnabled,
+  }: OperatorsParam): TE.TaskEither<Error, Operators> =>
     pipe(
       O.fromNullable(user?.token),
       O.fold(

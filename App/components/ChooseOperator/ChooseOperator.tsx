@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ListItem } from "react-native-elements";
 import { ApiContext } from "../../stores/api";
 import { Operators, Operator } from "../../types";
@@ -6,7 +6,11 @@ import { View, GestureResponderEvent } from "react-native";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as EQ from "fp-ts/lib/Eq";
 import * as O from "fp-ts/lib/Option";
+import * as T from "fp-ts/lib/Task";
+import * as TE from "fp-ts/lib/TaskEither";
 import { ErrorContext } from "../../stores";
+import { Toast } from "native-base";
+import { generalErrorToast } from "../../util/ui";
 
 export interface ChooseOperatorProps {
   selected?: Operator;
@@ -36,10 +40,22 @@ export const ChooseOperator = ({ selected, onSelect }: ChooseOperatorProps) => {
     onSelect(op);
   };
 
-  api
-    .operators(true, true)()
-    .then((data) => setOperators(data))
-    .catch((err) => setError(err));
+  useEffect(() => {
+    pipe(
+      { isApiEnabled: true, isDeparmentEnabled: true },
+      api.operators,
+      TE.fold(
+        (err) => {
+          Toast.show(generalErrorToast);
+          return T.never;
+        },
+        (res: Operators) => {
+          setOperators(res);
+          return T.of(undefined);
+        }
+      )
+    )();
+  }, []);
 
   return (
     <View
