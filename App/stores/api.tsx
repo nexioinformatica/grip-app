@@ -34,9 +34,9 @@ interface Context {
     operators: (
       isApiEnabled: boolean,
       isDepartmentEnabled: boolean
-    ) => T.Task<Operators>;
+    ) => TE.TaskEither<Error, Operators>;
     // movementReasons: () => T.Task<Reasons>;
-    newMovement: (movement: NewMovement) => T.Task<Movement>;
+    newMovement: (movement: NewMovement) => TE.TaskEither<Error, Movement>;
     reasonTypes: () => T.Task<Entries<ReasonType, string>>;
     barcodeDecode: (barcode: string) => TE.TaskEither<Error, BarcodeDecode[]>;
   };
@@ -60,7 +60,10 @@ export function ApiContextProvider({
   const { setError } = useContext(ErrorContext);
   const { user } = useContext(AuthContext);
 
-  const operators = (isApiEnabled: boolean, isDepartmentEnabled: boolean) =>
+  const operators = (
+    isApiEnabled: boolean,
+    isDepartmentEnabled: boolean
+  ): TE.TaskEither<Error, Operators> =>
     pipe(
       O.fromNullable(user?.token),
       O.fold(
@@ -69,8 +72,8 @@ export function ApiContextProvider({
           pipe(
             pipe(token, req, getOperators)(isApiEnabled, isDepartmentEnabled),
             TE.fold(
-              (err) => errorOccurred<Operators>(setError, err),
-              (res) => T.of(res.data)
+              (err) => TE.left(err),
+              (res) => TE.right(res.data)
             )
           )
       )
@@ -102,7 +105,7 @@ export function ApiContextProvider({
       { key: ReasonType.LoadScrap, value: "Carico scarto" },
     ]);
 
-  const newMovement = (movement: NewMovement): T.Task<Movement> =>
+  const newMovement = (movement: NewMovement): TE.TaskEither<Error, Movement> =>
     pipe(
       O.fromNullable(user?.token),
       O.fold(
@@ -111,8 +114,8 @@ export function ApiContextProvider({
           pipe(
             pipe(token, req, postMovement)(movement),
             TE.fold(
-              (err) => errorOccurred(setError, err),
-              (res) => T.of(res.data)
+              (err) => TE.left(err),
+              (res) => TE.right(res.data)
             )
           )
       )
