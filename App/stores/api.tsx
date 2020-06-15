@@ -19,6 +19,8 @@ import {
   ReasonType,
   ReasonTypeKey,
   BarcodeDecode,
+  ActionType,
+  ActionTypeKey,
 } from "../types/Api";
 import { noop } from "../util/noop";
 import {
@@ -37,6 +39,7 @@ interface Context {
     newMovement: (movement: NewMovement) => TE.TaskEither<Error, Movement>;
     reasonTypes: () => T.Task<ReasonType[]>;
     barcodeDecode: (barcode: string) => TE.TaskEither<Error, BarcodeDecode[]>;
+    actionTypes: () => T.Task<ActionType[]>;
   };
 }
 
@@ -53,6 +56,7 @@ export const ApiContext = createContext<Context>({
     newMovement: (movement: NewMovement) => T.never,
     reasonTypes: () => T.never,
     barcodeDecode: (barcode: string) => T.never,
+    actionTypes: () => T.never,
   },
 });
 
@@ -142,6 +146,13 @@ export function ApiContextProvider({
       )
     );
 
+  const actionTypes = (): T.Task<ActionType[]> =>
+    T.of([
+      { key: ActionTypeKey.MachineAndOperator, label: "Macchina e Operatore" },
+      { key: ActionTypeKey.Machine, label: "Macchina" },
+      { key: ActionTypeKey.Operator, label: "Operatore" },
+    ]);
+
   return (
     <ApiContext.Provider
       value={{
@@ -151,6 +162,7 @@ export function ApiContextProvider({
           newMovement: newMovement,
           reasonTypes: reasonTypes,
           barcodeDecode: barcodeDecode,
+          actionTypes: actionTypes,
         },
       }}
     >

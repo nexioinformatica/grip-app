@@ -1,27 +1,10 @@
-import React, { useState } from "react";
-import {
-  StackNavigationProp,
-  StackNavigationOptions,
-} from "@react-navigation/stack";
-import { StyleSheet, View } from "react-native";
-import {
-  Content,
-  Card,
-  CardItem,
-  Body,
-  Text,
-  H2,
-  H3,
-  Button,
-} from "native-base";
+import React, { useState, useEffect, useContext } from "react";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { Content, Text, H2, H3, Button } from "native-base";
 import { RootStackParamList } from "../Screens";
-import {
-  ScanInputData,
-  SimpleCard,
-  ScanInputList,
-  ScanInputListData,
-} from "../../components";
-import { BarCodeEvent } from "expo-barcode-scanner";
+import { SimpleCard, ScanFreshman, Dropdown } from "../../components";
+import { ActionType, ActionTypeKey } from "../../types";
+import { ApiContext } from "../../stores";
 
 // import { Button } from "react-native-elements";
 
@@ -34,60 +17,82 @@ export function StartProcessing(
   props: StartProcessingProps
 ): React.ReactElement {
   const { navigation } = props;
+  const { api } = useContext(ApiContext);
 
-  const [job, setJob] = useState<string>("");
-  const [machine, setMachine] = useState<string>("");
-  const [sheetMetal, setSheetMetal] = useState<string>("");
+  const [job, setJob] = useState<string | undefined>("");
+  const [machine, setMachine] = useState<string | undefined>("");
+  const [sheetMetal, setSheetMetal] = useState<string | undefined>("");
+  const [actionTypes, setActionTypes] = useState<ActionType[]>([]);
+  const [actionType, setActionType] = useState<ActionTypeKey>(
+    ActionTypeKey.MachineAndOperator
+  );
 
-  // TODO: Card could be wrapped in a SimpleCard component, hiding Card, CardItem, Body
-  // TODO: Move ScanInputList to a component
+  const getActionTypes = () =>
+    api
+      .actionTypes()()
+      .then((res) => setActionTypes(res));
 
-  const data: ScanInputListData = [
-    {
-      key: "job",
-      value: job,
-      onChangeText: (t: string) => setJob(t),
-      title: "Commessa",
-      onIconPress: () =>
-        navigation.navigate("Scan", {
-          onBarcodeScanned: (barcodeEvent: BarCodeEvent) =>
-            setJob(barcodeEvent.data),
-        }),
-    },
-    {
-      key: "machine",
-      value: machine,
-      onChangeText: (t: string) => setMachine(t),
-      title: "Macchina",
-      onIconPress: () =>
-        navigation.navigate("Scan", {
-          onBarcodeScanned: (barcodeEvent: BarCodeEvent) =>
-            setMachine(barcodeEvent.data),
-        }),
-    },
-    {
-      key: "sheet_metal",
-      value: sheetMetal,
-      onChangeText: (t: string) => setSheetMetal(t),
-      title: "Lamiera",
-      onIconPress: () =>
-        navigation.navigate("Scan", {
-          onBarcodeScanned: (barcodeEvent: BarCodeEvent) =>
-            setSheetMetal(barcodeEvent.data),
-        }),
-    },
-  ];
+  useEffect(() => {
+    getActionTypes();
+  }, []);
+
+  const handleSend = () => {
+    console.log(
+      JSON.stringify({
+        job: job,
+        machine: machine,
+        sheetMetal: sheetMetal,
+        actionType: actionType,
+      })
+    );
+  };
 
   return (
     <Content padder>
       <SimpleCard>
         <H2>Inizio Lavorazione</H2>
-        <Text>Notifica l'inizio della lavorazione al gestionale.</Text>
+        <Text>
+          Notifica l'inizio della lavorazione al gestionale indicando fase di
+          lavorazione, macchina, lamiera e tipologia e motivazione (opzionale).
+        </Text>
       </SimpleCard>
       <SimpleCard>
         <H3>Dati</H3>
-        <ScanInputList scanInputList={data} />
-        <Button full>
+
+        <ScanFreshman
+          key="job"
+          placeholder="Fase di lavorazione"
+          value={job}
+          onChangeValue={setJob}
+          onDecodeValue={(decoded) => {}} // TODO: handle decoded
+        />
+
+        <ScanFreshman
+          key="machine"
+          placeholder="Macchina"
+          value={machine}
+          onChangeValue={setMachine}
+          onDecodeValue={(decoded) => {}} // TODO: handle decoded
+        />
+
+        <ScanFreshman
+          key="sheet_metal"
+          placeholder="Lamiera"
+          value={sheetMetal}
+          onChangeValue={setSheetMetal}
+          onDecodeValue={(decoded) => {}} // TODO: handle decoded
+        />
+
+        <Dropdown<ActionTypeKey>
+          items={actionTypes.map((x) => ({
+            value: x.key,
+            label: x.label,
+          }))}
+          selected={actionType}
+          onValueChange={setActionType}
+        />
+
+        <Button full onPress={() => handleSend()}>
           <Text>Invia</Text>
         </Button>
       </SimpleCard>

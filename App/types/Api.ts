@@ -71,3 +71,14 @@ export interface BarcodeDecode {
   Tipo: string;
   Id: number;
 }
+
+export enum ActionTypeKey {
+  MachineAndOperator = 1,
+  Machine = 2,
+  Operator = 3,
+}
+
+export interface ActionType {
+  key: ActionTypeKey;
+  label: string;
+}
