@@ -32,10 +32,7 @@ import { Entry, Data, Entries } from "../types/Util";
 
 interface Context {
   api: {
-    operators: (
-      isApiEnabled: boolean,
-      isDepartmentEnabled: boolean
-    ) => TE.TaskEither<Error, Operators>;
+    operators: (params: OperatorsParam) => TE.TaskEither<Error, Operators>;
     // movementReasons: () => T.Task<Reasons>;
     newMovement: (movement: NewMovement) => TE.TaskEither<Error, Movement>;
     reasonTypes: () => T.Task<ReasonType[]>;
@@ -74,7 +71,7 @@ export function ApiContextProvider({
     pipe(
       O.fromNullable(user?.token),
       O.fold(
-        () => neededLogin<Operators>(setError),
+        () => neededLogin(setError),
         (token) =>
           pipe(
             pipe(token, req, getOperators)(isApiEnabled, isDepartmentEnabled),
