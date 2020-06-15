@@ -9,7 +9,7 @@ import * as O from "fp-ts/lib/Option";
 import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
 import { ErrorContext } from "../../stores";
-import { Toast } from "native-base";
+import { Toast, Text } from "native-base";
 import { generalErrorToast } from "../../util/ui";
 
 export interface ChooseOperatorProps {
@@ -42,7 +42,7 @@ export const ChooseOperator = ({ selected, onSelect }: ChooseOperatorProps) => {
 
   useEffect(() => {
     pipe(
-      { isApiEnabled: true, isDeparmentEnabled: true },
+      { isApiEnabled: true, isDepartmentEnabled: true },
       api.operators,
       TE.fold(
         (err) => {
@@ -63,16 +63,17 @@ export const ChooseOperator = ({ selected, onSelect }: ChooseOperatorProps) => {
         width: "100%",
       }}
     >
-      {operators.map((x, i) => (
-        <ListItem
-          key={i}
-          title={x.Nome}
-          subtitle={x.UserName}
-          onPress={(e) => handlePress(e)(x)}
-          checkmark={isSelected(x, O.fromNullable(selected))}
-          bottomDivider
-        />
-      ))}
+      {(operators.length &&
+        operators.map((x, i) => (
+          <ListItem
+            key={i}
+            title={x.Nome}
+            subtitle={x.UserName}
+            onPress={(e) => handlePress(e)(x)}
+            checkmark={isSelected(x, O.fromNullable(selected))}
+            bottomDivider
+          />
+        ))) || <Text>Nessun dato disponibile</Text>}
     </View>
   );
 };
