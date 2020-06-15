@@ -1,9 +1,6 @@
-import React, { createContext, useState, useContext } from "react";
-
-import moment from "moment";
+import React, { createContext, useContext } from "react";
 
 import { pipe } from "fp-ts/lib/pipeable";
-import * as E from "fp-ts/lib/Either";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as T from "fp-ts/lib/Task";
 import * as O from "fp-ts/lib/Option";
@@ -15,22 +12,19 @@ import {
   // Reasons,
   NewMovement,
   Movement,
-  ReasonTypes,
   ReasonType,
   ReasonTypeKey,
   BarcodeDecode,
   ActionType,
   ActionTypeKey,
 } from "../types/Api";
-import { noop } from "../util/noop";
 import {
   getOperators,
   // getReasons,
   postMovement,
   postBarcodeDecode,
 } from "../data/api";
-import { req, neededLogin, errorOccurred } from "../util/api";
-import { Entry, Data, Entries } from "../types/Util";
+import { req, neededLogin, publicReq } from "../util/api";
 
 interface Context {
   api: {
@@ -73,17 +67,10 @@ export function ApiContextProvider({
     isDepartmentEnabled,
   }: OperatorsParam): TE.TaskEither<Error, Operators> =>
     pipe(
-      O.fromNullable(user?.token),
-      O.fold(
-        () => neededLogin(setError),
-        (token) =>
-          pipe(
-            pipe(token, req, getOperators)(isApiEnabled, isDepartmentEnabled),
-            TE.fold(
-              (err) => TE.left(err),
-              (res) => TE.right(res.data)
-            )
-          )
+      pipe(publicReq(), getOperators)(isApiEnabled, isDepartmentEnabled),
+      TE.fold(
+        (err) => TE.left(err),
+        (res) => TE.right(res.data)
       )
     );
 
