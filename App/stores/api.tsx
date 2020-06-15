@@ -17,6 +17,7 @@ import {
   Movement,
   ReasonTypes,
   ReasonType,
+  ReasonTypeKey,
   BarcodeDecode,
 } from "../types/Api";
 import { noop } from "../util/noop";
@@ -37,7 +38,7 @@ interface Context {
     ) => TE.TaskEither<Error, Operators>;
     // movementReasons: () => T.Task<Reasons>;
     newMovement: (movement: NewMovement) => TE.TaskEither<Error, Movement>;
-    reasonTypes: () => T.Task<Entries<ReasonType, string>>;
+    reasonTypes: () => T.Task<ReasonType[]>;
     barcodeDecode: (barcode: string) => TE.TaskEither<Error, BarcodeDecode[]>;
   };
 }
@@ -101,14 +102,13 @@ export function ApiContextProvider({
   //     )
   //   );
 
-  // TODO: change the any type
-  const reasonTypes = (): T.Task<Entries<ReasonType, string>> =>
+  const reasonTypes = (): T.Task<ReasonType[]> =>
     T.of([
-      { key: ReasonType.Specified, value: "Specificato" },
-      { key: ReasonType.LoadProd, value: "Carico per produzione" },
-      { key: ReasonType.UnloadProd, value: "Scarico da produzione" },
-      { key: ReasonType.LoadRemnant, value: "Carico avanzo" },
-      { key: ReasonType.LoadScrap, value: "Carico scarto" },
+      { key: ReasonTypeKey.Specified, label: "Specificato" },
+      { key: ReasonTypeKey.LoadProd, label: "Carico per produzione" },
+      { key: ReasonTypeKey.UnloadProd, label: "Scarico da produzione" },
+      { key: ReasonTypeKey.LoadRemnant, label: "Carico avanzo" },
+      { key: ReasonTypeKey.LoadScrap, label: "Carico scarto" },
     ]);
 
   const newMovement = (movement: NewMovement): TE.TaskEither<Error, Movement> =>

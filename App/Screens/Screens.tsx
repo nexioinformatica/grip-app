@@ -11,13 +11,13 @@ import { BarCodeEvent } from "expo-barcode-scanner";
 import { Scan } from "./Scan";
 import { Login, Profile } from "./Auth";
 import { ErrorContext, AuthContext } from "../stores";
-import { ReasonType } from "../types";
+import { ReasonTypeKey } from "../types";
 import { Error } from "./Error";
 
 export type RootStackParamList = {
   Home: undefined;
   StartProcessing: undefined;
-  NewMovement: { reasonTypeDefault: ReasonType | undefined };
+  NewMovement: { reasonTypeDefault: ReasonTypeKey | undefined };
   Scan: { onBarcodeScanned?: (barcode: BarCodeEvent) => void };
   Profile: undefined;
 };

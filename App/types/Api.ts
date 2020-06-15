@@ -31,7 +31,7 @@ export interface Movement {
   // TODO: to complete
 }
 
-export enum ReasonType {
+export enum ReasonTypeKey {
   Specified = 0,
   UnloadProd = 1,
   LoadProd = 2,
@@ -44,6 +44,11 @@ export enum ReasonType {
   // 4 = Carico Scarto
 }
 
+export interface ReasonType {
+  key: ReasonTypeKey;
+  label: string;
+}
+
 export type ReasonTypes = SelectList<
   SelectListItem<ReasonType, string>,
   ReasonType
@@ -54,7 +59,7 @@ export type Freshman = string; // it: Matricola
 export type Quantity = number;
 
 export interface NewMovement {
-  TipoCausale: ReasonType;
+  TipoCausale: ReasonTypeKey;
   Matricole: Freshman[];
   Quantita: Quantity[];
 }

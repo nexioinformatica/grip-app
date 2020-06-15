@@ -5,7 +5,6 @@ import { Content, Button, Text, H2, H3 } from "native-base";
 import {
   SimpleCard,
   Dropdown,
-  toItems,
   ScanInput,
   ScanFreshman,
 } from "../../components";
@@ -13,15 +12,14 @@ import {
   BarcodeEvent,
   NewMovement,
   ReasonType,
-  Movement,
   BarcodeDecode,
+  ReasonTypeKey,
 } from "../../types";
 import { ApiContext } from "../../stores";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as O from "fp-ts/lib/Option";
 import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
-import { Entries } from "../../types/Util";
 import { foldDefault } from "../../util/fp";
 import { RouteProp } from "@react-navigation/native";
 
@@ -42,20 +40,18 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
   const [freshman, setFreshman] = useState<string | undefined>();
   const [freshmanId, setFreshmanId] = useState<number | undefined>();
   const [quantity, setQuantity] = useState<number | undefined>();
-  const [reasonType, setReasonType] = useState<ReasonType | undefined>(
+  const [reasonType, setReasonType] = useState<ReasonTypeKey | undefined>(
     reasonTypeDefault
   );
 
   // UI Form Data
-  const [reasonTypes, setReasonTypes] = useState<Entries<ReasonType, string>>(
-    []
-  );
+  const [reasonTypes, setReasonTypes] = useState<ReasonType[]>([]);
 
   // Api Wrappers
   const getReasonTypes = () =>
     api
       .reasonTypes()()
-      .then((data: Entries<ReasonType, string>) => setReasonTypes(data));
+      .then((data: ReasonType[]) => setReasonTypes(data));
 
   const postMovement = (movement: NewMovement) =>
     pipe(
@@ -117,11 +113,9 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
           }
           containerStyle={{ marginBottom: 10 }}
         />
-        <Dropdown<ReasonType>
-          items={toItems(
-            reasonTypes.map((x, i) => ({ label: x.value, key: x.key }))
-          )}
-          selected={(reasonType && (reasonType as number)) || undefined}
+        <Dropdown<ReasonTypeKey>
+          items={reasonTypes.map((x) => ({ value: x.key, label: x.label }))}
+          selected={reasonType}
           onValueChange={(x) => {
             setReasonType(x);
           }}
@@ -133,7 +127,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
             postMovement({
               TipoCausale: pipe(
                 O.fromNullable(reasonType),
-                foldDefault<ReasonType>(ReasonType.Specified)
+                foldDefault<ReasonTypeKey>(ReasonTypeKey.Specified)
               ),
               Matricole: [],
               Quantita: [],
