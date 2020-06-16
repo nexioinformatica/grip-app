@@ -82,3 +82,7 @@ export interface ActionType {
   key: ActionTypeKey;
   label: string;
 }
+
+export interface StartProcessing {
+  //TODO: complete this type with api docs (not available until now!)
+}

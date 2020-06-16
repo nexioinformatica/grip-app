@@ -17,12 +17,14 @@ import {
   BarcodeDecode,
   ActionType,
   ActionTypeKey,
+  StartProcessing,
 } from "../types/Api";
 import {
   getOperators,
   // getReasons,
   postMovement,
   postBarcodeDecode,
+  putStartProcessing,
 } from "../data/api";
 import { req, neededLogin, publicReq } from "../util/api";
 
@@ -34,6 +36,9 @@ interface Context {
     reasonTypes: () => T.Task<ReasonType[]>;
     barcodeDecode: (barcode: string) => TE.TaskEither<Error, BarcodeDecode[]>;
     actionTypes: () => T.Task<ActionType[]>;
+    startProcessing: (
+      data: StartProcessing
+    ) => TE.TaskEither<Error, StartProcessing>;
   };
 }
 
@@ -51,6 +56,7 @@ export const ApiContext = createContext<Context>({
     reasonTypes: () => T.never,
     barcodeDecode: (barcode: string) => T.never,
     actionTypes: () => T.never,
+    startProcessing: (data: StartProcessing) => T.never,
   },
 });
 
@@ -140,6 +146,24 @@ export function ApiContextProvider({
       { key: ActionTypeKey.Operator, label: "Operatore" },
     ]);
 
+  const startProcessing = (
+    data: StartProcessing
+  ): TE.TaskEither<Error, StartProcessing> =>
+    pipe(
+      O.fromNullable(user?.token),
+      O.fold(
+        () => neededLogin(setError),
+        (token) =>
+          pipe(
+            pipe(token, req, putStartProcessing)(data),
+            TE.fold(
+              (err) => TE.left(err),
+              (res) => TE.right(res.data)
+            )
+          )
+      )
+    );
+
   return (
     <ApiContext.Provider
       value={{
@@ -150,6 +174,7 @@ export function ApiContextProvider({
           reasonTypes: reasonTypes,
           barcodeDecode: barcodeDecode,
           actionTypes: actionTypes,
+          startProcessing: startProcessing,
         },
       }}
     >
