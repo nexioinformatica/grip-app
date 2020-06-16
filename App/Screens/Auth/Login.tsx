@@ -54,7 +54,6 @@ export const Login = (props: LoginProps): React.ReactElement => {
               setFieldValue,
               values,
             }) => {
-              console.log(values.username);
               // TODO: use reflection to get props automatically (maybe?)
               const isTouched = touched.password || touched.username;
               return (
