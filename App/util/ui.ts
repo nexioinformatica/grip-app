@@ -1,6 +1,28 @@
-import { Toast } from "native-base";
+import { Toast, RnViewStyleProp, RnTextStyleProp } from "native-base";
 
-export const generalErrorToast = {
-  text: "Coff coff, qualcosa è andato storto, riprova.",
+// Exported from native-base library.
+// It do not expose this type, so a general toast cannot be created.
+export interface ToastConfiguration {
+  text: string;
+  buttonText?: string;
+  position?: "top" | "bottom" | "center";
+  type?: "danger" | "success" | "warning";
+  duration?: number;
+  onClose?: (reason: "user" | "timeout" | "functionCall") => any;
+  style?: RnViewStyleProp;
+  textStyle?: RnTextStyleProp;
+  buttonTextStyle?: RnTextStyleProp;
+  buttonStyle?: RnViewStyleProp;
+}
+
+export const generalErrorToast: ToastConfiguration = {
+  text: "Coff coff, qualcosa è andato storto, riprova",
   duration: 3000,
+  type: "danger",
+};
+
+export const generalSuccessToast: ToastConfiguration = {
+  text: "Operazione effettuata con successo",
+  duration: 3000,
+  type: "success",
 };

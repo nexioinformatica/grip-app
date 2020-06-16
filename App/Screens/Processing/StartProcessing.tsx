@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Content, Text, H2, H3, Button } from "native-base";
+import { Content, Text, H2, H3, Button, Toast } from "native-base";
 import { RootStackParamList } from "../Screens";
 import { SimpleCard, ScanFreshman, Dropdown } from "../../components";
-import { ActionType, ActionTypeKey } from "../../types";
+import { ActionType, ActionTypeKey, StartProcessing } from "../../types";
 import { ApiContext } from "../../stores";
+import { pipe } from "fp-ts/lib/pipeable";
+import * as T from "fp-ts/lib/Task";
+import * as TE from "fp-ts/lib/TaskEither";
+import { generalErrorToast, generalSuccessToast } from "../../util/ui";
 
 // import { Button } from "react-native-elements";
 
@@ -13,7 +17,7 @@ type StartProcessingProps = {
   navigation: StartProcessingNavigationProp;
 };
 
-export function StartProcessing(
+function StartProcessingComponent(
   props: StartProcessingProps
 ): React.ReactElement {
   const { navigation } = props;
@@ -32,19 +36,35 @@ export function StartProcessing(
       .actionTypes()()
       .then((res) => setActionTypes(res));
 
+  const putStartProcessing = (data: StartProcessing) => {
+    pipe(
+      data,
+      api.startProcessing,
+      TE.fold(
+        (err) => {
+          Toast.show(generalErrorToast);
+          return T.never;
+        },
+        (res) => {
+          Toast.show(generalSuccessToast);
+          return T.of(undefined);
+        }
+      )
+    )();
+  };
+
   useEffect(() => {
     getActionTypes();
   }, []);
 
   const handleSend = () => {
-    console.log(
-      JSON.stringify({
-        job: job,
-        machine: machine,
-        sheetMetal: sheetMetal,
-        actionType: actionType,
-      })
-    );
+    const x = {
+      job: job,
+      machine: machine,
+      sheetMetal: sheetMetal,
+      actionType: actionType,
+    };
+    putStartProcessing({});
   };
 
   return (
@@ -99,3 +119,5 @@ export function StartProcessing(
     </Content>
   );
 }
+
+export { StartProcessingComponent as StartProcessing };

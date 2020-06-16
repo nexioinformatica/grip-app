@@ -1,7 +1,8 @@
 import React, { useState, useContext, Key, useEffect } from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Screens";
-import { Content, Button, Text, H2, H3 } from "native-base";
+import { Content, Button, Text, H2, H3, Toast } from "native-base";
+import { Input } from "react-native-elements";
 import {
   SimpleCard,
   Dropdown,
@@ -20,8 +21,9 @@ import { pipe } from "fp-ts/lib/pipeable";
 import * as O from "fp-ts/lib/Option";
 import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
-import { foldDefault } from "../../util/fp";
+import { foldDefault, log } from "../../util/fp";
 import { RouteProp } from "@react-navigation/native";
+import { generalSuccessToast, generalErrorToast } from "../../util/ui";
 
 type NewMovementNavigationProp = StackNavigationProp<RootStackParamList>;
 type NewMovementRouteProp = RouteProp<RootStackParamList, "NewMovement">;
@@ -56,27 +58,21 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
   const postMovement = (movement: NewMovement) =>
     pipe(
       movement,
+      log,
       api.newMovement,
       TE.fold(
         (err) => {
-          console.log("ERRORE");
+          Toast.show(generalErrorToast);
           return T.never;
         },
         (res) => {
           // TODO: use the value.
           console.log(res);
+          Toast.show(generalSuccessToast);
           return T.of(undefined);
         }
       )
-    );
-
-  // Handlers
-  const handleScan = (setter: (barcodeValue: string) => void): void => {
-    navigation.navigate("Scan", {
-      onBarcodeScanned: (barcodeEvent: BarcodeEvent) =>
-        setter(barcodeEvent.data),
-    });
-  };
+    )();
 
   useEffect(() => {
     getReasonTypes();
@@ -103,14 +99,11 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
           }
           containerStyle={{ marginBottom: 10 }}
         />
-        <ScanInput
+        <Input
           key="quantity"
           placeholder="Quantità"
           value={quantity ? quantity.toString() : ""}
           onChangeText={(t: string) => setQuantity(Number.parseInt(t))}
-          onIconPress={() =>
-            handleScan((b: string) => setQuantity(Number.parseInt(b)))
-          }
           containerStyle={{ marginBottom: 10 }}
         />
         <Dropdown<ReasonTypeKey>
