@@ -12,3 +12,10 @@ web-report/
 
 # macOS
 .DS_Store
+
+# react build dir
+build/*
+
+# firebase stuff
+.firebase/*
+.firebaserc
