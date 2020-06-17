@@ -15,6 +15,10 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.nexioapp.grip",
+      "versionCode": 1
+    },
     "ios": {
       "supportsTablet": true
     },

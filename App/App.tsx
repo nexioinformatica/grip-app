@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Platform } from "react-native";
 import * as Font from "expo-font";
 import { ThemeProvider } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
@@ -11,11 +12,13 @@ import { OperatorContextProvider } from "./stores/operator";
 import * as Sentry from "sentry-expo";
 import Constants from "expo-constants";
 import { IS_SENTRY_SET_UP, RELEASE_CHANNEL } from "./util/constants";
+import { sentryError } from "./util/sentry";
 
 // Add Sentry if available
 if (IS_SENTRY_SET_UP) {
   Sentry.init({
     dsn: Constants.manifest.extra.sentryPublicDsn,
+    enableInExpoDevelopment: true,
     debug: true,
   });
 
@@ -45,6 +48,10 @@ const App = () => {
       setReady(true);
     }, 0);
   }, [setReady]);
+
+  useEffect(() => {
+    sentryError("App")(new Error("Test 1"));
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
