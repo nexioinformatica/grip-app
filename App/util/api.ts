@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { BASE_URL, API_KEY, API_CLIENT_TIMEOUT } from "../constants";
+import { BASE_URL, API_KEY, API_CLIENT_TIMEOUT } from "./constants";
 import { Token } from "../types";
 import * as T from "fp-ts/lib/Task";
 
