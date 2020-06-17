@@ -22,6 +22,18 @@
       "sentryPublicDsn": null,
       "agilecomApiBaseUrl": null,
       "agilecomApiKey": null
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": null,
+            "project": null,
+            "authToken": null
+          }
+        }
+      ]
     }
   }
 }

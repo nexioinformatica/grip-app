@@ -22,18 +22,18 @@ const overrides = {
       agilecomApiKey: process.env.AGILECOM_API_KEY || null,
       agilecomApiBaseUrl: process.env.AGILECOM_API_BASE_URL || null,
     },
-    // hooks: {
-    //   postPublish: [
-    //     {
-    //       file: 'sentry-expo/upload-sourcemaps',
-    //       config: {
-    //         organization: process.env.SIS_SENTRY_ORG || null,
-    //         project: process.env.SIS_SENTRY_PROJECT || null,
-    //         authToken: process.env.SIS_SENTRY_AUTH_TOKEN || null
-    //       }
-    //     }
-    //   ]
-    // },
+    hooks: {
+      postPublish: [
+        {
+          file: "sentry-expo/upload-sourcemaps",
+          config: {
+            organization: process.env.SENTRY_ORG || null,
+            project: process.env.SENTRY_PROJECT || null,
+            authToken: process.env.SENTRY_AUTH_TOKEN || null,
+          },
+        },
+      ],
+    },
     version: pkgJson.version,
   },
 };

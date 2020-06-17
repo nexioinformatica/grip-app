@@ -8,6 +8,22 @@ import { theme } from "./util/theme";
 import { ErrorContextProvider, AuthContextProvider } from "./stores";
 import { ApiContextProvider } from "./stores/api";
 import { OperatorContextProvider } from "./stores/operator";
+import * as Sentry from "sentry-expo";
+import Constants from "expo-constants";
+import { IS_SENTRY_SET_UP, RELEASE_CHANNEL } from "./util/constants";
+
+// Add Sentry if available
+if (IS_SENTRY_SET_UP) {
+  Sentry.init({
+    dsn: Constants.manifest.extra.sentryPublicDsn,
+    debug: true,
+  });
+
+  Sentry.setRelease(RELEASE_CHANNEL);
+  if (Constants.manifest.revisionId) {
+    Sentry.setExtra("sisRevisionId", Constants.manifest.revisionId);
+  }
+}
 
 const App = () => {
   const [isFontReady, setFontReady] = useState(false);
