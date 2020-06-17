@@ -4,7 +4,6 @@ import { RootStackParamList } from "../Screens";
 import { Content, Button, Text, H1 } from "native-base";
 import { SimpleCard } from "../../components";
 import { AuthContext } from "../../stores";
-import { OperatorContext } from "../../stores";
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 type ProfileProps = {
@@ -12,9 +11,7 @@ type ProfileProps = {
 };
 
 export const Profile = (props: ProfileProps): React.ReactElement => {
-  const { navigation } = props;
   const { user, logout } = useContext(AuthContext);
-  const { operator, setOperator } = useContext(OperatorContext);
 
   return (
     <>

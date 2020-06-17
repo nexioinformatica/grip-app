@@ -1,5 +1,3 @@
-import { BarcodeEvent } from "../../types";
-
 export type ScanInputListData = ScanInputData[];
 
 export interface ScanInputData {

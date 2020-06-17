@@ -1,15 +1,9 @@
-import React, { createContext, useState, useContext } from "react";
-
-import moment from "moment";
-
-import { pipe } from "fp-ts/lib/pipeable";
-import * as E from "fp-ts/lib/Either";
+import React, { createContext, useState } from "react";
 
 import { noop } from "../util/noop";
-import { ErrorContext } from "./error";
-import { Login, Token, User } from "../types";
-import { token as tokenApi } from "../data/auth";
 import { Operator } from "../types/Api";
+
+// TODO: this module may be removed (check).
 
 interface Context {
   operator?: Operator;

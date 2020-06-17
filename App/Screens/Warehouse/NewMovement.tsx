@@ -1,16 +1,10 @@
-import React, { useState, useContext, Key, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Screens";
 import { Content, Button, Text, H2, H3, Toast } from "native-base";
 import { Input } from "react-native-elements";
+import { SimpleCard, Dropdown, ScanFreshman } from "../../components";
 import {
-  SimpleCard,
-  Dropdown,
-  ScanInput,
-  ScanFreshman,
-} from "../../components";
-import {
-  BarcodeEvent,
   NewMovement,
   ReasonType,
   BarcodeDecode,
@@ -33,7 +27,7 @@ type NewMovementProps = {
 };
 
 function NewMovementComponent(props: NewMovementProps): React.ReactElement {
-  const { navigation, route } = props;
+  const { route } = props;
   const { reasonTypeDefault } = route.params;
 
   const { api } = useContext(ApiContext);

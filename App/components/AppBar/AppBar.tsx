@@ -1,14 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
-import {
-  Header,
-  Body,
-  Title,
-  Right,
-  Button,
-  Icon,
-  Left,
-  Text,
-} from "native-base";
+import React from "react";
+import { Header, Body, Title, Right, Button, Icon, Left } from "native-base";
 import { StackHeaderProps } from "@react-navigation/stack";
 
 type AppBarProps = StackHeaderProps;

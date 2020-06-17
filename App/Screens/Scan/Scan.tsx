@@ -1,19 +1,7 @@
-import React, { useEffect } from "react";
-import {
-  StackNavigationProp,
-  StackNavigationOptions,
-} from "@react-navigation/stack";
+import React from "react";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../Screens";
-import {
-  Container,
-  Content,
-  Card,
-  CardItem,
-  Body,
-  Button,
-  Text,
-} from "native-base";
 import { BarcodeScanner } from "../../components";
 import { BarCodeEvent } from "expo-barcode-scanner";
 import { noop } from "../../util/noop";

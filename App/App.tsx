@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Text } from "native-base";
 import * as Font from "expo-font";
 import { ThemeProvider } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";

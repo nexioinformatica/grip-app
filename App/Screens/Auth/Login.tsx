@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Container, Button, Text, Content, H1, H2 } from "native-base";
 import { Input } from "react-native-elements";
 import { StyleSheet, View } from "react-native";
@@ -9,14 +9,12 @@ import * as E from "fp-ts/lib/Either";
 import { ChooseOperator, SimpleCard } from "../../components";
 import { Operator } from "../../types";
 
-interface LoginProps {}
-
 const validationSchema = Yup.object({
   username: Yup.string().required().min(4),
   password: Yup.string().required().min(4),
 });
 
-export const Login = (props: LoginProps): React.ReactElement => {
+export const Login = (): React.ReactElement => {
   const { login } = useContext(AuthContext);
 
   return (
@@ -26,8 +24,8 @@ export const Login = (props: LoginProps): React.ReactElement => {
           <H1>Login</H1>
           <Text>
             Scegli il tuo username ed inserisci la password. Se il tuo operatore
-            non è presente puoi provare a digitare manualmente l'username
-            nell'apposita casella di testo.
+            non è presente puoi provare a digitare manualmente l&apos;username
+            nell&apos;apposita casella di testo.
           </Text>
         </SimpleCard>
         <SimpleCard>
@@ -54,8 +52,6 @@ export const Login = (props: LoginProps): React.ReactElement => {
               setFieldValue,
               values,
             }) => {
-              // TODO: use reflection to get props automatically (maybe?)
-              const isTouched = touched.password || touched.username;
               return (
                 <>
                   <View style={{ width: "100%" }}>

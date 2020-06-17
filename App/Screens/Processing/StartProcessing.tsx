@@ -20,7 +20,6 @@ type StartProcessingProps = {
 function StartProcessingComponent(
   props: StartProcessingProps
 ): React.ReactElement {
-  const { navigation } = props;
   const { api } = useContext(ApiContext);
 
   const [job, setJob] = useState<string | undefined>("");
@@ -72,8 +71,9 @@ function StartProcessingComponent(
       <SimpleCard>
         <H2>Inizio Lavorazione</H2>
         <Text>
-          Notifica l'inizio della lavorazione al gestionale indicando fase di
-          lavorazione, macchina, lamiera e tipologia e motivazione (opzionale).
+          Notifica l&apos;inizio della lavorazione al gestionale indicando fase
+          di lavorazione, macchina, lamiera e tipologia e motivazione
+          (opzionale).
         </Text>
       </SimpleCard>
       <SimpleCard>
@@ -84,7 +84,9 @@ function StartProcessingComponent(
           placeholder="Fase di lavorazione"
           value={job}
           onChangeValue={setJob}
-          onDecodeValue={(decoded) => {}} // TODO: handle decoded
+          onDecodeValue={(decoded) => {
+            console.log(decoded);
+          }} // TODO: handle decoded
         />
 
         <ScanFreshman
@@ -92,7 +94,9 @@ function StartProcessingComponent(
           placeholder="Macchina"
           value={machine}
           onChangeValue={setMachine}
-          onDecodeValue={(decoded) => {}} // TODO: handle decoded
+          onDecodeValue={(decoded) => {
+            console.log(decoded);
+          }} // TODO: handle decoded
         />
 
         <ScanFreshman
@@ -100,7 +104,9 @@ function StartProcessingComponent(
           placeholder="Lamiera"
           value={sheetMetal}
           onChangeValue={setSheetMetal}
-          onDecodeValue={(decoded) => {}} // TODO: handle decoded
+          onDecodeValue={(decoded) => {
+            console.log(decoded);
+          }} // TODO: handle decoded
         />
 
         <Dropdown<ActionTypeKey>

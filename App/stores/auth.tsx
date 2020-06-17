@@ -11,6 +11,7 @@ import { ErrorContext } from "./error";
 const USER_STORAGE_KEY = "user";
 
 /** Json reviver for user object. */
+// tslint:disable-next-line:no-explicit-any
 const userReviver = (k: string, v: any) => {
   if (k === "timestamp") return moment(v);
   return v;
