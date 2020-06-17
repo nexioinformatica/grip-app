@@ -1,12 +1,26 @@
 import Constants from "expo-constants";
 
-export const API_KEY = "cc96d24a-c4af-4774-a7a6-4136fb07c718";
+/**
+ * The agilecom's api key.
+ */
+export const API_KEY = Constants.manifest.extra.agilecomApiKey || "test-key";
 
+/**
+ * The agilecom's api base url.
+ */
+export const BASE_URL =
+  Constants.manifest.extra.agilecomApiBaseUrl || "http://localhost:3000";
 // export const BASE_URL = "https://api.agilecom.it:8443";
 // export const BASE_URL = "http://localhost:3000";
-export const BASE_URL = "http://192.168.1.116:3000";
 
+/**
+ * Value of a second in millisconds.
+ */
 export const SECOND_MS = 1000;
+
+/**
+ * Number of seconds for api request timeout.
+ */
 export const API_CLIENT_TIMEOUT = 10 * SECOND_MS;
 
 /**

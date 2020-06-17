@@ -19,7 +19,9 @@
       "supportsTablet": true
     },
     "extra": {
-      "sentryPublicDsn": null
+      "sentryPublicDsn": null,
+      "agilecomApiBaseUrl": null,
+      "agilecomApiKey": null
     }
   }
 }

@@ -18,7 +18,9 @@ const pkgJson = require("../package.json");
 const overrides = {
   expo: {
     extra: {
-      sentryPublicDsn: process.env.SIS_SENTRY_PUBLIC_DNS || null,
+      sentryPublicDsn: process.env.SENTRY_PUBLIC_DNS || null,
+      agilecomApiKey: process.env.AGILECOM_API_KEY || null,
+      agilecomApiBaseUrl: process.env.AGILECOM_API_BASE_URL || null,
     },
     // hooks: {
     //   postPublish: [
