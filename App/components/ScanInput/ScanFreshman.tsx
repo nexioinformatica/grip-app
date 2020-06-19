@@ -71,6 +71,9 @@ export const ScanFreshman = ({
         <Icon
           name="alert-circle"
           onPress={() => {
+            // we need to clean previous value in order to redo the barcode decode
+            // if scanned item has the same barcode.
+            onChangeValue(undefined);
             onIconPress();
           }}
         />
@@ -92,5 +95,3 @@ export const ScanFreshman = ({
     />
   );
 };
-
-// <Icon name="camera" onPress={onIconPress ? onIconPress : noop} />
