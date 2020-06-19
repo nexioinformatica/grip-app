@@ -1,4 +1,4 @@
-import { Toast, RnViewStyleProp, RnTextStyleProp } from "native-base";
+import { RnViewStyleProp, RnTextStyleProp } from "native-base";
 
 // Exported from native-base library.
 // It do not expose this type, so a general toast cannot be created.
@@ -8,6 +8,7 @@ export interface ToastConfiguration {
   position?: "top" | "bottom" | "center";
   type?: "danger" | "success" | "warning";
   duration?: number;
+  // tslint:disable-next-line:no-explicit-any
   onClose?: (reason: "user" | "timeout" | "functionCall") => any;
   style?: RnViewStyleProp;
   textStyle?: RnTextStyleProp;

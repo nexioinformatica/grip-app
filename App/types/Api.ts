@@ -83,6 +83,7 @@ export interface ActionType {
   label: string;
 }
 
+// tslint:disable-next-line:no-empty-interface
 export interface StartProcessing {
   //TODO: complete this type with api docs (not available until now!)
 }

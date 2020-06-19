@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Text } from "native-base";
 import * as Font from "expo-font";
 import { ThemeProvider } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
@@ -9,10 +8,15 @@ import { theme } from "./util/theme";
 import { ErrorContextProvider, AuthContextProvider } from "./stores";
 import { ApiContextProvider } from "./stores/api";
 import { OperatorContextProvider } from "./stores/operator";
+import { init as sentryInit } from "./util/sentry";
+import { IS_SENTRY_SET_UP } from "./util/constants";
 
-const App = () => {
+if (IS_SENTRY_SET_UP) {
+  sentryInit();
+}
+
+const App = (): React.ReactElement => {
   const [isFontReady, setFontReady] = useState(false);
-  const [isReady, setReady] = useState(false);
 
   useEffect(() => {
     (async function () {
@@ -25,19 +29,13 @@ const App = () => {
     })();
   }, [setFontReady]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setReady(true);
-    }, 0);
-  }, [setReady]);
-
   return (
     <ThemeProvider theme={theme}>
       <ErrorContextProvider>
         <AuthContextProvider>
           <ApiContextProvider>
             <OperatorContextProvider>
-              {isFontReady && isReady ? <Screens /> : <SplashScreen />}
+              {isFontReady ? <Screens /> : <SplashScreen />}
             </OperatorContextProvider>
           </ApiContextProvider>
         </AuthContextProvider>

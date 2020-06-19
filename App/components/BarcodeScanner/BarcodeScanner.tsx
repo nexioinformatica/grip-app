@@ -10,7 +10,7 @@ export interface BarcodeScannerProps {
   onBarcodeScanned?: (barcodeEvent: BarCodeEvent) => void;
 }
 
-export interface BarcodeEvent extends BarCodeEvent {}
+export type BarcodeEvent = BarCodeEvent;
 
 export const BarcodeScanner = ({
   onBarcodeScanned,

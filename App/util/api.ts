@@ -1,7 +1,10 @@
 import axios, { AxiosInstance } from "axios";
-import { BASE_URL, API_KEY, API_CLIENT_TIMEOUT } from "../constants";
+import { BASE_URL, API_KEY, API_CLIENT_TIMEOUT } from "./constants";
 import { Token } from "../types";
 import * as T from "fp-ts/lib/Task";
+import * as TE from "fp-ts/lib/TaskEither";
+import { pipe } from "fp-ts/lib/pipeable";
+import { sentryError } from "./sentry";
 
 /** @returns A request application defaults and giben token as authorization. */
 export const req = (token: Token): AxiosInstance => {
@@ -38,3 +41,21 @@ export const errorOccurred = <T>(
   setError(err);
   return T.never;
 };
+
+/**
+ * Apply the identity function, and log, as a side effect, the error, if any.
+ * @returns The given TaskEither `te`.
+ */
+export const logErrorIfAny = <T>(
+  te: TE.TaskEither<Error, T>
+): TE.TaskEither<Error, T> =>
+  pipe(
+    te,
+    TE.fold(
+      (err) => {
+        sentryError("ApiContext")(err);
+        return TE.left(err);
+      },
+      (res) => TE.right(res)
+    )
+  );

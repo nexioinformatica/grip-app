@@ -26,7 +26,7 @@ import {
   postBarcodeDecode,
   putStartProcessing,
 } from "../data/api";
-import { req, neededLogin, publicReq } from "../util/api";
+import { req, neededLogin, publicReq, logErrorIfAny } from "../util/api";
 
 interface Context {
   api: {
@@ -42,6 +42,7 @@ interface Context {
   };
 }
 
+// TODO: remove from here
 export interface OperatorsParam {
   // TODO: move away
   isApiEnabled: boolean;
@@ -68,34 +69,21 @@ export function ApiContextProvider({
   const { setError } = useContext(ErrorContext);
   const { user } = useContext(AuthContext);
 
+  /** Operators */
   const operators = ({
     isApiEnabled,
     isDepartmentEnabled,
   }: OperatorsParam): TE.TaskEither<Error, Operators> =>
     pipe(
       pipe(publicReq(), getOperators)(isApiEnabled, isDepartmentEnabled),
+      logErrorIfAny,
       TE.fold(
         (err) => TE.left(err),
         (res) => TE.right(res.data)
       )
     );
 
-  // const movementReasons = () =>
-  //   pipe(
-  //     O.fromNullable(user?.token),
-  //     O.fold(
-  //       () => neededLogin(setError, []),
-  //       (token) =>
-  //         pipe(
-  //           pipe(token, req, getReasons)(),
-  //           TE.fold(
-  //             (err) => errorOccurred(setError, err, []),
-  //             (res) => T.of(res.data)
-  //           )
-  //         )
-  //     )
-  //   );
-
+  /** Reason Types */
   const reasonTypes = (): T.Task<ReasonType[]> =>
     T.of([
       { key: ReasonTypeKey.Specified, label: "Specificato" },
@@ -105,6 +93,7 @@ export function ApiContextProvider({
       { key: ReasonTypeKey.LoadScrap, label: "Carico scarto" },
     ]);
 
+  /** New Movement */
   const newMovement = (movement: NewMovement): TE.TaskEither<Error, Movement> =>
     pipe(
       O.fromNullable(user?.token),
@@ -113,6 +102,7 @@ export function ApiContextProvider({
         (token) =>
           pipe(
             pipe(token, req, postMovement)(movement),
+            logErrorIfAny,
             TE.fold(
               (err) => TE.left(err),
               (res) => TE.right(res.data)
@@ -121,6 +111,7 @@ export function ApiContextProvider({
       )
     );
 
+  /** BarcodeDecode */
   const barcodeDecode = (
     barcode: string
   ): TE.TaskEither<Error, BarcodeDecode[]> =>
@@ -131,6 +122,7 @@ export function ApiContextProvider({
         (token) =>
           pipe(
             pipe(token, req, postBarcodeDecode)(barcode),
+            logErrorIfAny,
             TE.fold(
               (err) => TE.left(err),
               (res) => TE.right(res.data)
@@ -139,6 +131,7 @@ export function ApiContextProvider({
       )
     );
 
+  /** Action Types */
   const actionTypes = (): T.Task<ActionType[]> =>
     T.of([
       { key: ActionTypeKey.MachineAndOperator, label: "Macchina e Operatore" },
@@ -146,6 +139,7 @@ export function ApiContextProvider({
       { key: ActionTypeKey.Operator, label: "Operatore" },
     ]);
 
+  /** Start Proessing */
   const startProcessing = (
     data: StartProcessing
   ): TE.TaskEither<Error, StartProcessing> =>
@@ -156,6 +150,7 @@ export function ApiContextProvider({
         (token) =>
           pipe(
             pipe(token, req, putStartProcessing)(data),
+            logErrorIfAny,
             TE.fold(
               (err) => TE.left(err),
               (res) => TE.right(res.data)

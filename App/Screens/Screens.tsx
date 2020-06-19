@@ -98,7 +98,7 @@ const wrap = (children: any): React.ReactElement => {
 };
 
 const Screens = (): React.ReactElement => {
-  const { error, setError } = useContext(ErrorContext);
+  const { error } = useContext(ErrorContext);
   const { user } = useContext(AuthContext);
 
   // Login Stack

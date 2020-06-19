@@ -4,7 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Screens";
 import { Content, Button, Text, H1 } from "native-base";
 import { SimpleCard } from "../../components";
-import { ReasonType, ReasonTypeKey } from "../../types";
+import { ReasonTypeKey } from "../../types";
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 type HomeProps = {

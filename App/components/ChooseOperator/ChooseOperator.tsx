@@ -31,7 +31,6 @@ const isSelected = (x: Operator, ground: O.Option<Operator>) =>
   );
 
 export const ChooseOperator = ({ selected, onSelect }: ChooseOperatorProps) => {
-  const { setError } = useContext(ErrorContext);
   const { api } = useContext(ApiContext);
 
   const [operators, setOperators] = useState<Operators>([]);
