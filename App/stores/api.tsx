@@ -24,7 +24,7 @@ import {
   // getReasons,
   postMovement,
   postBarcodeDecode,
-  putStartProcessing,
+  postStartProcessing,
 } from "../data/api";
 import { req, neededLogin, publicReq, logErrorIfAny } from "../util/api";
 
@@ -149,7 +149,7 @@ export function ApiContextProvider({
         () => neededLogin(setError),
         (token) =>
           pipe(
-            pipe(token, req, putStartProcessing)(data),
+            pipe(token, req, postStartProcessing)(data),
             logErrorIfAny,
             TE.fold(
               (err) => TE.left(err),

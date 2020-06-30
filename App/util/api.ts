@@ -1,31 +1,64 @@
-import axios, { AxiosInstance } from "axios";
-import { BASE_URL, API_KEY, API_CLIENT_TIMEOUT } from "./constants";
+import axios, { AxiosInstance, CancelToken, CancelTokenSource } from "axios";
+import {
+  BASE_URL,
+  API_KEY,
+  API_CLIENT_REQUEST_TIMEOUT,
+  API_CLIENT_CONNECTION_TIMEOUT,
+} from "./constants";
 import { Token } from "../types";
 import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
 import { pipe } from "fp-ts/lib/pipeable";
 import { sentryError } from "./sentry";
 
-/** @returns A request application defaults and giben token as authorization. */
+/**
+ * Create an abort token to cancel request if connection fails.
+ * For further details see https://github.com/axios/axios/issues/647.
+ *
+ * **Important note**: the setTimeout function is executed when this function
+ * is executed. Do not beat around the bush (tergiversare, in italian) with
+ * this abort token.
+ */
+const createAbortToken = (): CancelTokenSource => {
+  let abort = axios.CancelToken.source();
+  setTimeout(
+    () =>
+      abort.cancel(
+        `Request canceled after ${API_CLIENT_CONNECTION_TIMEOUT}ms.`
+      ),
+    API_CLIENT_CONNECTION_TIMEOUT
+  );
+  return abort;
+};
+
+/** @returns A request with application defaults and given token as authorization. */
 export const req = (token: Token): AxiosInstance => {
   return axios.create({
     baseURL: BASE_URL,
-    timeout: API_CLIENT_TIMEOUT,
+    timeout: API_CLIENT_REQUEST_TIMEOUT,
     headers: {
       "X-ApiKey": API_KEY,
       Authorization: "Bearer " + token.access_token,
     },
+    cancelToken: createAbortToken().token,
   });
 };
 
 /** @returns A request with application defaults and no authentication. */
 export const publicReq = (): AxiosInstance => {
+  let abort = axios.CancelToken.source();
+  setTimeout(
+    () => abort.cancel(`Timeout of ${API_CLIENT_CONNECTION_TIMEOUT}ms.`),
+    API_CLIENT_CONNECTION_TIMEOUT
+  );
+
   return axios.create({
     baseURL: BASE_URL,
-    timeout: API_CLIENT_TIMEOUT,
+    timeout: API_CLIENT_REQUEST_TIMEOUT,
     headers: {
       "X-ApiKey": API_KEY,
     },
+    cancelToken: createAbortToken().token,
   });
 };
 
