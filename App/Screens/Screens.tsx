@@ -42,7 +42,11 @@ const RootStack = ((): React.ReactElement => {
         }}
       >
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="StartProcessing" component={StartProcessing} />
+        <Stack.Screen
+          name="StartProcessing"
+          options={{ title: "Inizio Lavorazione" }}
+          component={StartProcessing}
+        />
         <Stack.Screen
           name="NewMovement"
           options={{ title: "Nuovo Movimento" }}

@@ -56,7 +56,7 @@ export function Home(props: HomeProps): React.ReactElement {
           <ScrapToWarehouseButton
             full
             style={styles.action}
-            onPress={() => handleScrapToWarehouseButtonPress()}
+            onPress={handleScrapToWarehouseButtonPress}
           />
         </SimpleCard>
       </Content>
