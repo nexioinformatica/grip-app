@@ -24,21 +24,11 @@ export const getOperators = (i: AxiosInstance) => (
   );
 };
 
-// export const getReasons = (i: AxiosInstance) => (): TE.TaskEither<
-//   Error,
-//   AxiosResponse<Reasons>
-// > => {
-//   return TE.tryCatch<Error, AxiosResponse>(
-//     () => i.get<Reasons>("api/v1/causali-magazzino"),
-//     (reason) => new Error(String(reason))
-//   );
-// };
-
 export const postMovement = (i: AxiosInstance) => (
   movement: NewMovement
 ): TE.TaskEither<Error, AxiosResponse<Movement>> => {
   return TE.tryCatch<Error, AxiosResponse<Movement>>(
-    () => i.post<Movement>("api/v1/movimenti-magazzino", { data: movement }),
+    () => i.post<Movement>("api/v1/movimenti-magazzino", movement),
     (reason) => new Error(String(reason))
   );
 };
@@ -52,12 +42,11 @@ export const postBarcodeDecode = (i: AxiosInstance) => (
   );
 };
 
-export const putStartProcessing = (i: AxiosInstance) => (
-  data: StartProcessing
+export const postStartProcessing = (i: AxiosInstance) => (
+  startProcessing: StartProcessing
 ): TE.TaskEither<Error, AxiosResponse<StartProcessing>> => {
-  return TE.left(new Error("Not implemented yet"));
-  // return TE.tryCatch<Error, AxiosResponse<StartProcessing>>(
-  //   () => i.put<BarcodeDecode[]>("api/v1/attivita", startProcessing),
-  //   (reason) => new Error(String(reason))
-  // );
+  return TE.tryCatch<Error, AxiosResponse<StartProcessing>>(
+    () => i.post<BarcodeDecode[]>("api/v1/attivita", startProcessing),
+    (reason) => new Error(String(reason))
+  );
 };
