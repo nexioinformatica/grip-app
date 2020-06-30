@@ -14,14 +14,14 @@ export const BASE_URL =
 // export const BASE_URL = "http://localhost:3000";
 
 /**
- * Value of a second in millisconds.
+ * Number of milliseconds for api request timeout.
  */
-export const SECOND_MS = 1000;
+export const API_CLIENT_REQUEST_TIMEOUT = 10 * 1000;
 
 /**
- * Number of seconds for api request timeout.
+ * Number of milliseconds for api connection timeout.
  */
-export const API_CLIENT_TIMEOUT = 10 * SECOND_MS;
+export const API_CLIENT_CONNECTION_TIMEOUT = 15 * 1000;
 
 /**
  * The current release channel. Can be one of `development`, `default` or
