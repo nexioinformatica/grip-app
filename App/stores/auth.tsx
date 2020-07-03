@@ -3,10 +3,14 @@ import { AsyncStorage } from "react-native";
 import moment from "moment";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as E from "fp-ts/lib/Either";
+import * as T from "fp-ts/lib/Task";
+import * as TE from "fp-ts/lib/TaskEither";
 import { noop } from "../util/noop";
 import { Login, Token, User } from "../types";
-import { token as tokenApi } from "../data/auth";
+import { login as postLogin } from "../data/auth";
+import { refresh as postRefresh } from "../data/auth";
 import { ErrorContext } from "./error";
+import { publicReq } from "../util/api";
 
 const USER_STORAGE_KEY = "user";
 
@@ -21,7 +25,7 @@ const userReviver = (k: string, v: any) => {
 interface Context {
   user?: User;
   logout: () => void;
-  login: (data: E.Either<Login, Token>) => void;
+  login: (data: E.Either<Login, Token>) => TE.TaskEither<Error, User>;
   // auth: () => void;
 }
 
@@ -37,7 +41,7 @@ const buildUser = (username: string) => (token: Token): User => {
 export const AuthContext = createContext<Context>({
   user: undefined,
   logout: noop,
-  login: noop,
+  login: (data: E.Either<Login, Token>) => T.never,
 });
 
 export function AuthContextProvider({
@@ -77,15 +81,46 @@ export function AuthContextProvider({
   }, [user]);
 
   /** Login the user either with login or token data. */
-  const login = (data: E.Either<Login, Token>) =>
-    pipe(
+  const login = (data: E.Either<Login, Token>): TE.TaskEither<Error, User> => {
+    return pipe(
       data,
       E.fold(
-        (login) =>
-          pipe(tokenApi(E.left(login)), buildUser(login.username), setUser),
-        (token) => 1 // TODO: is this useful? Note that we save in the async storage the whole user object not only the token.
+        (loginData) =>
+          pipe(
+            pipe(publicReq(), postLogin)(loginData),
+            TE.fold(
+              (err) => TE.left(err),
+              (res) => {
+                const newUser = buildUser(loginData.username)(res.data);
+                // do the side effect
+                setUser(newUser);
+                return TE.right(newUser);
+              }
+            )
+          ),
+        (tokenData) =>
+          pipe(
+            pipe(publicReq(), postRefresh)(tokenData),
+            TE.fold(
+              (err) => TE.left(err),
+              (res) => {
+                if (user) {
+                  // do the side effect
+                  const newUser = { ...user, token: res.data };
+                  setUser(newUser);
+                  return TE.right(newUser);
+                } else {
+                  // should not get here
+                  return TE.left(
+                    new Error("User is not logged in, cannot refresh token")
+                  );
+                }
+              }
+            )
+          )
       )
     );
+  };
 
   /** Logout the user. */
   const logout = () => setUser(undefined);

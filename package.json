@@ -10,6 +10,7 @@
   "scripts": {
     "gen": "node scripts/generateAppJson.js",
     "start": "node scripts/generateAppJson.js && expo start",
+    "start-no-https": "node scripts/generateAppJson.js && expo start --no-https",
     "android": "node scripts/generateAppJson.js && expo start --android",
     "ios": "node scripts/generateAppJson.js && expo start --ios",
     "web": "node scripts/generateAppJson.js && expo start --web",

@@ -1,31 +1,39 @@
+import { AxiosInstance, AxiosResponse } from "axios";
 import { Token, Login } from "../types";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as E from "fp-ts/lib/Either";
+import * as TE from "fp-ts/lib/TaskEither";
+import { API_KEY } from "../util/constants";
+import { req, publicReq } from "../util/api";
 
-const login = (data: Login): Token => {
-  return {
-    access_token: "aa",
-    expires_in: 100,
-    token_type: "Bearer",
-    refresh_token: "bbb",
-  };
+export const login = (i: AxiosInstance) => (
+  data: Login
+): TE.TaskEither<Error, AxiosResponse<Token>> => {
+  return TE.tryCatch<Error, AxiosResponse<Token>>(
+    () =>
+      i.post<Token>("token", {
+        params: {
+          client_id: API_KEY,
+          username: data.username,
+          password: data.password,
+          grant_type: "password",
+        },
+      }),
+    (reason) => new Error(String(reason))
+  );
 };
 
-const refresh = (data: Token): Token => {
-  return {
-    access_token: "aa",
-    expires_in: 100,
-    token_type: "Bearer",
-    refresh_token: "bbb",
-  };
-};
-
-export const token = (auth: E.Either<Login, Token>): Token => {
-  return pipe(
-    auth,
-    E.fold(
-      (data) => login(data),
-      (data) => refresh(data)
-    )
+export const refresh = (i: AxiosInstance) => (
+  data: Token
+): TE.TaskEither<Error, AxiosResponse<Token>> => {
+  return TE.tryCatch<Error, AxiosResponse<Token>>(
+    () =>
+      i.post<Token>("token", {
+        params: {
+          grant_type: "refresh_token",
+          refresh_token: data.refresh_token,
+        },
+      }),
+    (reason) => new Error(String(reason))
   );
 };

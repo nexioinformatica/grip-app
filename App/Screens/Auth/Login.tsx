@@ -1,13 +1,17 @@
 import React, { useContext } from "react";
-import { Container, Button, Text, Content, H1, H2 } from "native-base";
+import { Container, Button, Text, Content, H1, H2, Toast } from "native-base";
 import { Input } from "react-native-elements";
 import { StyleSheet, View } from "react-native";
 import { Formik, Field } from "formik";
 import * as Yup from "yup";
 import { AuthContext } from "../../stores";
 import * as E from "fp-ts/lib/Either";
+import * as T from "fp-ts/lib/Task";
+import * as TE from "fp-ts/lib/TaskEither";
 import { ChooseOperator, SimpleCard } from "../../components";
 import { Operator } from "../../types";
+import { generalErrorToast } from "../../util/ui";
+import { pipe } from "fp-ts/lib/pipeable";
 
 const validationSchema = Yup.object({
   username: Yup.string().required().min(4),
@@ -33,12 +37,24 @@ export const Login = (): React.ReactElement => {
             initialValues={{ username: "", password: "test" }} // TODO: remove defaults
             validationSchema={validationSchema}
             onSubmit={(values) =>
-              login(
-                E.left({
-                  username: values.username,
-                  password: values.password,
-                })
-              )
+              pipe(
+                login(
+                  E.left({
+                    username: values.username,
+                    password: values.password,
+                  })
+                ),
+                TE.fold(
+                  (err) => {
+                    Toast.show(generalErrorToast);
+                    return T.of(undefined);
+                  },
+                  (res) => {
+                    console.log(res);
+                    return T.of(res);
+                  }
+                )
+              )()
             }
           >
             {({
@@ -63,9 +79,6 @@ export const Login = (): React.ReactElement => {
                         setFieldValue("username", x.UserName)
                       }
                     />
-                    {/* <ChooseOperator
-                      onSelect={(x) => setFieldValue("username", x.UserName)}
-                    /> */}
                   </View>
 
                   <View style={{ marginTop: 20, width: "100%" }}>
