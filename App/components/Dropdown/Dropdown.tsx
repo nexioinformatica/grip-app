@@ -40,7 +40,6 @@ export const Dropdown = <T,>({
 
   return (
     <Picker
-      note
       mode="dropdown"
       style={{ width: "100%" }}
       selectedValue={selected}
