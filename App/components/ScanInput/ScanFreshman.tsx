@@ -19,8 +19,6 @@ export interface ScanFreshmanProps extends InputProps {
  * Collect user input as text or 2D code and provide the decoded object using
  * `barcode-decode` api.
  *
- * @param key
- * @param placeholder
  * @param value The value for the input component.
  * @param onChangeValue Callback for updating the input value.
  * @param onDecodeValue Callback providing the decoded value of the input value.

@@ -6,9 +6,11 @@ import { SimpleCard, ScanFreshman, Dropdown } from "../../components";
 import { ActionType, ActionTypeKey, StartProcessing } from "../../types";
 import { ApiContext } from "../../stores";
 import { pipe } from "fp-ts/lib/pipeable";
+import * as O from "fp-ts/lib/Option";
 import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
 import { generalErrorToast, generalSuccessToast } from "../../util/ui";
+import { isUndefined, allTrue, isEps, side, sideVoid } from "../../util/fp";
 
 // import { Button } from "react-native-elements";
 
@@ -25,18 +27,20 @@ function StartProcessingComponent(
   const [job, setJob] = useState<string | undefined>("");
   const [machine, setMachine] = useState<string | undefined>("");
   const [sheetMetal, setSheetMetal] = useState<string | undefined>("");
-  const [actionTypes, setActionTypes] = useState<ActionType[]>([]);
   const [actionType, setActionType] = useState<ActionTypeKey>(
     ActionTypeKey.MachineAndOperator
   );
+
+  const [actionTypes, setActionTypes] = useState<ActionType[]>([]);
+  const [isValid, setIsValid] = useState<boolean>(false);
 
   const getActionTypes = () =>
     api
       .actionTypes()()
       .then((res) => setActionTypes(res));
 
-  const putStartProcessing = (data: StartProcessing) => {
-    pipe(
+  const sendStartProcessing = (data: StartProcessing) => {
+    return pipe(
       data,
       api.startProcessing,
       TE.fold(
@@ -56,14 +60,24 @@ function StartProcessingComponent(
     getActionTypes();
   }, []);
 
+  useEffect(() => {
+    const values = [job, machine, sheetMetal, actionType];
+    setIsValid(
+      pipe(
+        values,
+        allTrue((x: any) => !isUndefined(x) && !isEps(x))
+      )
+    );
+  }, [job, machine, sheetMetal, actionType]);
+
   const handleSend = () => {
-    const x = {
-      job: job,
-      machine: machine,
-      sheetMetal: sheetMetal,
-      actionType: actionType,
-    };
-    putStartProcessing({});
+    // TODO: handle the case job, machine, ... are undefined.
+    sendStartProcessing({
+      job: job ?? "",
+      machine: machine ?? "",
+      sheetMetal: sheetMetal ?? "",
+      actionType: actionType ?? "",
+    });
   };
 
   return (
@@ -118,7 +132,7 @@ function StartProcessingComponent(
           onValueChange={setActionType}
         />
 
-        <Button full onPress={() => handleSend()}>
+        <Button full onPress={() => handleSend()} disabled={!isValid}>
           <Text>Invia</Text>
         </Button>
       </SimpleCard>

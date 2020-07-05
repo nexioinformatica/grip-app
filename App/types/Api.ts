@@ -85,5 +85,9 @@ export interface ActionType {
 
 // tslint:disable-next-line:no-empty-interface
 export interface StartProcessing {
+  job: string;
+  machine: string;
+  sheetMetal: string;
+  actionType: ActionTypeKey;
   //TODO: complete this type with api docs (not available until now!)
 }

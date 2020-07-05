@@ -15,7 +15,7 @@ import { pipe } from "fp-ts/lib/pipeable";
 import * as O from "fp-ts/lib/Option";
 import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
-import { foldDefault, log } from "../../util/fp";
+import { foldDefault, log, allTrue, isUndefined, isEps } from "../../util/fp";
 import { RouteProp } from "@react-navigation/native";
 import { generalSuccessToast, generalErrorToast } from "../../util/ui";
 
@@ -42,6 +42,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
 
   // UI Form Data
   const [reasonTypes, setReasonTypes] = useState<ReasonType[]>([]);
+  const [isValid, setIsValid] = useState<boolean>(false);
 
   // Api Wrappers
   const getReasonTypes = () =>
@@ -49,7 +50,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
       .reasonTypes()()
       .then((data: ReasonType[]) => setReasonTypes(data));
 
-  const postMovement = (movement: NewMovement) =>
+  const sendMovement = (movement: NewMovement) =>
     pipe(
       movement,
       log,
@@ -72,6 +73,26 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
     getReasonTypes();
   }, []);
 
+  useEffect(() => {
+    const values = [freshman, quantity, reasonType];
+    setIsValid(
+      pipe(
+        values,
+        allTrue((x: any) => !isUndefined(x) && !isEps(x))
+      )
+    );
+  }, [freshman, quantity, reasonType]);
+
+  const handleSubmit = () =>
+    sendMovement({
+      TipoCausale: pipe(
+        O.fromNullable(reasonType),
+        foldDefault<ReasonTypeKey>(ReasonTypeKey.Specified)
+      ),
+      Matricole: [],
+      Quantita: [],
+    });
+
   return (
     <Content padder>
       <SimpleCard>
@@ -83,8 +104,8 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
       </SimpleCard>
       <SimpleCard>
         <H3>Dati</H3>
+
         <ScanFreshman
-          key="freshman"
           placeholder="Matricola"
           value={freshman}
           onChangeValue={setFreshman}
@@ -93,6 +114,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
           }
           containerStyle={{ marginBottom: 10 }}
         />
+
         <Input
           key="quantity"
           placeholder="Quantità"
@@ -100,6 +122,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
           onChangeText={(t: string) => setQuantity(Number.parseInt(t))}
           containerStyle={{ marginBottom: 10 }}
         />
+
         <Dropdown<ReasonTypeKey>
           items={reasonTypes.map((x) => ({ value: x.key, label: x.label }))}
           selected={reasonType}
@@ -107,20 +130,8 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
             setReasonType(x);
           }}
         />
-        <Button
-          full
-          onPress={() =>
-            // () => console.log("Fatto")
-            postMovement({
-              TipoCausale: pipe(
-                O.fromNullable(reasonType),
-                foldDefault<ReasonTypeKey>(ReasonTypeKey.Specified)
-              ),
-              Matricole: [],
-              Quantita: [],
-            })
-          }
-        >
+
+        <Button full onPress={handleSubmit} disabled={!isValid}>
           <Text>Invia</Text>
         </Button>
       </SimpleCard>
