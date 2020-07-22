@@ -1,3 +1,3 @@
-export function noop(): void {
+export const noop = (): void => {
   /* Do nothing */
-}
+};

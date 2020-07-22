@@ -17,3 +17,17 @@ export interface Token {
   expires_in: number;
   refresh_token: string;
 }
+
+// tslint:disable-next-line:no-explicit-any
+export const userReviver = (k: string, v: any) => {
+  if (k === "timestamp") return moment(v);
+  return v;
+};
+
+export const buildUser = (username: string) => (token: Token): User => {
+  return {
+    username: username,
+    timestamp: moment(),
+    token: token,
+  };
+};
