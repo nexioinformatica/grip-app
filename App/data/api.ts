@@ -46,7 +46,7 @@ export const postStartProcessing = (i: AxiosInstance) => (
   startProcessing: StartProcessing
 ): TE.TaskEither<Error, AxiosResponse<StartProcessing>> => {
   return TE.tryCatch<Error, AxiosResponse<StartProcessing>>(
-    () => i.post<BarcodeDecode[]>("api/v1/attivita", startProcessing),
+    () => i.post<StartProcessing>("api/v1/attivita", startProcessing),
     (reason) => new Error(String(reason))
   );
 };
