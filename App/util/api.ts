@@ -10,6 +10,7 @@ import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
 import { pipe } from "fp-ts/lib/pipeable";
 import { sentryError } from "./sentry";
+import { Settings, makeSignal } from "geom-api-ts-client/dist/common/api";
 
 /**
  * Create an abort token to cancel request if connection fails.
@@ -92,3 +93,12 @@ export const logErrorIfAny = <T>(
       (res) => TE.right(res)
     )
   );
+
+export const makeSettings = (): Settings => ({
+  noVersion: false,
+  timeout: API_CLIENT_REQUEST_TIMEOUT,
+  apiKey: API_KEY,
+  signal: makeSignal(API_CLIENT_CONNECTION_TIMEOUT).token,
+  url: BASE_URL,
+  useHttp: true,
+});
