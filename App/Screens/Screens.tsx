@@ -106,7 +106,7 @@ const Screens = (): React.ReactElement => {
   const { user } = useContext(AuthContext);
 
   // Login Stack
-  if (!user) return wrap(LoginStack);
+  if (!user()) return wrap(LoginStack);
 
   // Error Stack
   if (error) return wrap(ErrorStack);

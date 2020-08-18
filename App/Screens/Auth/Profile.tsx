@@ -1,4 +1,3 @@
-import moment from "moment";
 import { Button, Content, H1, H2, Text } from "native-base";
 import React, { useContext } from "react";
 

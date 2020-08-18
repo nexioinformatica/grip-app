@@ -2,7 +2,7 @@ import { Field, Formik } from "formik";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
-import { Auth } from "geom-api-ts-client";
+import { Authentication, Operator } from "geom-api-ts-client";
 import { Button, Container, Content, H1, H2, Text, Toast } from "native-base";
 import React, { useContext } from "react";
 import { StyleSheet, View } from "react-native";
@@ -11,7 +11,6 @@ import * as Yup from "yup";
 
 import { ChooseOperator, SimpleCard } from "../../components";
 import { AuthContext, makeUser } from "../../stores";
-import { Operator } from "../../types";
 import { logErrorIfAny, makeSettings } from "../../util/api";
 import { API_KEY } from "../../util/constants";
 import { generalErrorToast } from "../../util/ui";
@@ -41,7 +40,7 @@ export const Login = (): React.ReactElement => {
             validationSchema={validationSchema}
             onSubmit={(values) =>
               pipe(
-                Auth.login({
+                Authentication.login({
                   value: {
                     username: values.username,
                     password: values.password,
@@ -82,7 +81,7 @@ export const Login = (): React.ReactElement => {
                     <Field
                       name="username"
                       as={ChooseOperator}
-                      onSelect={(x: Operator) =>
+                      onSelect={(x: Operator.Operator) =>
                         setFieldValue("username", x.UserName)
                       }
                     />

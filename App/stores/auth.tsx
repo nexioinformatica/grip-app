@@ -1,7 +1,7 @@
 import { pipe } from "fp-ts/lib/pipeable";
 import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
-import { Auth } from "geom-api-ts-client";
+import { Auth, Authentication } from "geom-api-ts-client";
 import moment from "moment";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AsyncStorage } from "react-native";
@@ -10,7 +10,6 @@ import { User } from "../types";
 import { makeSettings } from "../util/api";
 import { noop } from "../util/noop";
 import { ErrorContext } from "./error";
-import { Token } from "geom-api-ts-client/dist/auth";
 
 const USER_STORAGE_KEY = "user";
 
@@ -35,11 +34,10 @@ export function AuthContextProvider({
 }): React.ReactElement {
   const { setError } = useContext(ErrorContext);
   const [_user, setUser] = useState<undefined | User>(undefined);
-  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const tryRefresh = (u: User): T.Task<Token> =>
+  const tryRefresh = (u: User): T.Task<Auth.Token> =>
     pipe(
-      Auth.refresh({
+      Authentication.refresh({
         value: {
           refresh_token: u.token.refresh_token,
           grant_type: "refresh_token",
@@ -118,17 +116,12 @@ export function AuthContextProvider({
   );
 }
 
-export const makeUser = (username: string) => (token: Token): User => {
+export const makeUser = (username: string) => (token: Auth.Token): User => {
   return {
     username: username,
     timestamp: moment(),
     token: token,
   };
-};
-
-const isUserExpiring = (user: User): boolean => {
-  const expiresInNear = (user.token.expires_in * 80) / 100;
-  return moment().add(expiresInNear, "seconds").isAfter(user.timestamp);
 };
 
 /** Json reviver for user object. */
