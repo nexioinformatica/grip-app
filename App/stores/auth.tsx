@@ -90,7 +90,9 @@ export function AuthContextProvider({
   }, [_user]);
 
   const user = () => {
-    if (!_user) return _user;
+    if (!_user) {
+      throw new Error("Login needed");
+    }
 
     return _user;
   };
