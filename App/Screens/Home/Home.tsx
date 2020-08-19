@@ -5,6 +5,7 @@ import { RootStackParamList } from "../Screens";
 import { Content, Button, Text, H1 } from "native-base";
 import { SimpleCard } from "../../components";
 import { ReasonTypeKey } from "../../types";
+import { Warehouse } from "geom-api-ts-client";
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 type HomeProps = {
@@ -36,7 +37,7 @@ export function Home(props: HomeProps): React.ReactElement {
 
   const handleScrapToWarehouseButtonPress = () => {
     navigation.navigate("NewMovement", {
-      reasonTypeDefault: ReasonTypeKey.LoadRemnant,
+      reasonTypeDefault: Warehouse.Movement.ReasonTypeKey.LoadRemnant,
     });
   };
 
