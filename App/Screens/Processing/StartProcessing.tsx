@@ -20,6 +20,7 @@ type StartProcessingProps = {
   navigation: StartProcessingNavigationProp;
 };
 
+type NewActivity = Activities.NewActivity;
 type ActionType = Activities.ActionType;
 type ActionTypeKey = Activities.ActionTypeKey;
 type ActivityType = Activities.ActivityType.ActivityType;
@@ -115,7 +116,7 @@ function StartProcessingComponent(
           enableReinitialize={true}
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            const activity: Activities.Activity = makeActivity(values);
+            const activity: NewActivity = makeActivity(values);
 
             return pipe(
               call(Activities.start)({
@@ -330,7 +331,7 @@ function StartProcessingComponent(
 
 export { StartProcessingComponent as StartProcessing };
 
-const makeActivity = (values: FormValues): Activities.Activity => ({
+const makeActivity = (values: FormValues): NewActivity => ({
   ...{
     IdTipoAttivita: values.activityType!.IdTipoAttivita,
     TipoAzione: values.actionType,
