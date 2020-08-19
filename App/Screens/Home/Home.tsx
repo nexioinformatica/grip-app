@@ -1,11 +1,12 @@
+import { Warehouse } from "geom-api-ts-client";
+import { Button, Content, H1, Text } from "native-base";
 import React from "react";
 import { StyleSheet } from "react-native";
+
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../Screens";
-import { Content, Button, Text, H1 } from "native-base";
+
 import { SimpleCard } from "../../components";
-import { ReasonTypeKey } from "../../types";
-import { Warehouse } from "geom-api-ts-client";
+import { RootStackParamList } from "../Screens";
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 type HomeProps = {

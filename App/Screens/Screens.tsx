@@ -40,7 +40,9 @@ const RootStack = ((): React.ReactElement => {
       <Stack.Navigator
         screenOptions={{
           headerShown: true,
-          header: (props) => <AppBar {...props} />,
+          header: function appBar(props) {
+            return <AppBar {...props} />;
+          },
         }}
       >
         <Stack.Screen name="Home" component={Home} />

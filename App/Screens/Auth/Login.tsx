@@ -51,7 +51,7 @@ export const Login = (): React.ReactElement => {
                 }),
                 logErrorIfAny,
                 TE.fold(
-                  (_) => {
+                  () => {
                     Toast.show(generalErrorToast);
                     return T.never;
                   },
@@ -70,7 +70,6 @@ export const Login = (): React.ReactElement => {
               errors,
               isSubmitting,
               isValid,
-              touched,
               setFieldValue,
               values,
             }) => {

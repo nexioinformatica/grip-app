@@ -1,17 +1,14 @@
-import React, { useContext, useState, useEffect } from "react";
-import { ListItem } from "react-native-elements";
-// import { ApiContext } from "../../stores/api";
-// import { Operators, Operator } from "../../types";
-import { View, GestureResponderEvent } from "react-native";
-import { pipe } from "fp-ts/lib/pipeable";
 import * as EQ from "fp-ts/lib/Eq";
 import * as O from "fp-ts/lib/Option";
+import { pipe } from "fp-ts/lib/pipeable";
 import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
-import { ErrorContext } from "../../stores";
-import { Toast, Text } from "native-base";
-import { generalErrorToast } from "../../util/ui";
 import { Operator } from "geom-api-ts-client";
+import { Text } from "native-base";
+import React, { useEffect, useState } from "react";
+import { View } from "react-native";
+import { ListItem } from "react-native-elements";
+
 import { logErrorIfAny, makeSettings } from "../../util/api";
 
 export interface ChooseOperatorProps {
@@ -32,10 +29,13 @@ const isSelected = (x: Operator.Single, ground: O.Option<Operator.Single>) =>
     )
   );
 
-export const ChooseOperator = ({ selected, onSelect }: ChooseOperatorProps) => {
+export const ChooseOperator = ({
+  selected,
+  onSelect,
+}: ChooseOperatorProps): React.ReactElement => {
   const [operators, setOperators] = useState<Operator.Collection>([]);
 
-  const handlePress = (e: GestureResponderEvent) => (op: Operator.Single) => {
+  const handlePress = (op: Operator.Single) => {
     onSelect(op);
   };
 
@@ -49,7 +49,7 @@ export const ChooseOperator = ({ selected, onSelect }: ChooseOperatorProps) => {
       }),
       logErrorIfAny,
       TE.fold(
-        (_) => T.never,
+        () => T.never,
         (res: Operator.Collection) => {
           setOperators(res);
           return T.of(res);
@@ -70,7 +70,7 @@ export const ChooseOperator = ({ selected, onSelect }: ChooseOperatorProps) => {
             key={i}
             title={x.Nome}
             subtitle={x.UserName}
-            onPress={(e) => handlePress(e)(x)}
+            onPress={() => handlePress(x)}
             checkmark={isSelected(x, O.fromNullable(selected))}
             bottomDivider
           />

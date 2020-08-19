@@ -41,6 +41,8 @@ const ReasonTypeKey = Warehouse.Movement.ReasonTypeKey;
 type Reason = Warehouse.Reason.Reason;
 type Reasons = Warehouse.Reason.Collection;
 
+// FIXME: remove the eslint-disable when all this models have been implemented in the `geom-api-ts-client` lib.
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 interface FormValues {
   reasonType: ReasonType;
   freshman: any | undefined; // should be array (WHY??)
@@ -144,7 +146,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
       call(Warehouse.Reason.getCollection)({ settings: makeSettings() }),
       logErrorIfAny,
       teFold(
-        (_e) => tNever,
+        () => tNever,
         (res) => {
           setReasons([{ IdCausale: -1, Codice: "", Descrizione: "" }, ...res]);
           return tOf(res);
@@ -181,7 +183,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
               }),
               logErrorIfAny,
               teFold(
-                (_e) => {
+                () => {
                   Toast.show(generalErrorToast);
                   return tOf(undefined);
                 },
@@ -235,7 +237,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 <View style={isValid ? styles.group : styles.groupFirst}>
                   <Text>
                     Specificare <i>Tipo Causale</i> e <i>Causale</i> se il tipo
-                    è "Specificata"
+                    è &quot;Specificata&quot;
                   </Text>
                   <View style={styles.item}>
                     <Field
@@ -424,7 +426,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 </View>
                 <View style={styles.group}>
                   <Text>
-                    Opzionalmente, specificare l'<i>Ordine Esecutivo</i>,
+                    Opzionalmente, specificare l&apos;<i>Ordine Esecutivo</i>,
                     composto da Testata e Posizione e Fase
                   </Text>
                   <View style={styles.item}>

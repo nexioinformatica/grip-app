@@ -27,9 +27,8 @@ interface Context {
 }
 
 export const ApiContext = createContext<Context>({
-  call: (_task) => (_input) =>
-    TE.left(new Error("The API context isn't setted up.")),
-  callPublic: (_task) => (_input) =>
+  call: () => () => TE.left(new Error("The API context isn't setted up.")),
+  callPublic: () => () =>
     TE.left(new Error("The API context isn't setted up.")),
 });
 

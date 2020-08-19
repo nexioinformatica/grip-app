@@ -23,7 +23,7 @@ interface Context {
 export const AuthContext = createContext<Context>({
   user: () => undefined,
   logout: noop,
-  login: (_: User) => noop,
+  login: noop,
   refresh: noop,
 });
 
@@ -45,10 +45,7 @@ export function AuthContextProvider({
         settings: makeSettings(),
       }),
       TE.fold(
-        (_) => {
-          return T.never;
-        },
-
+        () => T.never,
         (res) => {
           setUser(makeUser(u.username)(res));
           return T.of(res);
@@ -90,10 +87,6 @@ export function AuthContextProvider({
   }, [_user]);
 
   const user = () => {
-    if (!_user) {
-      throw new Error("Login needed");
-    }
-
     return _user;
   };
 
@@ -127,8 +120,8 @@ export const makeUser = (username: string) => (token: Auth.Token): User => {
 };
 
 /** Json reviver for user object. */
-// tslint:disable-next-line:no-explicit-any
-const userReviver = (k: string, v: any) => {
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+const userReviver = (k: string, v: any): any => {
   if (k === "timestamp") return moment(v);
   return v;
 };

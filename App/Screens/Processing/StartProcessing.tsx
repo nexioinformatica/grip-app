@@ -8,7 +8,7 @@ import * as Yup from "yup";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { Dropdown, Key, ScanFreshman, SimpleCard } from "../../components";
+import { Dropdown, ScanFreshman, SimpleCard } from "../../components";
 import { ApiContext } from "../../stores";
 import { logErrorIfAny, makeSettings } from "../../util/api";
 import { addProp, teFold, tNever, tOf, aHead, oFold } from "../../util/fp";
@@ -25,6 +25,7 @@ type ActionType = Activities.ActionType;
 type ActionTypeKey = Activities.ActionTypeKey;
 type ActivityType = Activities.ActivityType.ActivityType;
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 interface FormValues {
   activityType: Activities.ActivityType.ActivityType | undefined;
   actionType: Activities.ActionTypeKey;
@@ -89,7 +90,7 @@ function StartProcessingComponent(
       call(Activities.ActivityType.getCollection)({ settings: makeSettings() }),
       logErrorIfAny,
       teFold(
-        (_e) => tNever,
+        () => tNever,
         (res) => {
           setActivityTypes(res);
           return tOf(res);
@@ -125,7 +126,7 @@ function StartProcessingComponent(
               }),
               logErrorIfAny,
               teFold(
-                (_e) => {
+                () => {
                   Toast.show(generalErrorToast);
                   return tOf(undefined);
                 },
@@ -166,8 +167,8 @@ function StartProcessingComponent(
               <>
                 {!isValid && (
                   <View style={{ ...styles.groupFirst, ...styles.error }}>
-                    {Object.values(errors).map((x) => (
-                      <Text>{x}</Text>
+                    {Object.values(errors).map((x, i) => (
+                      <Text key={i}>{x}</Text>
                     ))}
                   </View>
                 )}
@@ -236,7 +237,7 @@ function StartProcessingComponent(
                 </View>
                 <View style={styles.group}>
                   <Text>
-                    Opzionalmente, specificare l'<i>Unità Operativa</i>
+                    Opzionalmente, specificare l&apos;<i>Unità Operativa</i>
                   </Text>
                   <View style={styles.item}>
                     <Field
@@ -254,7 +255,7 @@ function StartProcessingComponent(
                 </View>
                 <View style={styles.group}>
                   <Text>
-                    Opzionalmente, specificare l'<i>Ordine Esecutivo</i>,
+                    Opzionalmente, specificare l&apos;<i>Ordine Esecutivo</i>,
                     composto da Testata, Posizione e Fase,
                   </Text>
                   <View style={styles.item}>
@@ -333,6 +334,8 @@ export { StartProcessingComponent as StartProcessing };
 
 const makeActivity = (values: FormValues): NewActivity => ({
   ...{
+    // FIXME: Find a way to produce new non-null object after validation and remove the non null assertion.
+    /* eslint-disable  @typescript-eslint/no-non-null-assertion */
     IdTipoAttivita: values.activityType!.IdTipoAttivita,
     TipoAzione: values.actionType,
   },
