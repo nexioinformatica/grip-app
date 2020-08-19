@@ -23,7 +23,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { Dropdown, ScanFreshman, SimpleCard } from "../../components";
 import { ApiContext } from "../../stores";
-import { logErrorIfAny, makeSettings } from "../../util/api";
+import { makeSettings } from "../../util/api";
 import { aHead, oFold, teFold, tNever, tOf } from "../../util/fp";
 import { generalErrorToast, generalSuccessToast } from "../../util/ui";
 import { RootStackParamList } from "../Screens";

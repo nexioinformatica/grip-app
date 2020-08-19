@@ -11,7 +11,7 @@ import * as Yup from "yup";
 
 import { ChooseOperator, SimpleCard } from "../../components";
 import { AuthContext, makeUser, ApiContext } from "../../stores";
-import { logErrorIfAny, makeSettings } from "../../util/api";
+import { makeSettings } from "../../util/api";
 import { API_KEY } from "../../util/constants";
 import { generalErrorToast } from "../../util/ui";
 

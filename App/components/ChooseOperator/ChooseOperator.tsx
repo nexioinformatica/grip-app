@@ -9,7 +9,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { View } from "react-native";
 import { ListItem } from "react-native-elements";
 
-import { logErrorIfAny, makeSettings } from "../../util/api";
+import { makeSettings } from "../../util/api";
 import { ApiContext } from "../../stores";
 
 export interface ChooseOperatorProps {
