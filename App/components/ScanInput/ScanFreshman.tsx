@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { Input, InputProps } from "react-native-elements";
-import { Spinner } from "native-base";
-import { Icon } from "../Icon/Icon";
-// import { BarcodeEvent, BarcodeDecode } from "../../types";
-import { ApiContext } from "../../stores/api";
 import { pipe } from "fp-ts/lib/pipeable";
-import * as TE from "fp-ts/lib/TaskEither";
 import * as T from "fp-ts/lib/Task";
+import * as TE from "fp-ts/lib/TaskEither";
 import { Barcode } from "geom-api-ts-client";
-import { AuthContext } from "../../stores";
-import { makeSettings } from "../../util/api";
+import { Spinner } from "native-base";
+import React, { useContext, useEffect, useState } from "react";
+import { Input, InputProps } from "react-native-elements";
+
+import { useNavigation } from "@react-navigation/native";
+
+import { ApiContext } from "../../stores/api";
 import { BarcodeEvent } from "../../types";
+import { makeSettings } from "../../util/api";
+import { Icon } from "../Icon/Icon";
 
 export interface ScanFreshmanProps extends InputProps {
   value?: string | undefined;
@@ -41,7 +41,7 @@ export const ScanFreshman = ({
 
   const [statusIcon, setStatusIcon] = useState(<></>); // default icon setted in use effect
 
-  const onDecodeError = (err: Error): T.Task<never> => {
+  const onDecodeError = (): T.Task<never> => {
     setDecoding(false);
     setDecodingFailed(true);
     return T.never;

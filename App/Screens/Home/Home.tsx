@@ -1,5 +1,5 @@
 import { Warehouse } from "geom-api-ts-client";
-import { Button, Content, H1, Text } from "native-base";
+import { Button, Content, H1, Text, NativeBase } from "native-base";
 import React from "react";
 import { StyleSheet } from "react-native";
 
@@ -13,7 +13,7 @@ type HomeProps = {
   navigation: HomeScreenNavigationProp;
 };
 
-const StartProcessingButton = (props: any) => {
+const StartProcessingButton = (props: NativeBase.Button) => {
   return (
     <Button {...props}>
       <Text>Inizio Lavorazione</Text>
@@ -21,7 +21,7 @@ const StartProcessingButton = (props: any) => {
   );
 };
 
-const ScrapToWarehouseButton = (props: any) => {
+const ScrapToWarehouseButton = (props: NativeBase.Button) => {
   return (
     <Button {...props}>
       <Text>Scarto a Magazzino</Text>

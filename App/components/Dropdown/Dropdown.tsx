@@ -38,8 +38,8 @@ export const Dropdown = <T,>({
   items,
   selected,
   onSelectedChange,
-}: DropdownProps<T>) => {
-  const handleValueChanged = (itemValue: any, itemPosition: number) => {
+}: DropdownProps<T>): React.ReactElement => {
+  const handleValueChanged = (itemValue: Key, itemPosition: number) => {
     onSelectedChange({ k: itemValue, v: items[itemPosition].value });
   };
 

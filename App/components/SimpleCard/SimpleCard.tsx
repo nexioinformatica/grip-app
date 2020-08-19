@@ -1,6 +1,7 @@
+import { Body, Card, CardItem } from "native-base";
 import React from "react";
-import { Card, CardItem, Body } from "native-base";
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 export interface SimpleCardProps {
   cardProps?: any;
   cardHeader?: any;
@@ -9,7 +10,7 @@ export interface SimpleCardProps {
   children: any;
 }
 
-export const SimpleCard = (props: SimpleCardProps) => {
+export const SimpleCard = (props: SimpleCardProps): React.ReactElement => {
   const { cardProps, cardItemProps, children, cardHeader, cardFooter } = props;
   return (
     <Card {...cardProps}>

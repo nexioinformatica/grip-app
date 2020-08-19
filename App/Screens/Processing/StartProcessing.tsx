@@ -54,6 +54,7 @@ const validationSchema = Yup.object({
 });
 
 function StartProcessingComponent(
+  /* eslint-disable  @typescript-eslint/no-unused-vars */
   props: StartProcessingProps
 ): React.ReactElement {
   const { call } = useContext(ApiContext);

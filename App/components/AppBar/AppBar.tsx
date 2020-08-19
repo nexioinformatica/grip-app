@@ -1,21 +1,23 @@
+import { Body, Button, Header, Icon, Left, Right, Title } from "native-base";
 import React from "react";
-import { Header, Body, Title, Right, Button, Icon, Left } from "native-base";
+
 import { StackHeaderProps } from "@react-navigation/stack";
 
 type AppBarProps = StackHeaderProps;
 
-const AppBar = (props: AppBarProps) => {
-  const { navigation } = props;
-  const canGoBack = navigation.canGoBack();
+const AppBar = (props: AppBarProps): React.ReactElement => {
+  const {
+    navigation: { canGoBack, goBack, navigate },
+  } = props;
 
   const BackButton = () => (
-    <Button onPress={() => navigation.goBack()} transparent>
+    <Button onPress={() => goBack()} transparent>
       <Icon name="arrow-back" />
     </Button>
   );
 
   const HomeButton = () => (
-    <Button onPress={() => navigation.navigate("Home")} transparent>
+    <Button onPress={() => navigate("Home")} transparent>
       <Icon name="home" />
     </Button>
   );
@@ -30,7 +32,7 @@ const AppBar = (props: AppBarProps) => {
       </Body>
       <Right>
         <Button transparent>
-          <Icon name="person" onPress={() => navigation.navigate("Profile")} />
+          <Icon name="person" onPress={() => navigate("Profile")} />
         </Button>
         <Button transparent>
           <Icon name="settings" />

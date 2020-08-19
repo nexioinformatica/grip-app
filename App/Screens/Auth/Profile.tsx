@@ -12,7 +12,10 @@ type ProfileProps = {
   navigation: HomeScreenNavigationProp;
 };
 
-export const Profile = (props: ProfileProps): React.ReactElement => {
+export const Profile = (
+  /* eslint-disable  @typescript-eslint/no-unused-vars */
+  props: ProfileProps
+): React.ReactElement => {
   const { user, logout, refresh } = useContext(AuthContext);
 
   return (

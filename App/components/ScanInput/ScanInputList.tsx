@@ -1,10 +1,8 @@
 import React from "react";
-import { Input, InputProps } from "react-native-elements";
-import { Icon } from "../Icon/Icon";
-import { noop } from "../../util/noop";
-import { ScanInput } from "./ScanInput";
 import { StyleSheet } from "react-native";
-import { ScanInputListData } from "./.";
+
+import { ScanInputListData } from "./";
+import { ScanInput } from "./ScanInput";
 
 interface ScanInputListProps {
   scanInputList: ScanInputListData;
@@ -18,7 +16,7 @@ const ScanInputListComponet = ({
   const data = scanInputList;
   return (
     <>
-      {data.map((d, i) => (
+      {data.map((d) => (
         <ScanInput
           key={d.key}
           placeholder={d.title}

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Dimensions } from "react-native";
+import { BarCodeEvent, BarCodeScanner } from "expo-barcode-scanner";
 import * as Permissions from "expo-permissions";
-import { BarCodeScanner, BarCodeEvent } from "expo-barcode-scanner";
-import { noop } from "../../util/noop";
-import { min, ordNumber } from "fp-ts/lib/Ord";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-elements";
+
+import { noop } from "../../util/noop";
 
 export interface BarcodeScannerProps {
   onBarcodeScanned?: (barcodeEvent: BarCodeEvent) => void;
@@ -42,9 +42,6 @@ export const BarcodeScanner = ({
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
-
-  const { width, height } = Dimensions.get("screen");
-  const size = min(ordNumber)(width, height);
 
   return (
     <BarCodeScanner
