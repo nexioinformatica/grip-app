@@ -6,3 +6,8 @@ export interface User {
   timestamp: moment.Moment;
   token: Auth.Token;
 }
+
+export const getExpiringIn = (user?: User): string =>
+  user
+    ? user.timestamp.clone().add(user?.token.expires_in, "seconds").fromNow()
+    : "";

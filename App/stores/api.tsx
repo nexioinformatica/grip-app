@@ -38,19 +38,22 @@ export function ApiContextProvider({
   children: JSX.Element;
 }): React.ReactElement {
   const { setError } = useContext(ErrorContext);
-  const { user } = useContext(AuthContext);
+  const { user, refresh } = useContext(AuthContext);
 
   const call = <T, U>(
     task: (params: U & { token: string | Token }) => TE.TaskEither<Error, T>
   ) => (input: U) =>
     pipe(
-      O.fromNullable(user()?.token),
+      O.fromNullable(user()),
       O.fold(
         () => {
           neededLogin(setError);
           return TE.left(new Error("Login needed."));
         },
-        (token) => task({ ...input, ...{ token: token.access_token } })
+        (user) => {
+          refresh();
+          return task({ ...input, ...{ token: user.token.access_token } });
+        }
       ),
       logErrorIfAny
     );

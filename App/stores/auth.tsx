@@ -1,5 +1,6 @@
 import { pipe } from "fp-ts/lib/pipeable";
 import * as T from "fp-ts/lib/Task";
+import * as O from "fp-ts/lib/Option";
 import * as TE from "fp-ts/lib/TaskEither";
 import { Auth, Authentication } from "geom-api-ts-client";
 import moment from "moment";
@@ -7,18 +8,22 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { AsyncStorage } from "react-native";
 
 import { User } from "../types";
-import { makeSettings } from "../util/api";
+import { makeSettings, logErrorIfAny } from "../util/api";
 import { noop } from "../util/noop";
 import { ErrorContext } from "./error";
-import { ApiContext } from "./api";
 
 const USER_STORAGE_KEY = "user";
+
+type Token = Auth.Token;
 
 interface Context {
   user: () => User | undefined;
   logout: () => void;
   login: (data: User) => void;
-  refresh: () => void;
+  /**
+   * Refresh the token. If force is true, the token is refreshed even if it is not expiring.
+   */
+  refresh: (force?: boolean) => void;
 }
 
 export const AuthContext = createContext<Context>({
@@ -33,26 +38,19 @@ export function AuthContextProvider({
 }: {
   children: JSX.Element;
 }): React.ReactElement {
-  const { callPublic } = useContext(ApiContext);
   const { setError } = useContext(ErrorContext);
   const [_user, setUser] = useState<undefined | User>(undefined);
 
-  const tryRefresh = (u: User): TE.TaskEither<Error, Auth.Token> =>
+  const getRefresh = (u: User): TE.TaskEither<Error, Token> =>
     pipe(
-      callPublic(Authentication.refresh)({
+      Authentication.refresh({
         value: {
           refresh_token: u.token.refresh_token,
           grant_type: "refresh_token",
         },
         settings: makeSettings(),
       }),
-      TE.fold(
-        (err) => TE.left(err),
-        (res) => {
-          setUser(makeUser(u.username)(res));
-          return TE.right(res);
-        }
-      )
+      logErrorIfAny
     );
 
   useEffect(() => {
@@ -98,10 +96,26 @@ export function AuthContextProvider({
 
   const logout = () => setUser(undefined);
 
-  const refresh = () => {
-    if (!_user) return;
-
-    tryRefresh(_user)();
+  const refresh = (force = false) => {
+    return pipe(
+      _user,
+      O.fromNullable,
+      O.fold(
+        () => abortIfNotUser<Token>(),
+        (user) =>
+          pipe(
+            refreshTokenIfIsExpiringOrForce(getRefresh)(force)(user),
+            TE.fold(
+              (err) => TE.left(err),
+              (newToken) => {
+                setUser(makeUser(user.username)(newToken));
+                return TE.right(newToken);
+              }
+            )
+          )
+      ),
+      logErrorIfAny
+    )();
   };
 
   return (
@@ -113,13 +127,49 @@ export function AuthContextProvider({
   );
 }
 
-export const makeUser = (username: string) => (token: Auth.Token): User => {
+export const makeUser = (username: string) => (token: Token): User => {
   return {
     username: username,
     timestamp: moment(),
     token: token,
   };
 };
+
+const isTokenExpiring = (user: User): boolean =>
+  moment().isAfter(
+    user.timestamp.clone().add((user.token.expires_in * 80) / 100)
+  );
+
+const refreshTokenIfIsExpiring = (
+  getRefresh: (user: User) => TE.TaskEither<Error, Token>
+) => (user: User) =>
+  pipe(
+    user,
+    O.fromPredicate(isTokenExpiring),
+    O.fold(
+      // token is not expiring
+      () => TE.right(user.token),
+      // token is expiring
+      () => getRefresh(user)
+    )
+  );
+
+const refreshTokenIfIsExpiringOrForce = (
+  getRefresh: (user: User) => TE.TaskEither<Error, Token>
+) => (force: boolean) => (user: User) =>
+  pipe(
+    force,
+    O.fromPredicate((x) => !x),
+    O.fold(
+      // force refresh
+      () => getRefresh(user),
+      // refresh only if expiring
+      () => refreshTokenIfIsExpiring(getRefresh)(user)
+    )
+  );
+
+const abortIfNotUser = <T,>(): TE.TaskEither<Error, T> =>
+  TE.left(new Error("Cannot refresh token, user is not logged in."));
 
 /** Json reviver for user object. */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
