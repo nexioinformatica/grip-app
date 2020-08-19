@@ -6,6 +6,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { SimpleCard } from "../../components";
 import { AuthContext } from "../../stores";
 import { RootStackParamList } from "../Screens";
+import { getExpiringIn } from "../../types/User";
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 type ProfileProps = {
@@ -29,12 +30,7 @@ export const Profile = (
           <H2>Accesso</H2>
           <Text>Token: {user()?.token.access_token}</Text>
           <Text>Refresh: {user()?.token.refresh_token}</Text>
-          <Text>
-            Scadenza:{" "}
-            {user()
-              ?.timestamp.add(user()?.token.expires_in, "seconds")
-              .fromNow()}
-          </Text>
+          <Text>Scadenza: {getExpiringIn(user())}</Text>
           <Button transparent>
             <Text onPress={() => refresh()}>Aggiorna Token</Text>
           </Button>
