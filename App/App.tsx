@@ -7,7 +7,6 @@ import { Screens } from "./Screens";
 import { theme } from "./util/theme";
 import { ErrorContextProvider, AuthContextProvider } from "./stores";
 import { ApiContextProvider } from "./stores/api";
-import { OperatorContextProvider } from "./stores/operator";
 import { init as sentryInit } from "./util/sentry";
 import { IS_SENTRY_SET_UP } from "./util/constants";
 
@@ -34,9 +33,7 @@ const App = (): React.ReactElement => {
       <ErrorContextProvider>
         <AuthContextProvider>
           <ApiContextProvider>
-            <OperatorContextProvider>
-              {isFontReady ? <Screens /> : <SplashScreen />}
-            </OperatorContextProvider>
+            {isFontReady ? <Screens /> : <SplashScreen />}
           </ApiContextProvider>
         </AuthContextProvider>
       </ErrorContextProvider>
