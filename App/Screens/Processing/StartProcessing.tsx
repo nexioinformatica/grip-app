@@ -89,7 +89,6 @@ function StartProcessingComponent(
   useEffect(() => {
     pipe(
       call(Activities.ActivityType.getCollection)({ settings: makeSettings() }),
-      logErrorIfAny,
       teFold(
         () => tNever,
         (res) => {
@@ -125,7 +124,6 @@ function StartProcessingComponent(
                 value: activity,
                 settings: makeSettings(),
               }),
-              logErrorIfAny,
               teFold(
                 () => {
                   Toast.show(generalErrorToast);

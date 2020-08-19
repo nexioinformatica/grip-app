@@ -144,7 +144,6 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
   useEffect(() => {
     pipe(
       call(Warehouse.Reason.getCollection)({ settings: makeSettings() }),
-      logErrorIfAny,
       teFold(
         () => tNever,
         (res) => {
@@ -181,7 +180,6 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 value: movement,
                 settings: makeSettings(),
               }),
-              logErrorIfAny,
               teFold(
                 () => {
                   Toast.show(generalErrorToast);

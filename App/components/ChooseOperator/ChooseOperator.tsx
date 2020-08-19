@@ -5,11 +5,12 @@ import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
 import { Operator } from "geom-api-ts-client";
 import { Text } from "native-base";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View } from "react-native";
 import { ListItem } from "react-native-elements";
 
 import { logErrorIfAny, makeSettings } from "../../util/api";
+import { ApiContext } from "../../stores";
 
 export interface ChooseOperatorProps {
   selected?: Operator.Single;
@@ -33,6 +34,7 @@ export const ChooseOperator = ({
   selected,
   onSelect,
 }: ChooseOperatorProps): React.ReactElement => {
+  const { callPublic } = useContext(ApiContext);
   const [operators, setOperators] = useState<Operator.Collection>([]);
 
   const handlePress = (op: Operator.Single) => {
@@ -41,13 +43,12 @@ export const ChooseOperator = ({
 
   useEffect(() => {
     pipe(
-      Operator.getCollection({
+      callPublic(Operator.getCollection)({
         query: {
           params: { AbilitatoAPI: true, AbilitatoAttivitaReparto: true },
         },
         settings: makeSettings(),
       }),
-      logErrorIfAny,
       TE.fold(
         () => T.never,
         (res: Operator.Collection) => {

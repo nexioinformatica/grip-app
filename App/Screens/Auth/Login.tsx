@@ -10,7 +10,7 @@ import { Input } from "react-native-elements";
 import * as Yup from "yup";
 
 import { ChooseOperator, SimpleCard } from "../../components";
-import { AuthContext, makeUser } from "../../stores";
+import { AuthContext, makeUser, ApiContext } from "../../stores";
 import { logErrorIfAny, makeSettings } from "../../util/api";
 import { API_KEY } from "../../util/constants";
 import { generalErrorToast } from "../../util/ui";
@@ -21,6 +21,7 @@ const validationSchema = Yup.object({
 });
 
 export const Login = (): React.ReactElement => {
+  const { callPublic } = useContext(ApiContext);
   const { login } = useContext(AuthContext);
 
   return (
@@ -40,7 +41,7 @@ export const Login = (): React.ReactElement => {
             validationSchema={validationSchema}
             onSubmit={(values) =>
               pipe(
-                Authentication.login({
+                callPublic(Authentication.login)({
                   value: {
                     username: values.username,
                     password: values.password,
@@ -49,7 +50,6 @@ export const Login = (): React.ReactElement => {
                   },
                   settings: makeSettings(),
                 }),
-                logErrorIfAny,
                 TE.fold(
                   () => {
                     Toast.show(generalErrorToast);

@@ -10,6 +10,7 @@ import { User } from "../types";
 import { makeSettings } from "../util/api";
 import { noop } from "../util/noop";
 import { ErrorContext } from "./error";
+import { ApiContext } from "./api";
 
 const USER_STORAGE_KEY = "user";
 
@@ -32,12 +33,13 @@ export function AuthContextProvider({
 }: {
   children: JSX.Element;
 }): React.ReactElement {
+  const { callPublic } = useContext(ApiContext);
   const { setError } = useContext(ErrorContext);
   const [_user, setUser] = useState<undefined | User>(undefined);
 
-  const tryRefresh = (u: User): T.Task<Auth.Token> =>
+  const tryRefresh = (u: User): TE.TaskEither<Error, Auth.Token> =>
     pipe(
-      Authentication.refresh({
+      callPublic(Authentication.refresh)({
         value: {
           refresh_token: u.token.refresh_token,
           grant_type: "refresh_token",
@@ -45,10 +47,10 @@ export function AuthContextProvider({
         settings: makeSettings(),
       }),
       TE.fold(
-        () => T.never,
+        (err) => TE.left(err),
         (res) => {
           setUser(makeUser(u.username)(res));
-          return T.of(res);
+          return TE.right(res);
         }
       )
     );
