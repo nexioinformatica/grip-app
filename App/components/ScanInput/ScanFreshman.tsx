@@ -3,16 +3,20 @@ import { useNavigation } from "@react-navigation/native";
 import { Input, InputProps } from "react-native-elements";
 import { Spinner } from "native-base";
 import { Icon } from "../Icon/Icon";
-import { BarcodeEvent, BarcodeDecode } from "../../types";
+// import { BarcodeEvent, BarcodeDecode } from "../../types";
 import { ApiContext } from "../../stores/api";
 import { pipe } from "fp-ts/lib/pipeable";
 import * as TE from "fp-ts/lib/TaskEither";
 import * as T from "fp-ts/lib/Task";
+import { Barcode } from "geom-api-ts-client";
+import { AuthContext } from "../../stores";
+import { makeSettings } from "../../util/api";
+import { BarcodeEvent } from "../../types";
 
 export interface ScanFreshmanProps extends InputProps {
   value?: string | undefined;
   onChangeValue: (value: string | undefined) => void;
-  onDecodeValue: (decodedValue: BarcodeDecode[]) => void;
+  onDecodeValue: (decodedValue: Barcode.BarcodeDecode) => void;
 }
 
 /**
@@ -30,7 +34,7 @@ export const ScanFreshman = ({
   ...rest
 }: ScanFreshmanProps): React.ReactElement => {
   const navigation = useNavigation();
-  const { api } = useContext(ApiContext);
+  const { callPublic } = useContext(ApiContext);
 
   const [isDecoding, setDecoding] = useState(false);
   const [isDecodingFailed, setDecodingFailed] = useState(false);
@@ -43,17 +47,25 @@ export const ScanFreshman = ({
     return T.never;
   };
 
-  const onDecodeSuccess = (res: BarcodeDecode[]): T.Task<undefined> => {
+  const onDecodeSuccess = (
+    res: Barcode.BarcodeDecode
+  ): T.Task<Barcode.BarcodeDecode> => {
     setDecoding(false);
     setDecodingFailed(false);
     onDecodeValue(res);
-    return T.of(undefined);
+    return T.of(res);
   };
 
   useEffect(() => {
     if (value) {
       setDecoding(true);
-      pipe(value, api.barcodeDecode, TE.fold(onDecodeError, onDecodeSuccess))();
+      pipe(
+        callPublic(Barcode.decode)({
+          value: { Code: value },
+          settings: makeSettings(),
+        }),
+        TE.fold(onDecodeError, onDecodeSuccess)
+      )();
     }
   }, [value]);
 

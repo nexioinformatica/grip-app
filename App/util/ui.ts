@@ -8,7 +8,7 @@ export interface ToastConfiguration {
   position?: "top" | "bottom" | "center";
   type?: "danger" | "success" | "warning";
   duration?: number;
-  // tslint:disable-next-line:no-explicit-any
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   onClose?: (reason: "user" | "timeout" | "functionCall") => any;
   style?: RnViewStyleProp;
   textStyle?: RnTextStyleProp;

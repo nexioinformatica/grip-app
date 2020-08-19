@@ -1,6 +1,8 @@
+import * as A from "fp-ts/lib/Array";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
-import * as A from "fp-ts/lib/Array";
+import * as T from "fp-ts/lib/Task";
+import * as TE from "fp-ts/lib/TaskEither";
 
 /**
  * @param z Default value
@@ -36,20 +38,59 @@ export const allTrue = <T>(p: (x: T) => boolean) => (xs: T[]): boolean => {
   );
 };
 
-/** 
+/**
  * Do a side effect by calling `f` and return the value `z`.
- * @returns The original value
+ * @returns `z`
  */
-export const sideVoid = <U, T>(f: () => T) => (z: U) => {
+export const sideVoid = <U, T>(f: () => T) => (z: U): U => {
   f();
   return z;
 };
 
-/** 
+/**
  * Do a side effect by calling `f` with param `x` and return the value `z`.
- * @returns The original value
+ * @returns `z`
  */
-export const side = <U, T1, T2>(f: (x: T1) => T2, x: T1) => (z: U) => {
+export const side = <T, U, V>(f: (x: U) => V, x: U) => (z: T): T => {
   f(x);
   return z;
 };
+
+/**
+ * Add a the property with name `name` and value `value` to the object
+ * `values` is `value` is not undefined.
+ *
+ * @example
+ * ```
+ * pipe(
+ *   {},
+ *   addProp(name: "John"),
+ *   addProp(age, undefined)
+ * )
+ *
+ * // Output: {name: "John"}
+ * ```
+ */
+export const addProp = <T>(name: string, value?: T) => <U>(
+  values: Partial<Record<string, U>>
+): Partial<Record<string, U | T>> => ({
+  ...values,
+  ...pipe(
+    value,
+    O.fromNullable,
+    O.fold(
+      () => ({}),
+      (x) => ({ [name]: x })
+    )
+  ),
+});
+
+export const aHead = A.head;
+export const oFromNullable = O.fromNullable;
+export const oFold = O.fold;
+export const teFold = TE.fold;
+export const teLeft = TE.left;
+export const teRight = TE.right;
+export const tNever = T.never;
+export const tOf = T.of;
+export const tUndefined = T.of(undefined);

@@ -11,13 +11,15 @@ import { BarCodeEvent } from "expo-barcode-scanner";
 import { Scan } from "./Scan";
 import { Login, Profile } from "./Auth";
 import { ErrorContext, AuthContext } from "../stores";
-import { ReasonTypeKey } from "../types";
 import { Error } from "./Error";
+import { Warehouse } from "geom-api-ts-client";
 
 export type RootStackParamList = {
   Home: undefined;
   StartProcessing: undefined;
-  NewMovement: { reasonTypeDefault: ReasonTypeKey | undefined };
+  NewMovement: {
+    reasonTypeDefault: Warehouse.Movement.ReasonTypeKey | undefined;
+  };
   Scan: { onBarcodeScanned?: (barcode: BarCodeEvent) => void };
   Profile: undefined;
 };
@@ -38,7 +40,9 @@ const RootStack = ((): React.ReactElement => {
       <Stack.Navigator
         screenOptions={{
           headerShown: true,
-          header: (props) => <AppBar {...props} />,
+          header: function appBar(props) {
+            return <AppBar {...props} />;
+          },
         }}
       >
         <Stack.Screen name="Home" component={Home} />
@@ -106,7 +110,7 @@ const Screens = (): React.ReactElement => {
   const { user } = useContext(AuthContext);
 
   // Login Stack
-  if (!user) return wrap(LoginStack);
+  if (!user()) return wrap(LoginStack);
 
   // Error Stack
   if (error) return wrap(ErrorStack);
