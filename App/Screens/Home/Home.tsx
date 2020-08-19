@@ -1,17 +1,19 @@
+import { Warehouse } from "geom-api-ts-client";
+import { Button, Content, H1, Text, NativeBase } from "native-base";
 import React from "react";
 import { StyleSheet } from "react-native";
+
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../Screens";
-import { Content, Button, Text, H1 } from "native-base";
+
 import { SimpleCard } from "../../components";
-import { ReasonTypeKey } from "../../types";
+import { RootStackParamList } from "../Screens";
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 type HomeProps = {
   navigation: HomeScreenNavigationProp;
 };
 
-const StartProcessingButton = (props: any) => {
+const StartProcessingButton = (props: NativeBase.Button) => {
   return (
     <Button {...props}>
       <Text>Inizio Lavorazione</Text>
@@ -19,7 +21,7 @@ const StartProcessingButton = (props: any) => {
   );
 };
 
-const ScrapToWarehouseButton = (props: any) => {
+const ScrapToWarehouseButton = (props: NativeBase.Button) => {
   return (
     <Button {...props}>
       <Text>Scarto a Magazzino</Text>
@@ -36,7 +38,7 @@ export function Home(props: HomeProps): React.ReactElement {
 
   const handleScrapToWarehouseButtonPress = () => {
     navigation.navigate("NewMovement", {
-      reasonTypeDefault: ReasonTypeKey.LoadRemnant,
+      reasonTypeDefault: Warehouse.Movement.ReasonTypeKey.LoadRemnant,
     });
   };
 
@@ -56,7 +58,7 @@ export function Home(props: HomeProps): React.ReactElement {
           <ScrapToWarehouseButton
             full
             style={styles.action}
-            onPress={() => handleScrapToWarehouseButtonPress()}
+            onPress={handleScrapToWarehouseButtonPress}
           />
         </SimpleCard>
       </Content>

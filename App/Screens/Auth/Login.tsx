@@ -1,13 +1,19 @@
+import { Field, Formik } from "formik";
+import { pipe } from "fp-ts/lib/pipeable";
+import * as T from "fp-ts/lib/Task";
+import * as TE from "fp-ts/lib/TaskEither";
+import { Authentication, Operator } from "geom-api-ts-client";
+import { Button, Container, Content, H1, H2, Text, Toast } from "native-base";
 import React, { useContext } from "react";
-import { Container, Button, Text, Content, H1, H2 } from "native-base";
-import { Input } from "react-native-elements";
 import { StyleSheet, View } from "react-native";
-import { Formik, Field } from "formik";
+import { Input } from "react-native-elements";
 import * as Yup from "yup";
-import { AuthContext } from "../../stores";
-import * as E from "fp-ts/lib/Either";
+
 import { ChooseOperator, SimpleCard } from "../../components";
-import { Operator } from "../../types";
+import { AuthContext, makeUser, ApiContext } from "../../stores";
+import { makeSettings } from "../../util/api";
+import { API_KEY } from "../../util/constants";
+import { generalErrorToast } from "../../util/ui";
 
 const validationSchema = Yup.object({
   username: Yup.string().required().min(4),
@@ -15,6 +21,7 @@ const validationSchema = Yup.object({
 });
 
 export const Login = (): React.ReactElement => {
+  const { callPublic } = useContext(ApiContext);
   const { login } = useContext(AuthContext);
 
   return (
@@ -30,15 +37,30 @@ export const Login = (): React.ReactElement => {
         </SimpleCard>
         <SimpleCard>
           <Formik
-            initialValues={{ username: "", password: "test" }} // TODO: remove defaults
+            initialValues={{ username: "", password: "" }}
             validationSchema={validationSchema}
             onSubmit={(values) =>
-              login(
-                E.left({
-                  username: values.username,
-                  password: values.password,
-                })
-              )
+              pipe(
+                callPublic(Authentication.login)({
+                  value: {
+                    username: values.username,
+                    password: values.password,
+                    grant_type: "password",
+                    client_id: API_KEY,
+                  },
+                  settings: makeSettings(),
+                }),
+                TE.fold(
+                  () => {
+                    Toast.show(generalErrorToast);
+                    return T.never;
+                  },
+                  (res) => {
+                    login(makeUser(values.username)(res));
+                    return T.of(res);
+                  }
+                )
+              )()
             }
           >
             {({
@@ -48,7 +70,6 @@ export const Login = (): React.ReactElement => {
               errors,
               isSubmitting,
               isValid,
-              touched,
               setFieldValue,
               values,
             }) => {
@@ -59,13 +80,10 @@ export const Login = (): React.ReactElement => {
                     <Field
                       name="username"
                       as={ChooseOperator}
-                      onSelect={(x: Operator) =>
+                      onSelect={(x: Operator.Operator) =>
                         setFieldValue("username", x.UserName)
                       }
                     />
-                    {/* <ChooseOperator
-                      onSelect={(x) => setFieldValue("username", x.UserName)}
-                    /> */}
                   </View>
 
                   <View style={{ marginTop: 20, width: "100%" }}>

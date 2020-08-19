@@ -1,43 +1,36 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-import { AsyncStorage } from "react-native";
-import moment from "moment";
 import { pipe } from "fp-ts/lib/pipeable";
-import * as E from "fp-ts/lib/Either";
+import * as T from "fp-ts/lib/Task";
+import * as O from "fp-ts/lib/Option";
+import * as TE from "fp-ts/lib/TaskEither";
+import { Auth, Authentication } from "geom-api-ts-client";
+import moment from "moment";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { AsyncStorage } from "react-native";
+
+import { User } from "../types";
+import { makeSettings, logErrorIfAny } from "../util/api";
 import { noop } from "../util/noop";
-import { Login, Token, User } from "../types";
-import { token as tokenApi } from "../data/auth";
 import { ErrorContext } from "./error";
 
 const USER_STORAGE_KEY = "user";
 
-/** Json reviver for user object. */
-// tslint:disable-next-line:no-explicit-any
-const userReviver = (k: string, v: any) => {
-  if (k === "timestamp") return moment(v);
-  return v;
-};
+type Token = Auth.Token;
 
-/** The Auth Context type */
 interface Context {
-  user?: User;
+  user: () => User | undefined;
   logout: () => void;
-  login: (data: E.Either<Login, Token>) => void;
-  // auth: () => void;
+  login: (data: User) => void;
+  /**
+   * Refresh the token. If force is true, the token is refreshed even if it is not expiring.
+   */
+  refresh: (force?: boolean) => void;
 }
 
-/** @returns A user with given username, a timestamp and a token. */
-const buildUser = (username: string) => (token: Token): User => {
-  return {
-    username: username,
-    timestamp: moment(),
-    token: token,
-  };
-};
-
 export const AuthContext = createContext<Context>({
-  user: undefined,
+  user: () => undefined,
   logout: noop,
   login: noop,
+  refresh: noop,
 });
 
 export function AuthContextProvider({
@@ -46,17 +39,33 @@ export function AuthContextProvider({
   children: JSX.Element;
 }): React.ReactElement {
   const { setError } = useContext(ErrorContext);
-  const [user, setUser] = useState<undefined | User>(undefined);
+  const [_user, setUser] = useState<undefined | User>(undefined);
+
+  const getRefresh = (u: User): TE.TaskEither<Error, Token> =>
+    pipe(
+      Authentication.refresh({
+        value: {
+          refresh_token: u.token.refresh_token,
+          grant_type: "refresh_token",
+        },
+        settings: makeSettings(),
+      }),
+      logErrorIfAny
+    );
 
   useEffect(() => {
     // Try to retrieve and decode the user saved in the async storage, if any.
     (async () => {
       try {
         const s = await AsyncStorage.getItem(USER_STORAGE_KEY);
-        const u = JSON.parse(s || "", userReviver);
+        const u = JSON.parse(s || "", userReviver) as User;
 
-        if (!u) setUser(undefined);
-        else setUser(u);
+        if (!u) {
+          setUser(undefined);
+          return T.never;
+        }
+
+        setUser(u);
       } catch (err) {
         setUser(undefined);
       }
@@ -68,31 +77,103 @@ export function AuthContextProvider({
     // i.e., update the user with it's json string or delete the key if user is undefined.
     (async () => {
       try {
-        if (!user) AsyncStorage.removeItem(USER_STORAGE_KEY);
-        else await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+        if (!_user) AsyncStorage.removeItem(USER_STORAGE_KEY);
+        else
+          await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(_user));
       } catch (err) {
         setError(err);
       }
     })();
-  }, [user]);
+  }, [_user]);
 
-  /** Login the user either with login or token data. */
-  const login = (data: E.Either<Login, Token>) =>
-    pipe(
-      data,
-      E.fold(
-        (login) =>
-          pipe(tokenApi(E.left(login)), buildUser(login.username), setUser),
-        (token) => 1 // TODO: is this useful? Note that we save in the async storage the whole user object not only the token.
-      )
-    );
+  const user = () => {
+    return _user;
+  };
 
-  /** Logout the user. */
+  const login = (user: User): void => {
+    setUser(user);
+  };
+
   const logout = () => setUser(undefined);
 
+  const refresh = (force = false) => {
+    return pipe(
+      _user,
+      O.fromNullable,
+      O.fold(
+        () => abortIfNotUser<Token>(),
+        (user) =>
+          pipe(
+            refreshTokenIfIsExpiringOrForce(getRefresh)(force)(user),
+            TE.fold(
+              (err) => TE.left(err),
+              (newToken) => {
+                setUser(makeUser(user.username)(newToken));
+                return TE.right(newToken);
+              }
+            )
+          )
+      ),
+      logErrorIfAny
+    )();
+  };
+
   return (
-    <AuthContext.Provider value={{ user: user, logout: logout, login: login }}>
+    <AuthContext.Provider
+      value={{ user: user, logout: logout, login: login, refresh: refresh }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
+
+export const makeUser = (username: string) => (token: Token): User => {
+  return {
+    username: username,
+    timestamp: moment(),
+    token: token,
+  };
+};
+
+const isTokenExpiring = (user: User): boolean =>
+  moment().isAfter(
+    user.timestamp.clone().add((user.token.expires_in * 80) / 100)
+  );
+
+const refreshTokenIfIsExpiring = (
+  getRefresh: (user: User) => TE.TaskEither<Error, Token>
+) => (user: User) =>
+  pipe(
+    user,
+    O.fromPredicate(isTokenExpiring),
+    O.fold(
+      // token is not expiring
+      () => TE.right(user.token),
+      // token is expiring
+      () => getRefresh(user)
+    )
+  );
+
+const refreshTokenIfIsExpiringOrForce = (
+  getRefresh: (user: User) => TE.TaskEither<Error, Token>
+) => (force: boolean) => (user: User) =>
+  pipe(
+    force,
+    O.fromPredicate((x) => !x),
+    O.fold(
+      // force refresh
+      () => getRefresh(user),
+      // refresh only if expiring
+      () => refreshTokenIfIsExpiring(getRefresh)(user)
+    )
+  );
+
+const abortIfNotUser = <T,>(): TE.TaskEither<Error, T> =>
+  TE.left(new Error("Cannot refresh token, user is not logged in."));
+
+/** Json reviver for user object. */
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+const userReviver = (k: string, v: any): any => {
+  if (k === "timestamp") return moment(v);
+  return v;
+};

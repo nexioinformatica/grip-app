@@ -1,50 +1,23 @@
-import axios, { AxiosInstance } from "axios";
-import { BASE_URL, API_KEY, API_CLIENT_TIMEOUT } from "./constants";
-import { Token } from "../types";
+import {
+  BASE_URL,
+  API_KEY,
+  API_CLIENT_REQUEST_TIMEOUT,
+  API_CLIENT_CONNECTION_TIMEOUT,
+} from "./constants";
 import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
 import { pipe } from "fp-ts/lib/pipeable";
 import { sentryError } from "./sentry";
-
-/** @returns A request application defaults and giben token as authorization. */
-export const req = (token: Token): AxiosInstance => {
-  return axios.create({
-    baseURL: BASE_URL,
-    timeout: API_CLIENT_TIMEOUT,
-    headers: {
-      "X-ApiKey": API_KEY,
-      Authorization: "Bearer " + token.access_token,
-    },
-  });
-};
-
-/** @returns A request with application defaults and no authentication. */
-export const publicReq = (): AxiosInstance => {
-  return axios.create({
-    baseURL: BASE_URL,
-    timeout: API_CLIENT_TIMEOUT,
-    headers: {
-      "X-ApiKey": API_KEY,
-    },
-  });
-};
+import { Settings, makeSignal } from "geom-api-ts-client/dist/common/api";
 
 export const neededLogin = <T>(setError: (err: Error) => void): T.Task<T> => {
   setError(new Error("You should be signed in"));
   return T.never;
 };
 
-export const errorOccurred = <T>(
-  setError: (err: Error) => void,
-  err: Error
-): T.Task<T> => {
-  setError(err);
-  return T.never;
-};
-
 /**
- * Apply the identity function, and log, as a side effect, the error, if any.
- * @returns The given TaskEither `te`.
+ * Apply the identity function and log, as a side effect, the error 
+ * with sentry if any.
  */
 export const logErrorIfAny = <T>(
   te: TE.TaskEither<Error, T>
@@ -59,3 +32,17 @@ export const logErrorIfAny = <T>(
       (res) => TE.right(res)
     )
   );
+
+/**
+ * Make default settings for GeOM API client with `.env` values.
+ */
+export const makeSettings = (
+  settings = {
+    noVersion: false,
+    timeout: API_CLIENT_REQUEST_TIMEOUT,
+    apiKey: API_KEY,
+    signal: makeSignal(API_CLIENT_CONNECTION_TIMEOUT).token,
+    url: BASE_URL,
+    useHttp: true,
+  }
+): Settings => settings;

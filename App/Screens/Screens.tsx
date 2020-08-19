@@ -1,23 +1,26 @@
+import { BarCodeEvent } from "expo-barcode-scanner";
+import { Warehouse } from "geom-api-ts-client";
+import { Container, Root } from "native-base";
 import React, { useContext } from "react";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { AppBar } from "../components";
-import { Home } from "./Home";
-import { Container, Root } from "native-base";
-import { StartProcessing } from "./Processing";
-import { NewMovement } from "./Warehouse";
-import { BarCodeEvent } from "expo-barcode-scanner";
-import { Scan } from "./Scan";
+import { AuthContext, ErrorContext } from "../stores";
 import { Login, Profile } from "./Auth";
-import { ErrorContext, AuthContext } from "../stores";
-import { ReasonTypeKey } from "../types";
 import { Error } from "./Error";
+import { Home } from "./Home";
+import { StartProcessing } from "./Processing";
+import { Scan } from "./Scan";
+import { NewMovement } from "./Warehouse";
 
 export type RootStackParamList = {
   Home: undefined;
   StartProcessing: undefined;
-  NewMovement: { reasonTypeDefault: ReasonTypeKey | undefined };
+  NewMovement: {
+    reasonTypeDefault: Warehouse.Movement.ReasonTypeKey | undefined;
+  };
   Scan: { onBarcodeScanned?: (barcode: BarCodeEvent) => void };
   Profile: undefined;
 };
@@ -38,11 +41,17 @@ const RootStack = ((): React.ReactElement => {
       <Stack.Navigator
         screenOptions={{
           headerShown: true,
-          header: (props) => <AppBar {...props} />,
+          header: function appBar(props) {
+            return <AppBar {...props} />;
+          },
         }}
       >
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="StartProcessing" component={StartProcessing} />
+        <Stack.Screen
+          name="StartProcessing"
+          options={{ title: "Inizio Lavorazione" }}
+          component={StartProcessing}
+        />
         <Stack.Screen
           name="NewMovement"
           options={{ title: "Nuovo Movimento" }}
@@ -87,6 +96,7 @@ const ErrorStack = ((): React.ReactElement => {
  * Wrap content into the basic structure.
  * @param children The content to wrap.
  */
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 const wrap = (children: any): React.ReactElement => {
   return (
     <Root>
@@ -102,7 +112,7 @@ const Screens = (): React.ReactElement => {
   const { user } = useContext(AuthContext);
 
   // Login Stack
-  if (!user) return wrap(LoginStack);
+  if (!user()) return wrap(LoginStack);
 
   // Error Stack
   if (error) return wrap(ErrorStack);
