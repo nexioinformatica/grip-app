@@ -147,7 +147,10 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
       teFold(
         () => tNever,
         (res) => {
-          setReasons([{ IdCausale: -1, Codice: "", Descrizione: "" }, ...res]);
+          setReasons([
+            { IdCausale: -1, Codice: "", Descrizione: "Non specificata" },
+            ...res,
+          ]);
           return tOf(res);
         }
       )
@@ -234,8 +237,8 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 )}
                 <View style={isValid ? styles.group : styles.groupFirst}>
                   <Text>
-                    Specificare <i>Tipo Causale</i> e <i>Causale</i> se il tipo
-                    è &quot;Specificata&quot;
+                    Specificare Tipo Causale e Causale se il tipo è
+                    &quot;Specificata&quot;
                   </Text>
                   <View style={styles.item}>
                     <Field
@@ -271,6 +274,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                         } ${reason.Descrizione}`,
                       }))}
                       selected={values.reason?.IdCausale}
+                      placeholder="Select"
                       onSelectedChange={({ v }: { k: number; v: Reason }) => {
                         pipe(
                           v,
@@ -285,9 +289,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                   </View>
                 </View>
                 <View style={styles.group}>
-                  <Text>
-                    Specificare una <i>Quantità</i>
-                  </Text>
+                  <Text>Specificare una Quantità</Text>
                   <View style={styles.item}>
                     <Field
                       name="quantity"
@@ -300,9 +302,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                   </View>
                 </View>
                 <View style={styles.group}>
-                  <Text>
-                    Specificare una <i>Matricola</i>
-                  </Text>
+                  <Text>Specificare una Matricola</Text>
                   <View style={styles.item}>
                     <Field
                       name="freshman"
@@ -318,9 +318,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                   </View>
                 </View>
                 <View style={styles.group}>
-                  <Text>
-                    Opzionalmente, specificare delle <i>Note</i>
-                  </Text>
+                  <Text>Opzionalmente, specificare delle Note</Text>
                   <View style={styles.item}>
                     <Field
                       name="note"
@@ -335,8 +333,8 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 </View>
                 <View style={styles.group}>
                   <Text>
-                    Opzionalmente, specificare
-                    <i>Attività Operatore o Attività Macchina o Entrambe</i>
+                    Opzionalmente, specificare Attività Operatore o Attività
+                    Macchina o Entrambe
                   </Text>
                   <View style={styles.item}>
                     <Field
@@ -364,9 +362,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                   </View>
                 </View>
                 <View style={styles.group}>
-                  <Text>
-                    Opzionalmente, specificare un <i>Articolo</i>
-                  </Text>
+                  <Text>Opzionalmente, specificare un Articolo</Text>
                   <View style={styles.item}>
                     <Field
                       name="article"
@@ -382,8 +378,8 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 </View>
                 <View style={styles.group}>
                   <Text>
-                    Opzionalmente, specificare{" "}
-                    <i>Lotto e Suddivisione e Collocazione</i>
+                    Opzionalmente, specificare Lotto e Suddivisione e
+                    Collocazione
                   </Text>
                   <View style={styles.item}>
                     <Field
@@ -424,8 +420,8 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 </View>
                 <View style={styles.group}>
                   <Text>
-                    Opzionalmente, specificare l&apos;<i>Ordine Esecutivo</i>,
-                    composto da Testata e Posizione e Fase
+                    Opzionalmente, specificare l&apos;Ordine Esecutivo, composto
+                    da Testata e Posizione e Fase
                   </Text>
                   <View style={styles.item}>
                     <Field
@@ -513,8 +509,8 @@ const isPlaceholderReason = (x?: Reason) =>
   x ? x.IdCausale === -1 && x.Codice === "" && x.Descrizione === "" : false;
 
 const styles = StyleSheet.create({
-  group: { marginTop: "1.5em", width: "100%" },
-  groupFirst: { marginTop: "0.5em", width: "100%" },
-  item: { marginTop: "0.5em" },
+  group: { marginTop: 15, width: "100%" },
+  groupFirst: { marginTop: 5, width: "100%" },
+  item: { marginTop: 5 },
   error: { color: "#ff0" },
 });

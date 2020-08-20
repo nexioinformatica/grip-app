@@ -1,5 +1,5 @@
 import React from "react";
-import { Picker } from "native-base";
+import { Picker, NativeBase } from "native-base";
 
 export type Key = string | number;
 
@@ -22,7 +22,7 @@ export interface Item<T> {
  * - `onSelectedChange`, callback selection of an item, returns the selected value with
  *    its key (type `Key`) and its value (type `T`).
  */
-interface DropdownProps<T> {
+interface DropdownProps<T> extends NativeBase.Picker {
   items: Item<T>[];
   selected?: Key;
   onSelectedChange: ({ k, v }: { k: Key; v: T }) => void;
@@ -38,6 +38,7 @@ export const Dropdown = <T,>({
   items,
   selected,
   onSelectedChange,
+  ...props
 }: DropdownProps<T>): React.ReactElement => {
   const handleValueChanged = (itemValue: Key, itemPosition: number) => {
     onSelectedChange({ k: itemValue, v: items[itemPosition].value });
@@ -49,6 +50,7 @@ export const Dropdown = <T,>({
       style={{ width: "100%" }}
       selectedValue={selected}
       onValueChange={handleValueChanged}
+      {...props}
     >
       {items.map((x, i) => (
         <Picker.Item label={x.label} value={x.key} key={i} />

@@ -26,7 +26,7 @@ const AppBar = (props: AppBarProps): React.ReactElement => {
 
   return (
     <Header>
-      <Left>{canGoBack ? <BackButton /> : <HomeButton />}</Left>
+      <Left>{canGoBack() ? <BackButton /> : <HomeButton />}</Left>
       <Body>
         <Title>{title}</Title>
       </Body>

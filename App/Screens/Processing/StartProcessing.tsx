@@ -172,9 +172,7 @@ function StartProcessingComponent(
                   </View>
                 )}
                 <View style={isValid ? styles.group : styles.groupFirst}>
-                  <Text>
-                    Specificare <i>Tipo Azione</i> e <i>Tipo Attività</i>
-                  </Text>
+                  <Text>Specificare Tipo Azione e Tipo Attività</Text>
                   <View style={styles.item}>
                     <Field
                       name="actionType"
@@ -217,9 +215,7 @@ function StartProcessingComponent(
                   </View>
                 </View>
                 <View style={styles.group}>
-                  <Text>
-                    Opzionalmente, specificare la <i>Macchina</i>
-                  </Text>
+                  <Text>Opzionalmente, specificare la Macchina</Text>
                   <View style={styles.item}>
                     <Field
                       name="machine"
@@ -235,9 +231,7 @@ function StartProcessingComponent(
                   </View>
                 </View>
                 <View style={styles.group}>
-                  <Text>
-                    Opzionalmente, specificare l&apos;<i>Unità Operativa</i>
-                  </Text>
+                  <Text>Opzionalmente, specificare l&apos;Unità Operativa</Text>
                   <View style={styles.item}>
                     <Field
                       name="operativeUnit"
@@ -254,8 +248,8 @@ function StartProcessingComponent(
                 </View>
                 <View style={styles.group}>
                   <Text>
-                    Opzionalmente, specificare l&apos;<i>Ordine Esecutivo</i>,
-                    composto da Testata, Posizione e Fase,
+                    Opzionalmente, specificare l&aposOrdine Esecutivo, composto
+                    da Testata, Posizione e Fase,
                   </Text>
                   <View style={styles.item}>
                     <Field
@@ -358,8 +352,8 @@ const makeActivity = (values: FormValues): NewActivity => ({
 });
 
 const styles = StyleSheet.create({
-  group: { marginTop: "1.5em", width: "100%" },
-  groupFirst: { marginTop: "0.5em", width: "100%" },
-  item: { marginTop: "0.5em" },
+  group: { marginTop: 15, width: "100%" },
+  groupFirst: { marginTop: 5, width: "100%" },
+  item: { marginTop: 5 },
   error: { color: "#ff0" },
 });
