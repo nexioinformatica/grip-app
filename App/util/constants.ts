@@ -8,10 +8,14 @@ export const API_KEY = Constants.manifest.extra.agilecomApiKey || "test-key";
 /**
  * The agilecom's api base url.
  */
-export const BASE_URL =
+export const API_BASE_URL =
   Constants.manifest.extra.agilecomApiBaseUrl || "http://localhost:3000";
-// export const BASE_URL = "https://api.agilecom.it:8443";
-// export const BASE_URL = "http://localhost:3000";
+
+/**
+ * Whether to use HTTP schema for APIs.
+ */
+export const API_USE_HTTP: boolean =
+  Constants.manifest.extra.agilecomApiUseHttp || false;
 
 /**
  * Number of milliseconds for api request timeout.

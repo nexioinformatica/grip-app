@@ -28,6 +28,7 @@ let names = [
   "SENTRY_AUTH_TOKEN",
   "AGILECOM_API_KEY",
   "AGILECOM_API_BASE_URL",
+  "AGILECOM_API_USE_HTTP",
 ];
 let variables = loadVariables(names);
 
@@ -102,6 +103,7 @@ function buildOverrides(variables) {
         sentryPublicDsn: variables.SENTRY_PUBLIC_DNS || null,
         agilecomApiKey: variables.AGILECOM_API_KEY || null,
         agilecomApiBaseUrl: variables.AGILECOM_API_BASE_URL || null,
+        agilecomApiUseHttp: variables.AGILECOM_API_USE_HTTP || false,
       },
       hooks: {
         postPublish: [

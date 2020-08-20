@@ -25,7 +25,8 @@
     "extra": {
       "sentryPublicDsn": null,
       "agilecomApiBaseUrl": null,
-      "agilecomApiKey": null
+      "agilecomApiKey": null,
+      "agilecomApiUseHttp": false
     },
     "hooks": {
       "postPublish": [
