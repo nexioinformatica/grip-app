@@ -37,7 +37,7 @@ export const Profile = (
           </Text>
           <Text>Scadenza: {getExpiringIn(user())}</Text>
           <Button transparent>
-            <Text onPress={() => refresh()}>Aggiorna Token</Text>
+            <Text onPress={() => refresh(true)}>Aggiorna Token</Text>
           </Button>
         </SimpleCard>
         <SimpleCard>
