@@ -39,12 +39,12 @@ const RootStack = ((): React.ReactElement => {
   return (
     <>
       <Stack.Navigator
-        screenOptions={{
-          headerShown: true,
-          header: function appBar(props) {
-            return <AppBar {...props} />;
-          },
-        }}
+      // screenOptions={{
+      //   headerShown: true,
+      //   header: function appBar(props) {
+      //     return <AppBar {...props} />;
+      //   },
+      // }}
       >
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen
@@ -92,33 +92,19 @@ const ErrorStack = ((): React.ReactElement => {
   );
 })();
 
-/**
- * Wrap content into the basic structure.
- * @param children The content to wrap.
- */
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-const wrap = (children: any): React.ReactElement => {
-  return (
-    <Root>
-      <Container style={{ flex: 1 }}>
-        <NavigationContainer>{children}</NavigationContainer>
-      </Container>
-    </Root>
-  );
-};
-
 const Screens = (): React.ReactElement => {
-  const { error } = useContext(ErrorContext);
+  // const { error } = useContext(ErrorContext);
   const { user } = useContext(AuthContext);
 
-  // Login Stack
-  if (!user()) return wrap(LoginStack);
+  // // Login Stack
+  // if (!user()) 
+  return <NavigationContainer>{LoginStack}</NavigationContainer>;
 
-  // Error Stack
-  if (error) return wrap(ErrorStack);
+  // // Error Stack
+  // if (error) return ErrorStack;
 
   // Root Stack
-  return wrap(RootStack);
+  // return <NavigationContainer>{RootStack}</NavigationContainer>;
 };
 
 export { Screens };

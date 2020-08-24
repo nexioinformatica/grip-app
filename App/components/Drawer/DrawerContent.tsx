@@ -30,8 +30,6 @@ export function DrawerContent(props: DrawerNavigationProp<RootStackParamList>) {
                 "https://pbs.twimg.com/profile_images/952545910990495744/b59hSXUd_400x400.jpg",
             }}
             size={50}
-            accessibilityValue="avatar"
-            focusable={false}
           />
           <Title style={styles.title}>Dawid Urbaniak</Title>
           <Caption style={styles.caption}>@trensik</Caption>
@@ -50,11 +48,7 @@ export function DrawerContent(props: DrawerNavigationProp<RootStackParamList>) {
             </View>
           </View>
         </View>
-        <Drawer.Section
-          style={styles.drawerSection}
-          accessibilityValue="drawer section"
-          focusable={false}
-        >
+        <Drawer.Section style={styles.drawerSection} focusable={false}>
           <DrawerItem
             icon={({ color, size }) => (
               <MaterialCommunityIcons
@@ -85,14 +79,10 @@ export function DrawerContent(props: DrawerNavigationProp<RootStackParamList>) {
             onPress={() => {}}
           />
         </Drawer.Section>
-        <Drawer.Section
-          title="Preferences"
-          accessibilityValue="drawer section"
-          focusable={false}
-        >
-          <TouchableRipple onPress={() => {}} accessibilityValue="">
+        <Drawer.Section title="Preferences" focusable={false}>
+          <TouchableRipple onPress={() => {}}>
             <View style={styles.preference}>
-              <Text accessibilityValue="dark theme">Dark Theme</Text>
+              <Text>Dark Theme</Text>
               <View pointerEvents="none">
                 <Switch value={false} />
               </View>
