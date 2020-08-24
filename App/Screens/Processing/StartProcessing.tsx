@@ -165,9 +165,11 @@ function StartProcessingComponent(
             return (
               <>
                 {!isValid && (
-                  <View style={{ ...styles.groupFirst, ...styles.error }}>
+                  <View style={{ ...styles.groupFirst }}>
                     {Object.values(errors).map((x, i) => (
-                      <Text key={i}>{x}</Text>
+                      <Text key={i} style={styles.textError}>
+                        {x}
+                      </Text>
                     ))}
                   </View>
                 )}
@@ -224,7 +226,6 @@ function StartProcessingComponent(
                       value={values.machineBarcode}
                       onChangeValue={handleChange("machineBarcode")}
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("machine", decoded);
                       }}
                     />
@@ -240,7 +241,6 @@ function StartProcessingComponent(
                       value={values.operativeUnitBarcode}
                       onChangeValue={handleChange("operativeUnitBarcode")}
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("operativeUnit", decoded);
                       }}
                     />
@@ -259,7 +259,6 @@ function StartProcessingComponent(
                       value={values.headerBarcode}
                       onChangeValue={handleChange("headerBarcode")}
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("header", decoded);
                       }}
                     />
@@ -273,7 +272,6 @@ function StartProcessingComponent(
                       value={values.positionBarcode}
                       onChangeValue={handleChange("positionBarcode")}
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("position", decoded);
                       }}
                     />
@@ -287,7 +285,6 @@ function StartProcessingComponent(
                       value={values.phaseBarcode}
                       onChangeValue={handleChange("phaseBarcode")}
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("phase", decoded);
                       }}
                     />
@@ -355,5 +352,5 @@ const styles = StyleSheet.create({
   group: { marginTop: 15, width: "100%" },
   groupFirst: { marginTop: 5, width: "100%" },
   item: { marginTop: 5 },
-  error: { color: "#ff0" },
+  textError: { color: "#f00" },
 });
