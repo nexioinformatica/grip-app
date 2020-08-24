@@ -1,4 +1,4 @@
-import { Field, Formik } from "formik";
+import { Formik } from "formik";
 import { pipe } from "fp-ts/lib/pipeable";
 import { Activities, Barcode } from "geom-api-ts-client";
 import { Button, Content, H2, H3, Text, Toast, View } from "native-base";
@@ -165,50 +165,38 @@ function StartProcessingComponent(
             return (
               <>
                 {!isValid && (
-                  <View style={{ ...styles.groupFirst, ...styles.error }}>
+                  <View style={{ ...styles.groupFirst }}>
                     {Object.values(errors).map((x, i) => (
-                      <Text key={i}>{x}</Text>
+                      <Text key={i} style={styles.textError}>
+                        {x}
+                      </Text>
                     ))}
                   </View>
                 )}
                 <View style={isValid ? styles.group : styles.groupFirst}>
                   <Text>Specificare Tipo Azione e Tipo Attività</Text>
                   <View style={styles.item}>
-                    <Field
-                      name="actionType"
-                      as={Dropdown}
+                    <Dropdown<ActionType>
                       items={actionTypes.map((x) => ({
                         key: x.key,
                         value: x.key,
                         label: x.label,
                       }))}
                       selected={values.actionType.valueOf()}
-                      onSelectedChange={({
-                        k,
-                      }: {
-                        k: ActionTypeKey;
-                        v: ActionType;
-                      }) => {
+                      onSelectedChange={({ k }) => {
                         setFieldValue("actionType", k);
                       }}
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="activityType"
-                      as={Dropdown}
+                    <Dropdown<ActivityType>
                       items={activityTypes.map((x) => ({
                         key: x.IdTipoAttivita,
                         value: x,
                         label: `(${x.Codice}) ${x.Descrizione}`,
                       }))}
                       selected={values.activityType?.IdTipoAttivita}
-                      onSelectedChange={({
-                        v,
-                      }: {
-                        k: number;
-                        v: ActivityType;
-                      }) => {
+                      onSelectedChange={({ v }) => {
                         setFieldValue("activityType", v);
                       }}
                     />
@@ -217,14 +205,13 @@ function StartProcessingComponent(
                 <View style={styles.group}>
                   <Text>Opzionalmente, specificare la Macchina</Text>
                   <View style={styles.item}>
-                    <Field
-                      name="machine"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Macchina"
                       value={values.machineBarcode}
-                      onChangeValue={handleChange("machineBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("machineBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("machine", decoded);
                       }}
                     />
@@ -233,14 +220,13 @@ function StartProcessingComponent(
                 <View style={styles.group}>
                   <Text>Opzionalmente, specificare l&apos;Unità Operativa</Text>
                   <View style={styles.item}>
-                    <Field
-                      name="operativeUnit"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Unita Operativa"
                       value={values.operativeUnitBarcode}
-                      onChangeValue={handleChange("operativeUnitBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("operativeUnitBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("operativeUnit", decoded);
                       }}
                     />
@@ -252,42 +238,39 @@ function StartProcessingComponent(
                     da Testata, Posizione e Fase,
                   </Text>
                   <View style={styles.item}>
-                    <Field
-                      name="header"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Testata"
                       value={values.headerBarcode}
-                      onChangeValue={handleChange("headerBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("headerBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("header", decoded);
                       }}
                     />
                   </View>
 
                   <View style={styles.item}>
-                    <Field
-                      name="position"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Posizione"
                       value={values.positionBarcode}
-                      onChangeValue={handleChange("positionBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("positionBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("position", decoded);
                       }}
                     />
                   </View>
 
                   <View style={styles.item}>
-                    <Field
-                      name="phase"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Fase"
                       value={values.phaseBarcode}
-                      onChangeValue={handleChange("phaseBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("phaseBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("phase", decoded);
                       }}
                     />
@@ -355,5 +338,5 @@ const styles = StyleSheet.create({
   group: { marginTop: 15, width: "100%" },
   groupFirst: { marginTop: 5, width: "100%" },
   item: { marginTop: 5 },
-  error: { color: "#ff0" },
+  textError: { color: "#f00" },
 });

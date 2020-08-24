@@ -1,4 +1,4 @@
-import { Field, Formik } from "formik";
+import { Formik } from "formik";
 import { not } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
@@ -45,7 +45,7 @@ type Reasons = Warehouse.Reason.Collection;
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 interface FormValues {
   reasonType: ReasonType;
-  freshman: any | undefined; // should be array (WHY??)
+  freshman: Barcode.BarcodeDecode | undefined; // should be array (WHY??)
   reason: any | undefined; // required only if reasonType = 0
   quantity: number | undefined; // should be array (WHY??)
   article: any | undefined;
@@ -81,7 +81,9 @@ const validationSchema = Yup.object({
     ),
     otherwise: Yup.mixed().notRequired(),
   }),
-  quantity: Yup.number().required("Il campo Quantità è richiesto"),
+  quantity: Yup.number()
+    .integer("Il campo deve essere un numero")
+    .required("Il campo Quantità è richiesto"),
 
   article: Yup.mixed().notRequired(),
   lot: Yup.mixed().notRequired(),
@@ -174,13 +176,13 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
           enableReinitialize={true}
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            const movement: Warehouse.Movement.NewMovement = makeMovement(
+            const newMovement: Warehouse.Movement.NewMovement = makeNewMovement(
               values
             );
 
             return pipe(
               call(Warehouse.Movement.create)({
-                value: movement,
+                value: newMovement,
                 settings: makeSettings(),
               }),
               teFold(
@@ -189,7 +191,6 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                   return tOf(undefined);
                 },
                 (res) => {
-                  console.log(res);
                   Toast.show(generalSuccessToast);
                   return tOf(res);
                 }
@@ -222,16 +223,14 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
               });
             }, [reasons]);
 
-            useEffect(() => {
-              console.log(values.reason);
-            }, [values.reason]);
-
             return (
               <>
                 {!isValid && (
-                  <View style={{ ...styles.groupFirst, ...styles.error }}>
+                  <View style={{ ...styles.groupFirst }}>
                     {Object.values(errors).map((x, i) => (
-                      <Text key={i}>{x}</Text>
+                      <Text key={i} style={styles.textError}>
+                        {x}
+                      </Text>
                     ))}
                   </View>
                 )}
@@ -241,29 +240,20 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                     &quot;Specificata&quot;
                   </Text>
                   <View style={styles.item}>
-                    <Field
-                      name="actionType"
-                      as={Dropdown}
+                    <Dropdown<ReasonType>
                       items={reasonTypes.map((x) => ({
                         key: x.key,
                         value: x.key,
                         label: x.label,
                       }))}
                       selected={values.reasonType.valueOf()}
-                      onSelectedChange={({
-                        k,
-                      }: {
-                        k: ReasonType;
-                        v: ReasonType;
-                      }) => {
+                      onSelectedChange={({ k }) => {
                         setFieldValue("reasonType", k);
                       }}
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="reason"
-                      as={Dropdown}
+                    <Dropdown<Reason>
                       items={reasons.map((reason) => ({
                         key: reason.IdCausale,
                         value: reason,
@@ -275,7 +265,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                       }))}
                       selected={values.reason?.IdCausale}
                       placeholder="Select"
-                      onSelectedChange={({ v }: { k: number; v: Reason }) => {
+                      onSelectedChange={({ v }) => {
                         pipe(
                           v,
                           O.fromPredicate(not(isPlaceholderReason)),
@@ -291,27 +281,24 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 <View style={styles.group}>
                   <Text>Specificare una Quantità</Text>
                   <View style={styles.item}>
-                    <Field
-                      name="quantity"
-                      as={Input}
-                      type="number"
-                      placeholder="Qunatità"
-                      value={values.quantity}
-                      onChangeValue={handleChange("quantity")}
+                    <Input
+                      keyboardType="numeric"
+                      placeholder="Quantità"
+                      value={values.quantity?.toString()}
+                      onChangeText={handleChange("quantity")}
                     />
                   </View>
                 </View>
                 <View style={styles.group}>
                   <Text>Specificare una Matricola</Text>
                   <View style={styles.item}>
-                    <Field
-                      name="freshman"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Matricola"
                       value={values.freshmanBarcode}
-                      onChangeValue={handleChange("freshmanBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("freshmanBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("freshman", decoded);
                       }}
                     />
@@ -320,14 +307,13 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 <View style={styles.group}>
                   <Text>Opzionalmente, specificare delle Note</Text>
                   <View style={styles.item}>
-                    <Field
-                      name="note"
-                      as={Textarea}
+                    <Textarea
+                      underline={false}
                       rowSpan={3}
                       bordered
                       placeholder="Note"
                       value={values.note}
-                      onChangeValue={handleChange("note")}
+                      onChangeText={handleChange("note")}
                     />
                   </View>
                 </View>
@@ -337,24 +323,24 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                     Macchina o Entrambe
                   </Text>
                   <View style={styles.item}>
-                    <Field
-                      name="operatorActivity"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Attività Operatore"
                       value={values.operatorActivityBarcode}
-                      onChangeValue={handleChange("operatorActivityBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("operatorActivityBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("operatorActivity", decoded);
                       }}
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="machineActivity"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Attività Macchina"
                       value={values.machineActivityBarcode}
-                      onChangeValue={handleChange("machineActivityBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("machineActivityBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("machineActivity", decoded);
                       }}
@@ -364,12 +350,12 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 <View style={styles.group}>
                   <Text>Opzionalmente, specificare un Articolo</Text>
                   <View style={styles.item}>
-                    <Field
-                      name="article"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Articolo"
                       value={values.articleBarcode}
-                      onChangeValue={handleChange("articleBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("articleBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("article", decoded);
                       }}
@@ -382,36 +368,34 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                     Collocazione
                   </Text>
                   <View style={styles.item}>
-                    <Field
-                      name="lot"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Lotto"
                       value={values.lotBarcode}
-                      onChangeValue={handleChange("lotBarcode")}
+                      onChangeValue={(v) => handleChange("lotBarcode")(v ?? "")}
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("lot", decoded);
                       }}
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="subdivision"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Suddivisione"
                       value={values.subdivisionBarcode}
-                      onChangeValue={handleChange("subdivisionBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("subdivisionBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("subdivision", decoded);
                       }}
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="collocation"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Collocazione"
                       value={values.collocationBarcode}
-                      onChangeValue={handleChange("collocationBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("collocationBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("collocation", decoded);
                       }}
@@ -424,40 +408,37 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                     da Testata e Posizione e Fase
                   </Text>
                   <View style={styles.item}>
-                    <Field
-                      name="header"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Testata"
                       value={values.headerBarcode}
-                      onChangeValue={handleChange("headerBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("headerBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("header", decoded);
                       }}
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="position"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Posizione"
                       value={values.positionBarcode}
-                      onChangeValue={handleChange("positionBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("positionBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("position", decoded);
                       }}
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="phase"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Fase"
                       value={values.phaseBarcode}
-                      onChangeValue={handleChange("phaseBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("phaseBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("phase", decoded);
                       }}
                     />
@@ -478,7 +459,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                     <Button
                       full
                       onPress={() => resetForm(initialValues as any)}
-                      disabled={isSubmitting}
+                      disabled={!isValid || isSubmitting}
                     >
                       <Text>Reset</Text>
                     </Button>
@@ -495,14 +476,14 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
 
 export { NewMovementComponent as NewMovement };
 
-const makeMovement = (values: FormValues): NewMovement => ({
+const makeNewMovement = (values: FormValues): NewMovement => ({
   TipoCausale: values.reasonType,
   IdCausale:
     values.reasonType === ReasonTypeKey.Specified
       ? values.reason.IdCausale
       : undefined,
   Quantita: [values.quantity ? values.quantity : 0],
-  Matricole: [values.freshman],
+  Matricole: [values.freshman ? values.freshman[0].Id : 0],
 });
 
 const isPlaceholderReason = (x?: Reason) =>
@@ -512,5 +493,5 @@ const styles = StyleSheet.create({
   group: { marginTop: 15, width: "100%" },
   groupFirst: { marginTop: 5, width: "100%" },
   item: { marginTop: 5 },
-  error: { color: "#ff0" },
+  textError: { color: "#f00" },
 });
