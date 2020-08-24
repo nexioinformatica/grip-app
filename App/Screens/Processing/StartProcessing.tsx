@@ -234,7 +234,7 @@ function StartProcessingComponent(
                 </View>
                 <View style={styles.group}>
                   <Text>
-                    Opzionalmente, specificare l&aposOrdine Esecutivo, composto
+                    Opzionalmente, specificare l&apos;Ordine Esecutivo, composto
                     da Testata, Posizione e Fase,
                   </Text>
                   <View style={styles.item}>
