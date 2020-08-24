@@ -137,7 +137,7 @@ export const makeUser = (username: string) => (token: Token): User => {
 
 const isTokenExpiring = (user: User): boolean =>
   moment().isAfter(
-    user.timestamp.clone().add((user.token.expires_in * 80) / 100)
+    user.timestamp.clone().add((user.token.expires_in * 80) / 100, "seconds")
   );
 
 const refreshTokenIfIsExpiring = (
