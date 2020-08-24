@@ -260,9 +260,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="reason"
-                      as={Dropdown}
+                    <Dropdown<Reason>
                       items={reasons.map((reason) => ({
                         key: reason.IdCausale,
                         value: reason,
@@ -274,7 +272,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                       }))}
                       selected={values.reason?.IdCausale}
                       placeholder="Select"
-                      onSelectedChange={({ v }: { k: number; v: Reason }) => {
+                      onSelectedChange={({ v }) => {
                         pipe(
                           v,
                           O.fromPredicate(not(isPlaceholderReason)),
@@ -290,12 +288,10 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 <View style={styles.group}>
                   <Text>Specificare una Quantità</Text>
                   <View style={styles.item}>
-                    <Field
-                      name="quantity"
-                      component={Input}
+                    <Input
                       keyboardType="numeric"
                       placeholder="Quantità"
-                      value={values.quantity}
+                      value={values.quantity?.toString()}
                       onChangeText={handleChange("quantity")}
                     />
                   </View>
@@ -303,12 +299,12 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 <View style={styles.group}>
                   <Text>Specificare una Matricola</Text>
                   <View style={styles.item}>
-                    <Field
-                      name="freshman"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Matricola"
                       value={values.freshmanBarcode}
-                      onChangeValue={handleChange("freshmanBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("freshmanBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("freshman", decoded);
                       }}
@@ -318,14 +314,13 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 <View style={styles.group}>
                   <Text>Opzionalmente, specificare delle Note</Text>
                   <View style={styles.item}>
-                    <Field
-                      name="note"
-                      as={Textarea}
+                    <Textarea
+                      underline={false}
                       rowSpan={3}
                       bordered
                       placeholder="Note"
                       value={values.note}
-                      onChangeValue={handleChange("note")}
+                      onChangeText={handleChange("note")}
                     />
                   </View>
                 </View>
@@ -335,24 +330,24 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                     Macchina o Entrambe
                   </Text>
                   <View style={styles.item}>
-                    <Field
-                      name="operatorActivity"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Attività Operatore"
                       value={values.operatorActivityBarcode}
-                      onChangeValue={handleChange("operatorActivityBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("operatorActivityBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("operatorActivity", decoded);
                       }}
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="machineActivity"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Attività Macchina"
                       value={values.machineActivityBarcode}
-                      onChangeValue={handleChange("machineActivityBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("machineActivityBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("machineActivity", decoded);
                       }}
@@ -362,12 +357,12 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                 <View style={styles.group}>
                   <Text>Opzionalmente, specificare un Articolo</Text>
                   <View style={styles.item}>
-                    <Field
-                      name="article"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Articolo"
                       value={values.articleBarcode}
-                      onChangeValue={handleChange("articleBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("articleBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("article", decoded);
                       }}
@@ -380,36 +375,34 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                     Collocazione
                   </Text>
                   <View style={styles.item}>
-                    <Field
-                      name="lot"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Lotto"
                       value={values.lotBarcode}
-                      onChangeValue={handleChange("lotBarcode")}
+                      onChangeValue={(v) => handleChange("lotBarcode")(v ?? "")}
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("lot", decoded);
                       }}
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="subdivision"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Suddivisione"
                       value={values.subdivisionBarcode}
-                      onChangeValue={handleChange("subdivisionBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("subdivisionBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("subdivision", decoded);
                       }}
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="collocation"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Collocazione"
                       value={values.collocationBarcode}
-                      onChangeValue={handleChange("collocationBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("collocationBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("collocation", decoded);
                       }}
@@ -422,36 +415,36 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                     da Testata e Posizione e Fase
                   </Text>
                   <View style={styles.item}>
-                    <Field
-                      name="header"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Testata"
                       value={values.headerBarcode}
-                      onChangeValue={handleChange("headerBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("headerBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("header", decoded);
                       }}
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="position"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Posizione"
                       value={values.positionBarcode}
-                      onChangeValue={handleChange("positionBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("positionBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("position", decoded);
                       }}
                     />
                   </View>
                   <View style={styles.item}>
-                    <Field
-                      name="phase"
-                      as={ScanFreshman}
+                    <ScanFreshman
                       placeholder="Fase"
                       value={values.phaseBarcode}
-                      onChangeValue={handleChange("phaseBarcode")}
+                      onChangeValue={(v) =>
+                        handleChange("phaseBarcode")(v ?? "")
+                      }
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
                         setFieldValue("phase", decoded);
                       }}
