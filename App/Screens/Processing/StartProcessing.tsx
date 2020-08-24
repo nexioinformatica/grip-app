@@ -1,4 +1,4 @@
-import { Field, Formik } from "formik";
+import { Formik } from "formik";
 import { pipe } from "fp-ts/lib/pipeable";
 import { Activities, Barcode } from "geom-api-ts-client";
 import { Button, Content, H2, H3, Text, Toast, View } from "native-base";

@@ -1,4 +1,4 @@
-import { Field, Formik } from "formik";
+import { Formik } from "formik";
 import { not } from "fp-ts/lib/function";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
@@ -240,21 +240,14 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                     &quot;Specificata&quot;
                   </Text>
                   <View style={styles.item}>
-                    <Field
-                      name="actionType"
-                      as={Dropdown}
+                    <Dropdown<ReasonType>
                       items={reasonTypes.map((x) => ({
                         key: x.key,
                         value: x.key,
                         label: x.label,
                       }))}
                       selected={values.reasonType.valueOf()}
-                      onSelectedChange={({
-                        k,
-                      }: {
-                        k: ReasonType;
-                        v: ReasonType;
-                      }) => {
+                      onSelectedChange={({ k }) => {
                         setFieldValue("reasonType", k);
                       }}
                     />

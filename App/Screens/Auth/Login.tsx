@@ -89,9 +89,7 @@ export const Login = (): React.ReactElement => {
                   <View style={{ marginTop: 20, width: "100%" }}>
                     <H2>Credenziali</H2>
                     <View style={styles.item}>
-                      <Field
-                        name="username"
-                        as={Input}
+                      <Input
                         placeholder="Username"
                         onChangeText={handleChange("username")}
                         value={values.username}
@@ -100,9 +98,7 @@ export const Login = (): React.ReactElement => {
                       />
                     </View>
                     <View style={styles.last}>
-                      <Field
-                        name="password"
-                        as={Input}
+                      <Input
                         onChangeText={handleChange("password")}
                         onBlur={handleBlur("password")}
                         placeholder="Password"
