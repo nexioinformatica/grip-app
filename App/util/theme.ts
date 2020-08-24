@@ -1,6 +1,3 @@
-import { Theme } from "react-native-elements";
+import { DefaultTheme } from "react-native-paper";
 
-type IconSet = "material-community" | "material";
-
-export const theme: Theme = {};
-export const iconSet: IconSet = "material-community";
+export const theme = { ...DefaultTheme };

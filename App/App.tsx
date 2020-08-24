@@ -1,43 +1,31 @@
-import React, { useEffect, useState } from "react";
-import * as Font from "expo-font";
-import { ThemeProvider } from "react-native-elements";
-import { Ionicons } from "@expo/vector-icons";
-import { Splash as SplashScreen } from "./Screens/Splash";
+import React from "react";
+import { Provider as PaperProvider } from "react-native-paper";
+
 import { Screens } from "./Screens";
-import { theme } from "./util/theme";
-import { ErrorContextProvider, AuthContextProvider } from "./stores";
-import { ApiContextProvider } from "./stores/api";
-import { init as sentryInit } from "./util/sentry";
+import {
+  ApiContextProvider,
+  AuthContextProvider,
+  ErrorContextProvider,
+} from "./stores";
 import { IS_SENTRY_SET_UP } from "./util/constants";
+import { init as sentryInit } from "./util/sentry";
+import { theme } from "./util/theme";
 
 if (IS_SENTRY_SET_UP) {
   sentryInit();
 }
 
 const App = (): React.ReactElement => {
-  const [isFontReady, setFontReady] = useState(false);
-
-  useEffect(() => {
-    (async function () {
-      await Font.loadAsync({
-        Roboto: require("native-base/Fonts/Roboto.ttf"),
-        Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-        ...Ionicons.font,
-      });
-      setFontReady(true);
-    })();
-  }, [setFontReady]);
-
   return (
-    <ThemeProvider theme={theme}>
-      <ErrorContextProvider>
-        <AuthContextProvider>
-          <ApiContextProvider>
-            {isFontReady ? <Screens /> : <SplashScreen />}
-          </ApiContextProvider>
-        </AuthContextProvider>
-      </ErrorContextProvider>
-    </ThemeProvider>
+    <ErrorContextProvider>
+      <AuthContextProvider>
+        <ApiContextProvider>
+          <PaperProvider theme={theme}>
+            <Screens />
+          </PaperProvider>
+        </ApiContextProvider>
+      </AuthContextProvider>
+    </ErrorContextProvider>
   );
 };
 
