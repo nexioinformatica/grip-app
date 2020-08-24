@@ -31,12 +31,12 @@ const AppBar = (props: AppBarProps): React.ReactElement => {
         <Title>{title}</Title>
       </Body>
       <Right>
-        <Button transparent>
-          <Icon name="person" onPress={() => navigate("Profile")} />
+        <Button transparent onPress={() => navigate("Profile")}>
+          <Icon name="person" />
         </Button>
-        <Button transparent>
+        {/* <Button transparent>
           <Icon name="settings" />
-        </Button>
+        </Button> */}
       </Right>
     </Header>
   );
