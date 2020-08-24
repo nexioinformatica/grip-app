@@ -45,7 +45,7 @@ type Reasons = Warehouse.Reason.Collection;
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 interface FormValues {
   reasonType: ReasonType;
-  freshman: any | undefined; // should be array (WHY??)
+  freshman: Barcode.BarcodeDecode | undefined; // should be array (WHY??)
   reason: any | undefined; // required only if reasonType = 0
   quantity: number | undefined; // should be array (WHY??)
   article: any | undefined;
@@ -81,7 +81,9 @@ const validationSchema = Yup.object({
     ),
     otherwise: Yup.mixed().notRequired(),
   }),
-  quantity: Yup.number().required("Il campo Quantità è richiesto"),
+  quantity: Yup.number()
+    .integer("Il campo deve essere un numero")
+    .required("Il campo Quantità è richiesto"),
 
   article: Yup.mixed().notRequired(),
   lot: Yup.mixed().notRequired(),
@@ -174,13 +176,13 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
           enableReinitialize={true}
           validationSchema={validationSchema}
           onSubmit={(values) => {
-            const movement: Warehouse.Movement.NewMovement = makeMovement(
+            const newMovement: Warehouse.Movement.NewMovement = makeNewMovement(
               values
             );
 
             return pipe(
               call(Warehouse.Movement.create)({
-                value: movement,
+                value: newMovement,
                 settings: makeSettings(),
               }),
               teFold(
@@ -189,7 +191,6 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                   return tOf(undefined);
                 },
                 (res) => {
-                  console.log(res);
                   Toast.show(generalSuccessToast);
                   return tOf(res);
                 }
@@ -222,16 +223,14 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
               });
             }, [reasons]);
 
-            useEffect(() => {
-              console.log(values.reason);
-            }, [values.reason]);
-
             return (
               <>
                 {!isValid && (
-                  <View style={{ ...styles.groupFirst, ...styles.error }}>
+                  <View style={{ ...styles.groupFirst }}>
                     {Object.values(errors).map((x, i) => (
-                      <Text key={i}>{x}</Text>
+                      <Text key={i} style={styles.textError}>
+                        {x}
+                      </Text>
                     ))}
                   </View>
                 )}
@@ -293,11 +292,11 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                   <View style={styles.item}>
                     <Field
                       name="quantity"
-                      as={Input}
-                      type="number"
-                      placeholder="Qunatità"
+                      component={Input}
+                      keyboardType="numeric"
+                      placeholder="Quantità"
                       value={values.quantity}
-                      onChangeValue={handleChange("quantity")}
+                      onChangeText={handleChange("quantity")}
                     />
                   </View>
                 </View>
@@ -311,7 +310,6 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                       value={values.freshmanBarcode}
                       onChangeValue={handleChange("freshmanBarcode")}
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("freshman", decoded);
                       }}
                     />
@@ -431,7 +429,6 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                       value={values.headerBarcode}
                       onChangeValue={handleChange("headerBarcode")}
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("header", decoded);
                       }}
                     />
@@ -444,7 +441,6 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                       value={values.positionBarcode}
                       onChangeValue={handleChange("positionBarcode")}
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("position", decoded);
                       }}
                     />
@@ -457,7 +453,6 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                       value={values.phaseBarcode}
                       onChangeValue={handleChange("phaseBarcode")}
                       onDecodeValue={(decoded: Barcode.BarcodeDecode) => {
-                        console.log(decoded);
                         setFieldValue("phase", decoded);
                       }}
                     />
@@ -478,7 +473,7 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
                     <Button
                       full
                       onPress={() => resetForm(initialValues as any)}
-                      disabled={isSubmitting}
+                      disabled={!isValid || isSubmitting}
                     >
                       <Text>Reset</Text>
                     </Button>
@@ -495,14 +490,14 @@ function NewMovementComponent(props: NewMovementProps): React.ReactElement {
 
 export { NewMovementComponent as NewMovement };
 
-const makeMovement = (values: FormValues): NewMovement => ({
+const makeNewMovement = (values: FormValues): NewMovement => ({
   TipoCausale: values.reasonType,
   IdCausale:
     values.reasonType === ReasonTypeKey.Specified
       ? values.reason.IdCausale
       : undefined,
   Quantita: [values.quantity ? values.quantity : 0],
-  Matricole: [values.freshman],
+  Matricole: [values.freshman ? values.freshman[0].Id : 0],
 });
 
 const isPlaceholderReason = (x?: Reason) =>
@@ -512,5 +507,5 @@ const styles = StyleSheet.create({
   group: { marginTop: 15, width: "100%" },
   groupFirst: { marginTop: 5, width: "100%" },
   item: { marginTop: 5 },
-  error: { color: "#ff0" },
+  textError: { color: "#f00" },
 });
