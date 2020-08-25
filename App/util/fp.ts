@@ -76,3 +76,5 @@ export const oFold = O.fold;
 export const teFold = TE.fold;
 export const tNever = T.never;
 export const tOf = T.of;
+export const teLeft = TE.left;
+export const teRight = TE.right;

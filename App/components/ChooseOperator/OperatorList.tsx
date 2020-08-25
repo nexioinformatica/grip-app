@@ -37,14 +37,14 @@ export const OperatorList = memo(({ onSelectedValue }: Props) => {
       settings: makeSettings(),
     }),
     TE.fold(
-      () => {
+      (err) => {
         setError(true);
-        return T.never;
+        return TE.left(err);
       },
       (res: Operator.Collection) => {
         setLoading(false);
         setData(res);
-        return T.of(res);
+        return TE.right(res);
       }
     )
   );

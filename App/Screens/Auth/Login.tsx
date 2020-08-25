@@ -141,7 +141,7 @@
 
 import { Formik } from "formik";
 import { pipe } from "fp-ts/lib/pipeable";
-import { Authentication, Operator } from "geom-api-ts-client";
+import { Authentication } from "geom-api-ts-client";
 import React, { useContext, useState } from "react";
 import {
   Linking,
@@ -149,16 +149,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ScrollView,
 } from "react-native";
-import {
-  Dialog,
-  Portal,
-  List,
-  Checkbox,
-  TouchableRipple,
-  Avatar,
-} from "react-native-paper";
+import { Dialog, Portal, Snackbar } from "react-native-paper";
 import * as Yup from "yup";
 
 import {
@@ -169,13 +161,12 @@ import {
   TextInput,
   TextInputIcon,
 } from "../../components/Auth";
-import { Paragraph } from "../../components/Auth/Paragraph";
+import { OperatorList } from "../../components/ChooseOperator/OperatorList";
 import { ApiContext, AuthContext, makeUser } from "../../stores";
 import { makeSettings } from "../../util/api";
 import { API_KEY } from "../../util/constants";
-import { teFold, tNever, tOf } from "../../util/fp";
+import { teFold, teLeft, teRight } from "../../util/fp";
 import { theme } from "../../util/theme";
-import { OperatorList } from "../../components/ChooseOperator/OperatorList";
 
 const validationSchema = Yup.object({
   username: Yup.string().required().min(1),
@@ -193,6 +184,8 @@ export const Login = () => {
   const { callPublic } = useContext(ApiContext);
   const { login } = useContext(AuthContext);
 
+  const [isError, setError] = useState(false);
+
   const handleLogin = (values: FormValues) =>
     pipe(
       callPublic(Authentication.login)({
@@ -205,13 +198,13 @@ export const Login = () => {
         settings: makeSettings(),
       }),
       teFold(
-        () => {
-          // Toast.show(generalErrorToast);
-          return tNever;
+        (err: Error) => {
+          setError(true);
+          return teLeft(err);
         },
         (res) => {
           login(makeUser(values.username)(res));
-          return tOf(res);
+          return teRight(res);
         }
       )
     )();
@@ -273,6 +266,7 @@ export const Login = () => {
               <Button
                 mode="contained"
                 disabled={!isValid || isSubmitting}
+                loading={isSubmitting}
                 onPress={handleSubmit}
               >
                 Login
@@ -315,6 +309,15 @@ export const Login = () => {
         </TouchableOpacity>
         <Text>.</Text>
       </View>
+
+      <Snackbar
+        visible={isError}
+        onDismiss={() => {
+          setError(false);
+        }}
+      >
+        <Text>Coff coff, qualcosa è andato storto</Text>
+      </Snackbar>
     </Background>
   );
 };
