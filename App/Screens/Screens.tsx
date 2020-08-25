@@ -2,18 +2,22 @@ import { BarCodeEvent } from "expo-barcode-scanner";
 import { Warehouse } from "geom-api-ts-client";
 import { Container, Root } from "native-base";
 import React, { useContext } from "react";
+// import { DrawerContent } from "../components/Drawer";
+import { Text, View } from "react-native";
 
+// import { StartProcessing } from "./Processing";
+// import { Scan } from "./Scan";.
+// import { NewMovement } from "./Warehouse";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { AppBar } from "../components";
+import { DrawerContent } from "../components/Drawer";
 import { AuthContext, ErrorContext } from "../stores";
 import { Login, Profile } from "./Auth";
 import { Error } from "./Error";
 import { Home } from "./Home";
-import { StartProcessing } from "./Processing";
-import { Scan } from "./Scan";
-import { NewMovement } from "./Warehouse";
+import { RootNavigator, LoginNavigator } from "./Navigators";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -33,40 +37,51 @@ export type ErrorStackParamList = {
   Error: { error: Error; onClear: () => void };
 };
 
-const RootStack = ((): React.ReactElement => {
-  const Stack = createStackNavigator<RootStackParamList>();
+type RootDrawerParamList = {
+  Home: undefined;
+};
 
-  return (
-    <>
-      <Stack.Navigator
-      // screenOptions={{
-      //   headerShown: true,
-      //   header: function appBar(props) {
-      //     return <AppBar {...props} />;
-      //   },
-      // }}
-      >
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen
-          name="StartProcessing"
-          options={{ title: "Inizio Lavorazione" }}
-          component={StartProcessing}
-        />
-        <Stack.Screen
-          name="NewMovement"
-          options={{ title: "Nuovo Movimento" }}
-          component={NewMovement}
-        />
-        <Stack.Screen name="Scan" component={Scan} />
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={{ title: "Profilo" }}
-        />
-      </Stack.Navigator>
-    </>
-  );
-})();
+// const RootNavigator = ((): React.ReactElement => {
+//   const Drawer = createDrawerNavigator<RootDrawerParamList>();
+
+//   return (
+// <>
+//   <Drawer.Navigator
+//     drawerContent={(props) => (
+//       <View
+//         style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+//       >
+//         <Text>Exanoke</Text>
+//       </View>
+//     )}
+//     // screenOptions={{
+//     //   headerShown: true,
+//     //   header: function appBar(props) {
+//     //     return <AppBar {...props} />;
+//     //   },
+//     // }}
+//   >
+//     <Drawer.Screen name="Home" component={Home} />
+//     {/* <Drawer.Screen
+//       name="StartProcessing"
+//       options={{ title: "Inizio Lavorazione" }}
+//       component={StartProcessing}
+//     />
+//     <Drawer.Screen
+//       name="NewMovement"
+//       options={{ title: "Nuovo Movimento" }}
+//       component={NewMovement}
+//     />
+//     <Drawer.Screen name="Scan" component={Scan} />
+//     <Drawer.Screen
+//       name="Profile"
+//       component={Profile}
+//       options={{ title: "Profilo" }}
+//     /> */}
+//   </Drawer.Navigator>
+// </>
+// );
+// })();
 
 const LoginStack = ((): React.ReactElement => {
   const Stack = createStackNavigator<LoginStackParamList>();
@@ -97,14 +112,15 @@ const Screens = (): React.ReactElement => {
   const { user } = useContext(AuthContext);
 
   // // Login Stack
-  // if (!user()) 
-  return <NavigationContainer>{LoginStack}</NavigationContainer>;
+  // if (!user())
+  if (!user) return <LoginNavigator />;
+  // return <NavigationContainer>{LoginStack}</NavigationContainer>;
 
   // // Error Stack
   // if (error) return ErrorStack;
 
   // Root Stack
-  // return <NavigationContainer>{RootStack}</NavigationContainer>;
+  return <RootNavigator />;
 };
 
 export { Screens };

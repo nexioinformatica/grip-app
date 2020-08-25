@@ -1,25 +1,30 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React, { memo, useContext } from "react";
+import { StyleSheet, View } from "react-native";
 import {
-  DrawerItem,
-  DrawerContentScrollView,
-  DrawerNavigationProp,
-} from "@react-navigation/drawer";
-import {
-  useTheme,
   Avatar,
-  Title,
   Caption,
-  Paragraph,
   Drawer,
-  Text,
-  TouchableRipple,
+  Paragraph,
   Switch,
+  Text,
+  Title,
+  TouchableRipple,
 } from "react-native-paper";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { RootStackParamList } from "../../Screens";
 
-export function DrawerContent(props: DrawerNavigationProp<RootStackParamList>) {
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  DrawerContentComponentProps,
+  DrawerContentOptions,
+  DrawerContentScrollView,
+  DrawerItem,
+} from "@react-navigation/drawer";
+import { AuthContext } from "../../stores";
+
+type Props = DrawerContentComponentProps<DrawerContentOptions>;
+
+export const DrawerContent = memo((props: Props) => {
+  const { user } = useContext(AuthContext);
+
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.drawerContent}>
@@ -31,7 +36,7 @@ export function DrawerContent(props: DrawerNavigationProp<RootStackParamList>) {
             }}
             size={50}
           />
-          <Title style={styles.title}>Dawid Urbaniak</Title>
+          <Title style={styles.title}>{user?.username ?? "Test"}</Title>
           <Caption style={styles.caption}>@trensik</Caption>
           <View style={styles.row}>
             <View style={styles.section}>
@@ -100,7 +105,7 @@ export function DrawerContent(props: DrawerNavigationProp<RootStackParamList>) {
       </View>
     </DrawerContentScrollView>
   );
-}
+});
 
 const styles = StyleSheet.create({
   drawerContent: {

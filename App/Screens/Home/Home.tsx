@@ -1,50 +1,56 @@
 import { Warehouse } from "geom-api-ts-client";
-import { Button, Content, H1, Text, NativeBase } from "native-base";
+// import { Button, Content, H1, Text, NativeBase } from "native-base";
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { SimpleCard } from "../../components";
 import { RootStackParamList } from "../Screens";
+import { StackNavigatorParamlist } from "../Stacks";
+import { Button } from "react-native-paper";
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
+type HomeScreenNavigationProp = StackNavigationProp<StackNavigatorParamlist>;
 type HomeProps = {
   navigation: HomeScreenNavigationProp;
 };
 
-const StartProcessingButton = (props: NativeBase.Button) => {
-  return (
-    <Button {...props}>
-      <Text>Inizio Lavorazione</Text>
-    </Button>
-  );
-};
+// const StartProcessingButton = (props: NativeBase.Button) => {
+//   return (
+//     <Button {...props}>
+//       <Text>Inizio Lavorazione</Text>
+//     </Button>
+//   );
+// };
 
-const ScrapToWarehouseButton = (props: NativeBase.Button) => {
-  return (
-    <Button {...props}>
-      <Text>Scarto a Magazzino</Text>
-    </Button>
-  );
-};
+// const ScrapToWarehouseButton = (props: NativeBase.Button) => {
+//   return (
+//     <Button {...props}>
+//       <Text>Scarto a Magazzino</Text>
+//     </Button>
+//   );
+// };
 
 export function Home(props: HomeProps): React.ReactElement {
   const { navigation } = props;
 
-  const handleStartProcessingButtonPress = () => {
-    navigation.navigate("StartProcessing");
-  };
+  // const handleStartProcessingButtonPress = () => {
+  //   navigation.navigate("StartProcessing");
+  // };
 
-  const handleScrapToWarehouseButtonPress = () => {
-    navigation.navigate("NewMovement", {
-      reasonTypeDefault: Warehouse.Movement.ReasonTypeKey.LoadRemnant,
-    });
-  };
+  // const handleScrapToWarehouseButtonPress = () => {
+  //   navigation.navigate("NewMovement", {
+  //     reasonTypeDefault: Warehouse.Movement.ReasonTypeKey.LoadRemnant,
+  //   });
+  // };
 
   return (
     <>
-      <Content padder>
+      <Text>Home</Text>
+      <Button onPress={() => navigation.navigate("Example")}>
+        <Text>Click</Text>
+      </Button>
+      {/* <Content padder>
         <SimpleCard>
           <H1>Azioni</H1>
           <Text>Inizia scegliendo una delle azioni elencate qui sotto.</Text>
@@ -61,7 +67,7 @@ export function Home(props: HomeProps): React.ReactElement {
             onPress={handleScrapToWarehouseButtonPress}
           />
         </SimpleCard>
-      </Content>
+      </Content> */}
     </>
   );
 }
