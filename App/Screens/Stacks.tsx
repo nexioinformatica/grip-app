@@ -7,10 +7,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Home } from "./Home";
 import { Appbar } from "../components/AppBar";
 import { Profile } from "./Auth";
-
-// import { BottomTabs } from './bottomTabs';
-// import { Details } from './details';
-// import { StackNavigatorParamlist } from './types';
+import {
+  WarehouseStack,
+  NewMovement,
+  Movements,
+  MovementsStack,
+} from "./Warehouse";
 
 export type HomeStackParamList = {
   Home: undefined;
@@ -30,10 +32,6 @@ export type HomeStackParamList = {
   };
 };
 
-export type ProfileStackParamList = {
-  Profile: undefined;
-};
-
 export const HomeStack = () => {
   const Stack = createStackNavigator<HomeStackParamList>();
 
@@ -48,22 +46,14 @@ export const HomeStack = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        // options={({ route }) => {
-        //   console.log("!@# options", { route });
-        //   const routeName = route.state
-        //     ? route.state.routes[route.state.index].name
-        //     : "Feed";
-        //   return { headerTitle: routeName };
-        // }}
         options={{ headerTitle: "Dashboard" }}
-      />
-      <Stack.Screen
-        name="Example"
-        component={Home}
-        options={{ headerTitle: "Example" }}
       />
     </Stack.Navigator>
   );
+};
+
+export type ProfileStackParamList = {
+  Profile: undefined;
 };
 
 export const ProfileStack = () => {
