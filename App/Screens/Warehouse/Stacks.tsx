@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Appbar } from "../../components";
 import { NewMovement } from "./NewMovement";
 import { Movements } from "./Movements";
+import { ReasonType } from "../../types/ReasonType";
 
 export type WarehouseStackParamList = {
   Movements: undefined;
@@ -30,7 +31,7 @@ export const WarehouseStack = () => {
 
 export type MovementsStackParamList = {
   Movements: undefined;
-  NewMovement: undefined;
+  NewMovement: { reasonType: ReasonType };
 };
 
 export const MovementsStack = () => {

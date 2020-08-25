@@ -1,10 +1,21 @@
-import React, { useContext, useEffect, useState, memo } from "react";
-import { Text, View, ScrollView, StyleSheet } from "react-native";
-import { Card, Title, Button, Snackbar } from "react-native-paper";
-import { ScanFreshman } from "../../components";
 import { Formik } from "formik";
 import { Barcode } from "geom-api-ts-client";
+import React, { memo, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Button, Caption, Card, Snackbar, Title } from "react-native-paper";
 import * as Yup from "yup";
+
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+import { ScanFreshman } from "../../../components";
+import { getReasonTypeName } from "../../../types/ReasonType";
+import { MovementsStackParamList } from "../Stacks";
+
+type Props = {
+  navigation: StackNavigationProp<MovementsStackParamList, "NewMovement">;
+  route: RouteProp<MovementsStackParamList, "NewMovement">;
+};
 
 interface FormValues {
   freshman: Barcode.BarcodeDecode | undefined;
@@ -21,7 +32,12 @@ const validationSchema = Yup.object({
   freshman: Yup.mixed().required("Il campo Matricola è richiesto"),
 });
 
-export const NewMovement = memo(() => {
+export const NewMovement = memo((props: Props) => {
+  const {
+    route: {
+      params: { reasonType },
+    },
+  } = props;
   const [isError, setError] = useState(false);
 
   const handleSubmit = (values: FormValues) => {
@@ -37,6 +53,7 @@ export const NewMovement = memo(() => {
           <Card>
             <Card.Content>
               <Title>Nuovo Movimento</Title>
+              <Caption>{getReasonTypeName(reasonType)}</Caption>
 
               <View style={styles.mt16}>
                 <Formik<FormValues>
