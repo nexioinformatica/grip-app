@@ -3,11 +3,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Home } from "./Home";
 import { Appbar } from "../components/AppBar";
 import { Profile } from "./Auth";
+import { Scan } from "./Scan";
+import { BarcodeEvent } from "../types";
 
 export type HomeStackParamList = {
   Home: undefined;
-  Profile: undefined;
-  Scan: undefined;
+  Scan: { onBarcodeScanned?: (barcode: BarcodeEvent) => void };
 };
 
 export const HomeStack = (): React.ReactElement => {
@@ -25,6 +26,11 @@ export const HomeStack = (): React.ReactElement => {
         name="Home"
         component={Home}
         options={{ headerTitle: "Dashboard" }}
+      />
+      <Stack.Screen
+        name="Scan"
+        component={Scan}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

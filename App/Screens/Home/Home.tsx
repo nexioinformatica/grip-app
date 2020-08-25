@@ -1,8 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { Button, Card, Title, Paragraph, FAB } from "react-native-paper";
+import { Card, Title, Paragraph, FAB } from "react-native-paper";
 import { theme } from "../../util/theme";
+import { DecodeBarcodeCard } from "./Actions/DecodeBarcodeCard";
 
 export function Home(): React.ReactElement {
   return (
@@ -19,22 +20,7 @@ export function Home(): React.ReactElement {
         </Card>
       </View>
       <View style={styles.box}>
-        <Card>
-          <Card.Content>
-            <Title>Decodifica</Title>
-            <Paragraph>
-              Decodifica un barcode e ottieni informazioni sull&apos;elemento
-            </Paragraph>
-            <Button
-              mode="contained"
-              icon="camera"
-              style={styles.mt16}
-              disabled={true}
-            >
-              <Text>Decodifica Barcode</Text>
-            </Button>
-          </Card.Content>
-        </Card>
+        <DecodeBarcodeCard />
       </View>
       <FAB style={styles.fab} icon="information-outline" disabled={true}></FAB>
     </View>

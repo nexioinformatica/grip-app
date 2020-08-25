@@ -6,12 +6,11 @@ import {
   ApiContextProvider,
   AuthContextProvider,
   ErrorContextProvider,
-  PreferencesContextProvider,
   PreferencesContext,
 } from "./stores";
 import { IS_SENTRY_SET_UP } from "./util/constants";
 import { init as sentryInit } from "./util/sentry";
-import { theme, lightTheme, darkTheme } from "./util/theme";
+import { lightTheme, darkTheme } from "./util/theme";
 import { useColorScheme } from "react-native";
 
 if (IS_SENTRY_SET_UP) {
