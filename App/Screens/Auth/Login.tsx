@@ -282,9 +282,10 @@ export const Login = () => {
                     </Text>
                     <View style={{ height: 200, marginTop: 24 }}>
                       <OperatorList
-                        onSelectedValue={(operator) =>
-                          handleChange("username")(operator.UserName ?? "")
-                        }
+                        onSelectedValue={(operator) => {
+                          hideDialog();
+                          handleChange("username")(operator.UserName ?? "");
+                        }}
                       />
                     </View>
                   </Dialog.Content>

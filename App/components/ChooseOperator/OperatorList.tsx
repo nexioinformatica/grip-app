@@ -13,6 +13,8 @@ import * as T from "fp-ts/lib/Task";
 import { makeSettings } from "../../util/api";
 import { pipe } from "fp-ts/lib/pipeable";
 import { ApiContext } from "../../stores";
+import useCancellablePromise from "@rodw95/use-cancelable-promise";
+import { tOf, tNever, toResultTask } from "../../util/fp";
 
 type Operator = Operator.Single;
 
@@ -21,6 +23,7 @@ export interface Props {
 }
 
 export const OperatorList = memo(({ onSelectedValue }: Props) => {
+  const makeCancelable = useCancellablePromise();
   const { callPublic } = useContext(ApiContext);
 
   const [isError, setError] = useState(false);
@@ -29,28 +32,26 @@ export const OperatorList = memo(({ onSelectedValue }: Props) => {
 
   const handleSelected = (x: Operator) => onSelectedValue(x);
 
-  const getOperators = pipe(
-    callPublic(Operator.getCollection)({
-      query: {
-        params: { AbilitatoAPI: true, AbilitatoAttivitaReparto: true },
-      },
-      settings: makeSettings(),
-    }),
-    TE.fold(
-      (err) => {
-        setError(true);
-        return TE.left(err);
-      },
-      (res: Operator.Collection) => {
-        setLoading(false);
-        setData(res);
-        return TE.right(res);
-      }
-    )
-  );
+  const getOperators = () =>
+    makeCancelable(
+      pipe(
+        callPublic(Operator.getCollection)({
+          query: {
+            params: { AbilitatoAPI: true, AbilitatoAttivitaReparto: true },
+          },
+          settings: makeSettings(),
+        }),
+        toResultTask
+      )()
+    );
 
   useEffect(() => {
-    getOperators();
+    getOperators()
+      .then((res) => {
+        setLoading(false);
+        setData(res);
+      })
+      .catch(() => setError(true));
   }, []);
 
   if (isError)
@@ -69,7 +70,7 @@ export const OperatorList = memo(({ onSelectedValue }: Props) => {
           key={i}
           title={x.Nome}
           description={x.UserName}
-          disabled={x.Attivo}
+          disabled={!x.Attivo}
           onPress={() => handleSelected(x)}
           left={(props) => (
             <Avatar.Text
