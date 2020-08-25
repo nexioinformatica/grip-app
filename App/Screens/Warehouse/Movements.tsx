@@ -28,9 +28,6 @@ export const Movements = memo((props: Props) => {
       <Card>
         <Card.Content>
           <Title>Movimenti</Title>
-          <Paragraph>Agisci sul magazzino</Paragraph>
-
-          <Divider style={styles.divider} />
 
           <View style={styles.mt16}>
             <Button

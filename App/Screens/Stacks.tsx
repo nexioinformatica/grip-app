@@ -13,6 +13,7 @@ import {
   Movements,
   MovementsStack,
 } from "./Warehouse";
+import { Scan } from "./Scan";
 
 export type HomeStackParamList = {
   Home: undefined;
@@ -30,6 +31,7 @@ export type HomeStackParamList = {
     retweets: number;
     hearts: number;
   };
+  Scan: undefined;
 };
 
 export const HomeStack = () => {

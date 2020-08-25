@@ -2,37 +2,39 @@ import { pipe } from "fp-ts/lib/pipeable";
 import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
 import { Barcode } from "geom-api-ts-client";
-import { Spinner } from "native-base";
 import React, { useContext, useEffect, useState } from "react";
-import { Input, InputProps } from "react-native-elements";
 
 import { useNavigation } from "@react-navigation/native";
 
 import { ApiContext } from "../../stores/api";
 import { BarcodeEvent } from "../../types";
 import { makeSettings } from "../../util/api";
-import { Icon } from "../Icon/Icon";
+import { ActivityIndicator, TextInput, IconButton } from "react-native-paper";
+import { TextInputProps, StyleSheet, View, Text } from "react-native";
+import { theme } from "../../util/theme";
 
-export interface ScanFreshmanProps extends InputProps {
+type Props = React.ComponentProps<typeof TextInput> & {
   value?: string | undefined;
-  onChangeValue: (value: string | undefined) => void;
+  onChangeText: (value: string | undefined) => void;
   onDecodeValue: (decodedValue: Barcode.BarcodeDecode) => void;
-}
+  errorText?: string;
+};
 
 /**
  * Collect user input as text or 2D code and provide the decoded object using
  * `barcode-decode` api.
  *
  * @param value The value for the input component.
- * @param onChangeValue Callback for updating the input value.
+ * @param onChangeText Callback for updating the input value.
  * @param onDecodeValue Callback providing the decoded value of the input value.
  */
 export const ScanFreshman = ({
   value,
-  onChangeValue,
+  onChangeText,
   onDecodeValue,
+  errorText,
   ...rest
-}: ScanFreshmanProps): React.ReactElement => {
+}: Props): React.ReactElement => {
   const navigation = useNavigation();
   const { callPublic } = useContext(ApiContext);
 
@@ -72,36 +74,58 @@ export const ScanFreshman = ({
   const onIconPress = () =>
     navigation.navigate("Scan", {
       onBarcodeScanned: (barcodeEvent: BarcodeEvent) =>
-        onChangeValue(barcodeEvent.data),
+        onChangeText(barcodeEvent.data),
     });
 
   useEffect(() => {
     if (isDecodingFailed)
       setStatusIcon(
-        <Icon
+        <TextInput.Icon
           name="alert-circle"
           onPress={() => {
             // we need to clean previous value in order to redo the barcode decode
             // if scanned item has the same barcode.
-            onChangeValue(undefined);
+            onChangeText(undefined);
             onIconPress();
           }}
         />
       );
 
-    if (isDecoding) setStatusIcon(<Spinner />);
+    if (isDecoding) setStatusIcon(<TextInput.Icon name="magnify" />);
 
     if (!isDecoding && !isDecodingFailed)
-      setStatusIcon(<Icon name="camera" onPress={onIconPress} />);
+      setStatusIcon(<TextInput.Icon name="camera" onPress={onIconPress} />);
   }, [isDecoding, isDecodingFailed]);
 
   return (
-    <Input
-      value={value}
-      onChangeText={onChangeValue}
-      rightIcon={statusIcon}
-      containerStyle={{ width: "100%" }}
-      {...rest}
-    />
+    <View style={styles.container}>
+      <TextInput
+        value={value}
+        onChangeText={onChangeText}
+        right={statusIcon}
+        style={styles.input}
+        selectionColor={theme.colors.primary}
+        underlineColor="transparent"
+        mode="outlined"
+        {...rest}
+      />
+      {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    marginVertical: 12,
+  },
+  input: {
+    backgroundColor: theme.colors.surface,
+  },
+  error: {
+    fontSize: 14,
+    color: theme.colors.error,
+    paddingHorizontal: 4,
+    paddingTop: 4,
+  },
+});
