@@ -136,7 +136,12 @@ export const DrawerContent = memo((props: Props) => {
               id="2"
               left={(props) => <List.Icon {...props} icon="animation-play" />}
             >
-              <List.Item title="Attività" onPress={() => {}} />
+              <List.Item
+                title="Attività"
+                onPress={() => {
+                  props.navigation.navigate("Activities");
+                }}
+              />
               <List.Item title="Operatori" disabled={true} />
               <List.Item title="Macchine" disabled={true} />
             </List.Accordion>
