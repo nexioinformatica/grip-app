@@ -20,7 +20,6 @@ import { ApiContext, AuthContext } from "../../stores";
 import { getExpiringIn, getInitials } from "../../types/User";
 import { makeSettings } from "../../util/api";
 import { toResultTask } from "../../util/fp";
-import { theme } from "../../util/theme";
 
 export const Profile = (): React.ReactElement => {
   const { user, logout, refresh } = useContext(AuthContext);
@@ -99,6 +98,7 @@ export const Profile = (): React.ReactElement => {
                     title="Abilitato API"
                     right={(props) => (
                       <Checkbox
+                        {...props}
                         status={
                           operator?.AbilitatoAPI ? "checked" : "unchecked"
                         }
@@ -109,6 +109,7 @@ export const Profile = (): React.ReactElement => {
                     title="Abilitato Attività Reparto"
                     right={(props) => (
                       <Checkbox
+                        {...props}
                         status={
                           operator?.AbilitatoAttivitaReparto
                             ? "checked"
@@ -127,7 +128,7 @@ export const Profile = (): React.ReactElement => {
                   <List.Item
                     title="Access Token"
                     right={(props) => (
-                      <View style={{ alignSelf: "center" }}>
+                      <View style={{ alignSelf: "center" }} {...props}>
                         <Text>
                           {access_token?.substr(access_token.length - 6)}
                         </Text>
@@ -137,7 +138,7 @@ export const Profile = (): React.ReactElement => {
                   <List.Item
                     title="Refresh Token"
                     right={(props) => (
-                      <View style={{ alignSelf: "center" }}>
+                      <View style={{ alignSelf: "center" }} {...props}>
                         <Text>
                           {refresh_token?.substr(refresh_token.length - 6)}
                         </Text>
@@ -147,7 +148,7 @@ export const Profile = (): React.ReactElement => {
                   <List.Item
                     title="Scadenza"
                     right={(props) => (
-                      <View style={{ alignSelf: "center" }}>
+                      <View style={{ alignSelf: "center" }} {...props}>
                         <Text>{getExpiringIn(user)}</Text>
                       </View>
                     )}

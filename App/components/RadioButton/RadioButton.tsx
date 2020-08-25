@@ -1,6 +1,6 @@
-import React, { memo } from "react";
+import React from "react";
 import { RadioButton as Radio } from "react-native-paper";
-import * as _ from "lodash";
+import _ from "lodash";
 
 type Key = string;
 
@@ -20,10 +20,13 @@ export const RadioButton = <T,>({
   items,
   selected,
   onSelectedChange,
-}: Props<T>) => {
+}: Props<T>): React.ReactElement => {
   const handleValueChange = (selected: string) => {
     const item = _.find(items, (x) => x.key == selected);
-    if (!item) throw new Error("Something went wrong");
+    if (!item)
+      throw new Error(
+        "Selected RadioButton key was not found in the item list."
+      );
     onSelectedChange({ k: selected, v: item.value });
   };
 

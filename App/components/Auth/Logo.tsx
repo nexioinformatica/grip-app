@@ -1,9 +1,13 @@
-import React, { memo } from "react";
+import React from "react";
 import { Image, StyleSheet } from "react-native";
 
-export const Logo = memo(() => (
+const Logo = () => (
   <Image source={require("../../../assets/logo.png")} style={styles.image} />
-));
+);
+
+const LogoMemo = React.memo(Logo);
+
+export { LogoMemo as Logo };
 
 const styles = StyleSheet.create({
   image: {

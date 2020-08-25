@@ -1,6 +1,11 @@
-import { getReasonTypeName, ReasonTypeKey } from "../types/ReasonType";
+import {
+  getReasonTypeName,
+  ReasonTypeKey,
+  ReasonType,
+} from "../types/ReasonType";
+import { Item } from "../types/Item";
 
-export const getReasonTypesData = () =>
+export const getReasonTypesData = (): Item<string, ReasonType>[] =>
   [
     ReasonTypeKey.Specified,
     ReasonTypeKey.UnloadProd,

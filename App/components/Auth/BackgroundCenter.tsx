@@ -1,17 +1,16 @@
-import React, { memo } from "react";
-import {
-  ImageBackground,
-  StyleSheet,
-  KeyboardAvoidingView,
-} from "react-native";
+import React from "react";
 import { Background } from "./Background";
 
 type Props = {
   children: React.ReactNode;
 };
 
-export const BackgroundCenter = ({ children }: Props) => (
+const BackgroundCenter = ({ children }: Props): React.ReactElement => (
   <Background containerStyle={{ justifyContent: "center" }}>
     {children}
   </Background>
 );
+
+const BackgroundCenterMemo = React.memo(BackgroundCenter);
+
+export { BackgroundCenterMemo as BackgroundCenter };

@@ -79,7 +79,7 @@ export const tOf = T.of;
 export const teLeft = TE.left;
 export const teRight = TE.right;
 
-export const toResultTask = <E, A>(te: TE.TaskEither<E, A>) =>
+export const toResultTask = <E, A>(te: TE.TaskEither<E, A>): T.Task<A> =>
   pipe(
     te,
     teFold(

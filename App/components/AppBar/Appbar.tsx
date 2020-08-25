@@ -1,19 +1,21 @@
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 import {
   Appbar as AppbarPaper,
-  Avatar,
   useTheme,
   IconButton,
 } from "react-native-paper";
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { StackHeaderProps } from "@react-navigation/stack";
 
 type Props = StackHeaderProps;
 
-export const Appbar = ({ scene, previous, navigation }: Props) => {
+export const Appbar = ({
+  scene,
+  previous,
+  navigation,
+}: Props): React.ReactElement => {
   const theme = useTheme();
 
   const { options } = scene.descriptor;
@@ -35,7 +37,9 @@ export const Appbar = ({ scene, previous, navigation }: Props) => {
         <TouchableOpacity
           style={{ marginLeft: 10 }}
           onPress={() => {
-            ((navigation as any) as DrawerNavigationProp<{}>).openDrawer();
+            ((navigation as unknown) as DrawerNavigationProp<
+              Record<string, Record<string, unknown> | undefined>
+            >).openDrawer();
           }}
         >
           <IconButton icon="menu" />

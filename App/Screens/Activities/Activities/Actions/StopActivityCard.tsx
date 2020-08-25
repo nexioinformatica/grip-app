@@ -1,30 +1,26 @@
-import React, { useState, memo } from "react";
+import React from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Button, Card, Title, List } from "react-native-paper";
-import { RadioButton } from "../../../../components";
-import { getActionTypesData } from "../../../../data/ActionTypeResource";
-import { ActionType, ActionTypeKey } from "../../../../types/ActionType";
-import { useNavigation } from "@react-navigation/native";
+import { Button, Card, Title } from "react-native-paper";
 
-export const StopActivityCard = memo(() => {
-  const navigation = useNavigation();
-  const [actionType, setActionType] = useState<ActionType>(
-    ActionTypeKey.MachineAndOperator
-  );
+const StopActivityCard = (): React.ReactElement => {
   return (
     <Card>
       <Card.Content>
         <Title>Stop Attività</Title>
 
         <View style={styles.mt16}>
-          <Button mode="contained" disabled={true} onPress={() => {}}>
+          <Button mode="contained" disabled={true}>
             <Text>Stop Attività</Text>
           </Button>
         </View>
       </Card.Content>
     </Card>
   );
-});
+};
+
+const StopActivityCardMemo = React.memo(StopActivityCard);
+
+export { StopActivityCardMemo as StopActivityCard };
 
 const styles = StyleSheet.create({
   mt16: { marginTop: 16 },

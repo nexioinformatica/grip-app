@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import { StyleSheet, Text } from "react-native";
 import { theme } from "../../util/theme";
 
@@ -6,9 +6,13 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const Header = memo(({ children }: Props) => (
+const Header = ({ children }: Props) => (
   <Text style={styles.header}>{children}</Text>
-));
+);
+
+const HeaderMemo = React.memo(Header);
+
+export { HeaderMemo as Header };
 
 const styles = StyleSheet.create({
   header: {

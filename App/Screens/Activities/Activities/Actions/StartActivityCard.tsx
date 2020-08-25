@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Button, Card, Title, List } from "react-native-paper";
 import { RadioButton } from "../../../../components/RadioButton/RadioButton";
@@ -6,7 +6,7 @@ import { getActionTypesData } from "../../../../data/ActionTypeResource";
 import { ActionType, ActionTypeKey } from "../../../../types/ActionType";
 import { useNavigation } from "@react-navigation/native";
 
-export const StartActivityCard = memo(() => {
+const StartActivityCard = (): React.ReactElement => {
   const navigation = useNavigation();
   const [actionType, setActionType] = useState<ActionType>(
     ActionTypeKey.MachineAndOperator
@@ -42,7 +42,11 @@ export const StartActivityCard = memo(() => {
       </Card.Content>
     </Card>
   );
-});
+};
+
+const StartActivityCardMemo = React.memo(StartActivityCard);
+
+export { StartActivityCardMemo as StartActivityCard };
 
 const styles = StyleSheet.create({
   mt16: { marginTop: 16 },

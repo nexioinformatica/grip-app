@@ -1,6 +1,11 @@
-import { ActionTypeKey, getActionTypeName } from "../types/ActionType";
+import {
+  ActionType,
+  ActionTypeKey,
+  getActionTypeName,
+} from "../types/ActionType";
+import { Item } from "../types/Item";
 
-export const getActionTypesData = () =>
+export const getActionTypesData = (): Item<string, ActionType>[] =>
   [
     ActionTypeKey.MachineAndOperator,
     ActionTypeKey.Machine,

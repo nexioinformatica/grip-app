@@ -9,8 +9,8 @@ import { useNavigation } from "@react-navigation/native";
 import { ApiContext } from "../../stores/api";
 import { BarcodeEvent } from "../../types";
 import { makeSettings } from "../../util/api";
-import { ActivityIndicator, TextInput, IconButton } from "react-native-paper";
-import { TextInputProps, StyleSheet, View, Text } from "react-native";
+import { TextInput } from "react-native-paper";
+import { StyleSheet, View, Text } from "react-native";
 import { theme } from "../../util/theme";
 
 type Props = React.ComponentProps<typeof TextInput> & {

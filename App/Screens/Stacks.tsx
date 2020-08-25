@@ -1,40 +1,16 @@
 import React from "react";
-import { TouchableOpacity, Text, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { DrawerNavigationProp } from "@react-navigation/drawer";
-import { Avatar, useTheme } from "react-native-paper";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Home } from "./Home";
 import { Appbar } from "../components/AppBar";
 import { Profile } from "./Auth";
-import {
-  WarehouseStack,
-  NewMovement,
-  Movements,
-  MovementsStack,
-} from "./Warehouse";
-import { Scan } from "./Scan";
 
 export type HomeStackParamList = {
   Home: undefined;
-  Example: undefined;
   Profile: undefined;
-  Details: {
-    id: number;
-    name: string;
-    handle: string;
-    date: string;
-    content: string;
-    image: string;
-    avatar: string;
-    comments: number;
-    retweets: number;
-    hearts: number;
-  };
   Scan: undefined;
 };
 
-export const HomeStack = () => {
+export const HomeStack = (): React.ReactElement => {
   const Stack = createStackNavigator<HomeStackParamList>();
 
   return (
@@ -58,7 +34,7 @@ export type ProfileStackParamList = {
   Profile: undefined;
 };
 
-export const ProfileStack = () => {
+export const ProfileStack = (): React.ReactElement => {
   const Stack = createStackNavigator<ProfileStackParamList>();
 
   return (

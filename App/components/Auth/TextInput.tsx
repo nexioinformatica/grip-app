@@ -1,12 +1,11 @@
-import React, { memo } from "react";
+import React from "react";
 import { View, StyleSheet, Text } from "react-native";
-import { TextInput as Input, IconButton } from "react-native-paper";
+import { TextInput as Input } from "react-native-paper";
 import { theme } from "../../util/theme";
-import { Icon } from "../Icon";
 
 type Props = React.ComponentProps<typeof Input> & { errorText?: string };
 
-export const TextInput = memo(({ errorText, ...props }: Props) => (
+const TextInput = ({ errorText, ...props }: Props) => (
   <View style={styles.container}>
     <Input
       style={styles.input}
@@ -17,9 +16,13 @@ export const TextInput = memo(({ errorText, ...props }: Props) => (
     />
     {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
   </View>
-));
+);
 
-export const TextInputIcon = Input.Icon;
+const TextInputMemo = React.memo(TextInput);
+
+const TextInputIcon = Input.Icon;
+
+export { TextInputMemo as TextInput, TextInputIcon };
 
 const styles = StyleSheet.create({
   container: {

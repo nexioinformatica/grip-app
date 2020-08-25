@@ -1,31 +1,8 @@
-import React, { useContext, useEffect, useState, memo } from "react";
-import { Text, View, StyleSheet, ScrollView } from "react-native";
-import { ActivitiesStackParamList } from "../Stacks";
-import {
-  Button,
-  Card,
-  Title,
-  Paragraph,
-  Caption,
-  Headline,
-  Subheading,
-  Divider,
-  List,
-} from "react-native-paper";
-import {
-  StackNavigationProp,
-  StackNavigationOptions,
-} from "@react-navigation/stack";
-import { Activities } from "geom-api-ts-client";
-import { number } from "yup";
-import { RadioButton } from "../../../components";
-import { ReasonTypeKey } from "geom-api-ts-client/dist/resources/warehouse/movement";
-import { getActionTypesData } from "../../../data/ActionTypeResource";
+import React from "react";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { StartActivityCard, StopActivityCard } from "./Actions";
 
-type Props = { navigation: StackNavigationProp<ActivitiesStackParamList> };
-
-const ActivitiesScreen = memo((props: Props) => {
+const ActivitiesScreen = () => {
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -41,9 +18,11 @@ const ActivitiesScreen = memo((props: Props) => {
       </ScrollView>
     </View>
   );
-});
+};
 
-export { ActivitiesScreen as Activities };
+const ActivitiesScreenMemo = React.memo(ActivitiesScreen);
+
+export { ActivitiesScreenMemo as Activities };
 
 const styles = StyleSheet.create({
   container: { flex: 1, margin: 16 },

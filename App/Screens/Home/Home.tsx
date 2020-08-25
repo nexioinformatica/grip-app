@@ -23,7 +23,7 @@ export function Home(): React.ReactElement {
           <Card.Content>
             <Title>Decodifica</Title>
             <Paragraph>
-              Decodifica un barcode e ottieni informazioni sull'elemento
+              Decodifica un barcode e ottieni informazioni sull&apos;elemento
             </Paragraph>
             <Button
               mode="contained"

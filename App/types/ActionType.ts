@@ -12,7 +12,7 @@ export const getActionTypeName = (actionType: ActionType): ActionTypeName => {
   throw new Error("Invalid ActionType");
 };
 
-export const isRequiringMachine = (actionType: ActionType) => {
+export const isRequiringMachine = (actionType: ActionType): boolean => {
   return (
     actionType === ActionTypeKey.Machine ||
     actionType === ActionTypeKey.MachineAndOperator

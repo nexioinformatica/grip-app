@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, memo } from "react";
+import React, { useState } from "react";
 import { Text, View, ScrollView, StyleSheet } from "react-native";
 import { Card, Title, Button, Snackbar, Caption } from "react-native-paper";
 import { ScanFreshman } from "../../../components";
@@ -46,7 +46,7 @@ const validationSchema = (actionType: ActionType) => {
   });
 };
 
-export const StartActivity = memo((props: Props) => {
+const StartActivity = (props: Props) => {
   const {
     route: {
       params: { actionType },
@@ -55,6 +55,8 @@ export const StartActivity = memo((props: Props) => {
   const [isError, setError] = useState(false);
 
   const handleSubmit = (values: FormValues) => {
+    console.log(values);
+    // TODO: implement handle submit
     return Promise.reject().catch(() => {
       setError(true);
     });
@@ -159,7 +161,11 @@ export const StartActivity = memo((props: Props) => {
       </Snackbar>
     </View>
   );
-});
+};
+
+const StartActivityMemo = React.memo(StartActivity);
+
+export { StartActivityMemo as StartActivity };
 
 const styles = StyleSheet.create({
   container: { flex: 1, margin: 16 },

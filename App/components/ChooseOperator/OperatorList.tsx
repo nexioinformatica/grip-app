@@ -1,5 +1,5 @@
-import React, { memo, Suspense, useContext, useState, useEffect } from "react";
-import { ScrollView, AsyncStorage, StyleSheet, View } from "react-native";
+import React, { useContext, useState, useEffect } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 import {
   List,
   Avatar,
@@ -7,14 +7,11 @@ import {
   IconButton,
 } from "react-native-paper";
 import { Operator } from "geom-api-ts-client";
-import { isEmptyArray } from "formik";
-import * as TE from "fp-ts/lib/TaskEither";
-import * as T from "fp-ts/lib/Task";
 import { makeSettings } from "../../util/api";
 import { pipe } from "fp-ts/lib/pipeable";
 import { ApiContext } from "../../stores";
 import useCancellablePromise from "@rodw95/use-cancelable-promise";
-import { tOf, tNever, toResultTask } from "../../util/fp";
+import { toResultTask } from "../../util/fp";
 import { getInitials } from "../../types";
 
 type Operator = Operator.Single;
@@ -23,7 +20,7 @@ export interface Props {
   onSelectedValue: (operator: Operator) => void;
 }
 
-export const OperatorList = memo(({ onSelectedValue }: Props) => {
+const OperatorList = ({ onSelectedValue }: Props): React.ReactElement => {
   const makeCancelable = useCancellablePromise();
   const { callPublic } = useContext(ApiContext);
 
@@ -85,7 +82,11 @@ export const OperatorList = memo(({ onSelectedValue }: Props) => {
       ))}
     </ScrollView>
   );
-});
+};
+
+const MemoOperatorList = React.memo(OperatorList);
+
+export { MemoOperatorList as OperatorList };
 
 const styles = StyleSheet.create({
   warningBox: {

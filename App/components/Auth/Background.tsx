@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -6,11 +6,11 @@ import {
 } from "react-native";
 
 type Props = {
-  containerStyle?: any;
+  containerStyle?: Record<string, unknown>;
   children: React.ReactNode;
 };
 
-export const Background = memo(({ containerStyle, children }: Props) => (
+const Background = ({ containerStyle, children }: Props) => (
   <ImageBackground
     source={require("../../../assets/background_dot.png")}
     resizeMode="repeat"
@@ -23,7 +23,11 @@ export const Background = memo(({ containerStyle, children }: Props) => (
       {children}
     </KeyboardAvoidingView>
   </ImageBackground>
-));
+);
+
+const BackgroundMemo = React.memo(Background);
+
+export { BackgroundMemo as Background };
 
 const styles = StyleSheet.create({
   background: {

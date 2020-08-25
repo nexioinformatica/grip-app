@@ -9,7 +9,7 @@ export type WarehouseStackParamList = {
   Movements: undefined;
 };
 
-export const WarehouseStack = () => {
+export const WarehouseStack = (): React.ReactElement => {
   const Stack = createStackNavigator<WarehouseStackParamList>();
 
   return (
@@ -34,7 +34,7 @@ export type MovementsStackParamList = {
   NewMovement: { reasonType: ReasonType };
 };
 
-export const MovementsStack = () => {
+export const MovementsStack = (): React.ReactElement => {
   const Stack = createStackNavigator<MovementsStackParamList>();
 
   return (

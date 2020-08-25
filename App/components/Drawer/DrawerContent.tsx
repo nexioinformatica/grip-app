@@ -1,4 +1,4 @@
-import React, { memo, useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import {
   Avatar,
@@ -12,12 +12,10 @@ import {
   TouchableRipple,
 } from "react-native-paper";
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   DrawerContentComponentProps,
   DrawerContentOptions,
   DrawerContentScrollView,
-  DrawerItem,
 } from "@react-navigation/drawer";
 import {
   Placeholder,
@@ -48,7 +46,7 @@ const SingleLinePlaceholder = () => (
   </Placeholder>
 );
 
-export const DrawerContent = memo((props: Props) => {
+const DrawerContent = (props: Props): React.ReactElement => {
   const { call } = useContext(ApiContext);
   const { user } = useContext(AuthContext);
   const makeCancellable = useCancellablePromise();
@@ -148,25 +146,16 @@ export const DrawerContent = memo((props: Props) => {
           </List.AccordionGroup>
         </Drawer.Section>
         <Drawer.Section title="Impostazioni" focusable={false}>
-          <DrawerItem
-            icon={({ color, size }) => (
-              <MaterialCommunityIcons
-                name="account-outline"
-                color={color}
-                size={size}
-              />
-            )}
-            label="Profile"
+          <List.Item
+            left={(props) => <List.Icon {...props} icon="account-outline" />}
+            title="Profile"
             onPress={() => {
               props.navigation.navigate("Profile");
             }}
           />
-          <DrawerItem
-            icon={({ color, size }) => (
-              <MaterialCommunityIcons name="tune" color={color} size={size} />
-            )}
-            label="Preferences"
-            onPress={() => {}}
+          <List.Item
+            left={(props) => <List.Icon {...props} icon="tune" />}
+            title="Preferences"
           />
         </Drawer.Section>
         <Drawer.Section title="Prefrenze" focusable={false}>
@@ -178,19 +167,15 @@ export const DrawerContent = memo((props: Props) => {
               </View>
             </View>
           </TouchableRipple>
-          <TouchableRipple onPress={() => {}}>
-            <View style={styles.preference}>
-              <Text>RTL</Text>
-              <View pointerEvents="none">
-                <Switch value={false} />
-              </View>
-            </View>
-          </TouchableRipple>
         </Drawer.Section>
       </View>
     </DrawerContentScrollView>
   );
-});
+};
+
+const DrawerContentMemo = React.memo(DrawerContent);
+
+export { DrawerContentMemo as DrawerContent };
 
 const styles = StyleSheet.create({
   drawerContent: {

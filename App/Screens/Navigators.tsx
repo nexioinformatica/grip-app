@@ -4,22 +4,22 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 
 import { HomeStack, ProfileStack } from "./Stacks";
-import { Home } from "./Home";
 import { DrawerContent } from "../components/Drawer";
 import { Login } from "./Auth";
 import { MovementsStack } from "./Warehouse";
 import { Scan } from "./Scan";
 import { ActivitiesStack } from "./Activities";
+import { BarcodeEvent } from "../types";
 
 export type RootNavigatorParamList = {
   Home: undefined;
   Profile: undefined;
   Movements: undefined;
   Activities: undefined;
-  Scan: undefined;
+  Scan: { onBarcodeScanned?: (barcode: BarcodeEvent) => void };
 };
 
-export const RootNavigator = () => {
+export const RootNavigator = (): React.ReactElement => {
   const Drawer = createDrawerNavigator<RootNavigatorParamList>();
 
   return (
@@ -39,7 +39,7 @@ export type LoginNavigatorParamList = {
   Login: undefined;
 };
 
-export const LoginNavigator = () => {
+export const LoginNavigator = (): React.ReactElement => {
   const Stack = createDrawerNavigator<LoginNavigatorParamList>();
 
   return (

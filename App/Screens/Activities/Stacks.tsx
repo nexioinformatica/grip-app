@@ -9,7 +9,7 @@ export type ActivitiesStackParamList = {
   StartActivity: { actionType: Activities.ActionType };
 };
 
-export const ActivitiesStack = () => {
+export const ActivitiesStack = (): React.ReactElement => {
   const Stack = createStackNavigator<ActivitiesStackParamList>();
 
   return (

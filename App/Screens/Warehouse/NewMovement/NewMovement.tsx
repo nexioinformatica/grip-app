@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import { Barcode } from "geom-api-ts-client";
-import React, { memo, useState } from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button, Caption, Card, Snackbar, Title } from "react-native-paper";
 import * as Yup from "yup";
@@ -32,7 +32,7 @@ const validationSchema = Yup.object({
   freshman: Yup.mixed().required("Il campo Matricola è richiesto"),
 });
 
-export const NewMovement = memo((props: Props) => {
+const NewMovement = (props: Props): React.ReactElement => {
   const {
     route: {
       params: { reasonType },
@@ -41,6 +41,8 @@ export const NewMovement = memo((props: Props) => {
   const [isError, setError] = useState(false);
 
   const handleSubmit = (values: FormValues) => {
+    console.log(values);
+    // TODO: implement real handle submit
     return Promise.reject().catch(() => {
       setError(true);
     });
@@ -126,7 +128,11 @@ export const NewMovement = memo((props: Props) => {
       </Snackbar>
     </View>
   );
-});
+};
+
+const NewMovementMemo = React.memo(NewMovement);
+
+export { NewMovementMemo as NewMovement };
 
 const styles = StyleSheet.create({
   container: { flex: 1, margin: 16 },
