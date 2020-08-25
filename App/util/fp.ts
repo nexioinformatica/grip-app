@@ -83,7 +83,7 @@ export const toResultTask = <E, A>(te: TE.TaskEither<E, A>) =>
   pipe(
     te,
     teFold(
-      () => tNever,
+      (err) => () => Promise.reject(err),
       (res) => tOf(res)
     )
   );

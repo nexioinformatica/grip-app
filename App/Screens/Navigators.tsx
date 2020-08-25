@@ -3,7 +3,7 @@ import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 
-import { StackNavigator } from "./Stacks";
+import { HomeStack, ProfileStack } from "./Stacks";
 import { Home } from "./Home";
 import { DrawerContent } from "../components/Drawer";
 import { Login } from "./Auth";
@@ -14,7 +14,8 @@ export const RootNavigator = () => {
   return (
     <NavigationContainer>
       <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
-        <Drawer.Screen name="Home" component={StackNavigator} />
+        <Drawer.Screen name="Home" component={HomeStack} />
+        <Drawer.Screen name="Profile" component={ProfileStack} />
         {/* <Drawer.Screen name="Home" component={Home} /> */}
       </Drawer.Navigator>
     </NavigationContainer>

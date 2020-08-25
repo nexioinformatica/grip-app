@@ -15,6 +15,7 @@ import { pipe } from "fp-ts/lib/pipeable";
 import { ApiContext } from "../../stores";
 import useCancellablePromise from "@rodw95/use-cancelable-promise";
 import { tOf, tNever, toResultTask } from "../../util/fp";
+import { getInitials } from "../../types";
 
 type Operator = Operator.Single;
 
@@ -85,12 +86,6 @@ export const OperatorList = memo(({ onSelectedValue }: Props) => {
     </ScrollView>
   );
 });
-
-/** @returns A string of two uppercase letters, representing name initials. */
-const getInitials = (name: string) => {
-  var matched = name.match(/\b\w/g) || [];
-  return ((matched.shift() || "") + (matched.pop() || "")).toUpperCase();
-};
 
 const styles = StyleSheet.create({
   warningBox: {

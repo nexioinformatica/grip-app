@@ -6,14 +6,16 @@ import { Avatar, useTheme } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Home } from "./Home";
 import { Appbar } from "../components/AppBar";
+import { Profile } from "./Auth";
 
 // import { BottomTabs } from './bottomTabs';
 // import { Details } from './details';
 // import { StackNavigatorParamlist } from './types';
 
-export type StackNavigatorParamlist = {
+export type HomeStackParamList = {
   Home: undefined;
   Example: undefined;
+  Profile: undefined;
   Details: {
     id: number;
     name: string;
@@ -28,10 +30,12 @@ export type StackNavigatorParamlist = {
   };
 };
 
-export const StackNavigator = () => {
-  const Stack = createStackNavigator<StackNavigatorParamlist>();
+export type ProfileStackParamList = {
+  Profile: undefined;
+};
 
-  const theme = useTheme();
+export const HomeStack = () => {
+  const Stack = createStackNavigator<HomeStackParamList>();
 
   return (
     <Stack.Navigator
@@ -51,12 +55,32 @@ export const StackNavigator = () => {
         //     : "Feed";
         //   return { headerTitle: routeName };
         // }}
-        options={{ headerTitle: "Tweet" }}
+        options={{ headerTitle: "Dashboard" }}
       />
       <Stack.Screen
         name="Example"
         component={Home}
-        options={{ headerTitle: "Tweet" }}
+        options={{ headerTitle: "Example" }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export const ProfileStack = () => {
+  const Stack = createStackNavigator<ProfileStackParamList>();
+
+  return (
+    <Stack.Navigator
+      initialRouteName="Profile"
+      headerMode="screen"
+      screenOptions={{
+        header: Appbar,
+      }}
+    >
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerTitle: "Profilo" }}
       />
     </Stack.Navigator>
   );

@@ -154,12 +154,12 @@ import { Dialog, Portal, Snackbar } from "react-native-paper";
 import * as Yup from "yup";
 
 import {
-  Background,
   Button,
   Header,
   Logo,
   TextInput,
   TextInputIcon,
+  BackgroundCenter,
 } from "../../components/Auth";
 import { OperatorList } from "../../components/ChooseOperator/OperatorList";
 import { ApiContext, AuthContext, makeUser } from "../../stores";
@@ -215,7 +215,7 @@ export const Login = () => {
   const showDialog = () => setVisible(true);
 
   return (
-    <Background>
+    <BackgroundCenter>
       <Logo />
 
       <Header>Welcome back.</Header>
@@ -319,7 +319,7 @@ export const Login = () => {
       >
         <Text>Coff coff, qualcosa è andato storto</Text>
       </Snackbar>
-    </Background>
+    </BackgroundCenter>
   );
 };
 

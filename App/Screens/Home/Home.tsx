@@ -7,10 +7,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { SimpleCard } from "../../components";
 import { RootStackParamList } from "../Screens";
-import { StackNavigatorParamlist } from "../Stacks";
+import { HomeStackParamList } from "../Stacks";
 import { Button } from "react-native-paper";
 
-type HomeScreenNavigationProp = StackNavigationProp<StackNavigatorParamlist>;
+type HomeScreenNavigationProp = StackNavigationProp<HomeStackParamList>;
 type HomeProps = {
   navigation: HomeScreenNavigationProp;
 };

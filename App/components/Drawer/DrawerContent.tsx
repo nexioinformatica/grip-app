@@ -17,8 +17,13 @@ import {
   DrawerContentOptions,
   DrawerContentScrollView,
   DrawerItem,
+  DrawerNavigationProp,
 } from "@react-navigation/drawer";
 import { AuthContext } from "../../stores";
+import {
+  ProfileStackParamList,
+  HomeStackParamList,
+} from "../../Screens/Stacks";
 
 type Props = DrawerContentComponentProps<DrawerContentOptions>;
 
@@ -57,13 +62,28 @@ export const DrawerContent = memo((props: Props) => {
           <DrawerItem
             icon={({ color, size }) => (
               <MaterialCommunityIcons
+                name="palette"
+                color={color}
+                size={size}
+              />
+            )}
+            label="Dashboard"
+            onPress={() => {
+              props.navigation.navigate("Home");
+            }}
+          />
+          <DrawerItem
+            icon={({ color, size }) => (
+              <MaterialCommunityIcons
                 name="account-outline"
                 color={color}
                 size={size}
               />
             )}
             label="Profile"
-            onPress={() => {}}
+            onPress={() => {
+              props.navigation.navigate("Profile");
+            }}
           />
           <DrawerItem
             icon={({ color, size }) => (

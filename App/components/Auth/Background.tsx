@@ -6,16 +6,20 @@ import {
 } from "react-native";
 
 type Props = {
+  containerStyle?: any;
   children: React.ReactNode;
 };
 
-export const Background = memo(({ children }: Props) => (
+export const Background = memo(({ containerStyle, children }: Props) => (
   <ImageBackground
     source={require("../../../assets/background_dot.png")}
     resizeMode="repeat"
     style={styles.background}
   >
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <KeyboardAvoidingView
+      style={{ ...styles.container, ...containerStyle }}
+      behavior="padding"
+    >
       {children}
     </KeyboardAvoidingView>
   </ImageBackground>
@@ -34,6 +38,5 @@ const styles = StyleSheet.create({
     maxWidth: 340,
     alignSelf: "center",
     alignItems: "center",
-    justifyContent: "center",
   },
 });
