@@ -25,7 +25,7 @@ import {
 } from "rn-placeholder";
 import useCancellablePromise from "@rodw95/use-cancelable-promise";
 
-import { AuthContext, ApiContext } from "../../stores";
+import { AuthContext, ApiContext, PreferencesContext } from "../../stores";
 import { pipe } from "fp-ts/lib/pipeable";
 import { Operator } from "geom-api-ts-client";
 import { makeSettings } from "../../util/api";
@@ -49,6 +49,7 @@ const SingleLinePlaceholder = () => (
 const DrawerContent = (props: Props): React.ReactElement => {
   const { call } = useContext(ApiContext);
   const { user } = useContext(AuthContext);
+  const { theme } = useContext(PreferencesContext);
   const makeCancellable = useCancellablePromise();
   const [realName, setRealName] = useState<string | undefined>(undefined);
 
@@ -148,22 +149,22 @@ const DrawerContent = (props: Props): React.ReactElement => {
         <Drawer.Section title="Impostazioni" focusable={false}>
           <List.Item
             left={(props) => <List.Icon {...props} icon="account-outline" />}
-            title="Profile"
+            title="Profilo"
             onPress={() => {
               props.navigation.navigate("Profile");
             }}
           />
           <List.Item
             left={(props) => <List.Icon {...props} icon="tune" />}
-            title="Preferences"
+            title="Preferenze"
           />
         </Drawer.Section>
         <Drawer.Section title="Prefrenze" focusable={false}>
-          <TouchableRipple onPress={() => {}}>
+          <TouchableRipple onPress={theme.toggle} disabled={true}>
             <View style={styles.preference}>
               <Text>Dark Theme</Text>
               <View pointerEvents="none">
-                <Switch value={false} />
+                <Switch value={theme.current === "dark"} disabled={true} />
               </View>
             </View>
           </TouchableRipple>
