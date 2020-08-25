@@ -44,7 +44,7 @@ export function ApiContextProvider({
     task: (params: U & { token: string | Token }) => TE.TaskEither<Error, T>
   ) => (input: U) =>
     pipe(
-      O.fromNullable(user()),
+      O.fromNullable(user),
       O.fold(
         () => {
           neededLogin(setError);

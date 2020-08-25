@@ -17,7 +17,7 @@ const USER_STORAGE_KEY = "user";
 type Token = Auth.Token;
 
 interface Context {
-  user: () => User | undefined;
+  user: User | undefined;
   logout: () => void;
   login: (data: User) => void;
   /**
@@ -27,7 +27,7 @@ interface Context {
 }
 
 export const AuthContext = createContext<Context>({
-  user: () => undefined,
+  user: undefined,
   logout: noop,
   login: noop,
   refresh: noop,
@@ -86,9 +86,7 @@ export function AuthContextProvider({
     })();
   }, [_user]);
 
-  const user = () => {
-    return _user;
-  };
+  const user = _user;
 
   const login = (user: User): void => {
     setUser(user);
