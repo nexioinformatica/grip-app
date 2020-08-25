@@ -1,82 +1,61 @@
-import { Warehouse } from "geom-api-ts-client";
-// import { Button, Content, H1, Text, NativeBase } from "native-base";
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-import { StackNavigationProp } from "@react-navigation/stack";
+import { Button, Card, Title, Paragraph, FAB } from "react-native-paper";
+import { theme } from "../../util/theme";
 
-import { SimpleCard } from "../../components";
-import { RootStackParamList } from "../Screens";
-import { HomeStackParamList } from "../Stacks";
-import { Button } from "react-native-paper";
-
-type HomeScreenNavigationProp = StackNavigationProp<HomeStackParamList>;
-type HomeProps = {
-  navigation: HomeScreenNavigationProp;
-};
-
-// const StartProcessingButton = (props: NativeBase.Button) => {
-//   return (
-//     <Button {...props}>
-//       <Text>Inizio Lavorazione</Text>
-//     </Button>
-//   );
-// };
-
-// const ScrapToWarehouseButton = (props: NativeBase.Button) => {
-//   return (
-//     <Button {...props}>
-//       <Text>Scarto a Magazzino</Text>
-//     </Button>
-//   );
-// };
-
-export function Home(props: HomeProps): React.ReactElement {
-  const { navigation } = props;
-
-  // const handleStartProcessingButtonPress = () => {
-  //   navigation.navigate("StartProcessing");
-  // };
-
-  // const handleScrapToWarehouseButtonPress = () => {
-  //   navigation.navigate("NewMovement", {
-  //     reasonTypeDefault: Warehouse.Movement.ReasonTypeKey.LoadRemnant,
-  //   });
-  // };
-
+export function Home(): React.ReactElement {
   return (
-    <>
-      <Text>Home</Text>
-      <Button onPress={() => navigation.navigate("Example")}>
-        <Text>Click</Text>
-      </Button>
-      {/* <Content padder>
-        <SimpleCard>
-          <H1>Azioni</H1>
-          <Text>Inizia scegliendo una delle azioni elencate qui sotto.</Text>
-        </SimpleCard>
-        <SimpleCard>
-          <StartProcessingButton
-            full
-            style={styles.action}
-            onPress={handleStartProcessingButtonPress}
-          />
-          <ScrapToWarehouseButton
-            full
-            style={styles.action}
-            onPress={handleScrapToWarehouseButtonPress}
-          />
-        </SimpleCard>
-      </Content> */}
-    </>
+    <View style={styles.container}>
+      <View>
+        <Card>
+          <Card.Content>
+            <Title>Yeah!</Title>
+            <Paragraph>Nessuna attività in programma.</Paragraph>
+            <Paragraph style={{ ...styles.label, ...styles.mt16 }}>
+              Inizia un lavoro dal menù a sinistra.
+            </Paragraph>
+          </Card.Content>
+        </Card>
+      </View>
+      <View style={styles.box}>
+        <Card>
+          <Card.Content>
+            <Title>Decodifica</Title>
+            <Paragraph>
+              Decodifica un barcode e ottieni informazioni sull'elemento
+            </Paragraph>
+            <Button
+              mode="contained"
+              icon="camera"
+              style={styles.mt16}
+              disabled={true}
+            >
+              <Text>Decodifica Barcode</Text>
+            </Button>
+          </Card.Content>
+        </Card>
+      </View>
+      <FAB style={styles.fab} icon="information-outline" disabled={true}></FAB>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  title: {
-    marginBottom: 10,
+  container: { flex: 1, margin: 16 },
+  box: {
+    marginTop: 16,
   },
-  action: {
-    marginBottom: 5,
+  mt16: {
+    marginTop: 16,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
+  label: {
+    color: theme.colors.secondary,
   },
 });

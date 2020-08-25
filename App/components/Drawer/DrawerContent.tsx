@@ -1,9 +1,10 @@
-import React, { memo, useContext } from "react";
+import React, { memo, useContext, useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import {
   Avatar,
   Caption,
   Drawer,
+  List,
   Paragraph,
   Switch,
   Text,
@@ -17,32 +18,81 @@ import {
   DrawerContentOptions,
   DrawerContentScrollView,
   DrawerItem,
-  DrawerNavigationProp,
 } from "@react-navigation/drawer";
-import { AuthContext } from "../../stores";
 import {
-  ProfileStackParamList,
-  HomeStackParamList,
-} from "../../Screens/Stacks";
+  Placeholder,
+  PlaceholderMedia,
+  PlaceholderLine,
+  Fade,
+} from "rn-placeholder";
+import useCancellablePromise from "@rodw95/use-cancelable-promise";
+
+import { AuthContext, ApiContext } from "../../stores";
+import { pipe } from "fp-ts/lib/pipeable";
+import { Operator } from "geom-api-ts-client";
+import { makeSettings } from "../../util/api";
+import { toResultTask } from "../../util/fp";
+import { getInitials } from "../../types";
 
 type Props = DrawerContentComponentProps<DrawerContentOptions>;
 
+const AvatarPlaceholder = () => (
+  <Placeholder Animation={Fade}>
+    <PlaceholderMedia />
+  </Placeholder>
+);
+
+const SingleLinePlaceholder = () => (
+  <Placeholder Animation={Fade}>
+    <PlaceholderLine />
+  </Placeholder>
+);
+
 export const DrawerContent = memo((props: Props) => {
+  const { call } = useContext(ApiContext);
   const { user } = useContext(AuthContext);
+  const makeCancellable = useCancellablePromise();
+  const [realName, setRealName] = useState<string | undefined>(undefined);
+
+  if (!user) throw new Error("User is undefined. ");
+
+  const getMe = () =>
+    pipe(
+      pipe(call(Operator.getMe)({ settings: makeSettings() }), toResultTask)(),
+      makeCancellable
+    ).then((x) => setRealName(x.Nome));
+
+  useEffect(() => {
+    getMe();
+  }, []);
+
+  const avatar = realName ? (
+    <Avatar.Text label={getInitials(realName)} size={50} />
+  ) : (
+    <AvatarPlaceholder />
+  );
+
+  const userName = realName ? (
+    <Title style={styles.title}>{realName}</Title>
+  ) : (
+    <SingleLinePlaceholder />
+  );
 
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.drawerContent}>
         <View style={styles.userInfoSection}>
-          <Avatar.Image
-            source={{
-              uri:
-                "https://pbs.twimg.com/profile_images/952545910990495744/b59hSXUd_400x400.jpg",
+          {avatar}
+
+          <View
+            style={{
+              marginTop: 20,
             }}
-            size={50}
-          />
-          <Title style={styles.title}>{user?.username ?? "Test"}</Title>
-          <Caption style={styles.caption}>@trensik</Caption>
+          >
+            {userName}
+          </View>
+
+          <Caption style={styles.caption}>@{user.username}</Caption>
           <View style={styles.row}>
             <View style={styles.section}>
               <Paragraph style={[styles.paragraph, styles.caption]}>
@@ -59,19 +109,35 @@ export const DrawerContent = memo((props: Props) => {
           </View>
         </View>
         <Drawer.Section style={styles.drawerSection} focusable={false}>
-          <DrawerItem
-            icon={({ color, size }) => (
-              <MaterialCommunityIcons
-                name="palette"
-                color={color}
-                size={size}
-              />
-            )}
-            label="Dashboard"
+          <List.Item
+            title="Dashboard"
+            left={(props) => <List.Icon {...props} icon="palette" />}
             onPress={() => {
               props.navigation.navigate("Home");
             }}
           />
+          <List.AccordionGroup>
+            <List.Accordion
+              title="Magazzino"
+              id="1"
+              left={(props) => <List.Icon {...props} icon="warehouse" />}
+            >
+              <List.Item title="Movimenti" onPress={() => {}} />
+            </List.Accordion>
+          </List.AccordionGroup>
+          <List.AccordionGroup>
+            <List.Accordion
+              title="Attività"
+              id="2"
+              left={(props) => <List.Icon {...props} icon="animation-play" />}
+            >
+              <List.Item title="Attività" onPress={() => {}} />
+              <List.Item title="Operatori" disabled={true} />
+              <List.Item title="Macchine" disabled={true} />
+            </List.Accordion>
+          </List.AccordionGroup>
+        </Drawer.Section>
+        <Drawer.Section title="Impostazioni" focusable={false}>
           <DrawerItem
             icon={({ color, size }) => (
               <MaterialCommunityIcons
@@ -92,19 +158,8 @@ export const DrawerContent = memo((props: Props) => {
             label="Preferences"
             onPress={() => {}}
           />
-          <DrawerItem
-            icon={({ color, size }) => (
-              <MaterialCommunityIcons
-                name="bookmark-outline"
-                color={color}
-                size={size}
-              />
-            )}
-            label="Bookmarks"
-            onPress={() => {}}
-          />
         </Drawer.Section>
-        <Drawer.Section title="Preferences" focusable={false}>
+        <Drawer.Section title="Prefrenze" focusable={false}>
           <TouchableRipple onPress={() => {}}>
             <View style={styles.preference}>
               <Text>Dark Theme</Text>
@@ -133,9 +188,9 @@ const styles = StyleSheet.create({
   },
   userInfoSection: {
     paddingLeft: 20,
+    paddingRight: 20,
   },
   title: {
-    marginTop: 20,
     fontWeight: "bold",
   },
   caption: {
