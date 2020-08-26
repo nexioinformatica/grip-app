@@ -12,8 +12,8 @@ export const getReasonTypesData = (): Item<string, ReasonType>[] =>
     ReasonTypeKey.LoadProd,
     ReasonTypeKey.LoadRemnant,
     ReasonTypeKey.LoadScrap,
-  ].map((x, i) => ({
-    key: i.toString(),
+  ].map((x) => ({
+    key: x.toString(),
     value: x,
     label: getReasonTypeName(x),
   }));

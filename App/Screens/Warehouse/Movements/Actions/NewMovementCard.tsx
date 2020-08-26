@@ -40,7 +40,7 @@ const NewMovementCard = (): React.ReactElement => {
               })
             }
           >
-            <Text>Nuova Attività</Text>
+            <Text>Nuovo Movimento</Text>
           </Button>
         </View>
       </Card.Content>

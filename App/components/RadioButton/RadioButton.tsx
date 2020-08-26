@@ -22,7 +22,7 @@ export const RadioButton = <T,>({
   onSelectedChange,
 }: Props<T>): React.ReactElement => {
   const handleValueChange = (selected: string) => {
-    const item = _.find(items, (x) => x.key == selected);
+    const item = _.find(items, (x) => x.key === selected);
     if (!item)
       throw new Error(
         "Selected RadioButton key was not found in the item list."
