@@ -1,18 +1,33 @@
-import React, { useState } from "react";
-import { Text, View, ScrollView, StyleSheet } from "react-native";
-import { Card, Title, Button, Snackbar, Caption } from "react-native-paper";
-import { ScanFreshman } from "../../../components";
 import { Formik } from "formik";
-import { Barcode } from "geom-api-ts-client";
-import * as Yup from "yup";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { ActivitiesStackParamList } from "../Stacks";
-import { RouteProp } from "@react-navigation/native";
+import React, { useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import {
-  getActionTypeName,
+  Button,
+  Caption,
+  Card,
+  List,
+  Snackbar,
+  Title,
+} from "react-native-paper";
+import * as Yup from "yup";
+
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+import {
+  ActivityTypeFormSection,
+  ExecutiveOrderFormSection,
+  ScanFreshman,
+  MachineFormSection,
+} from "../../../components";
+import {
   ActionType,
+  getActionTypeName,
   isRequiringMachine,
 } from "../../../types/ActionType";
+import { ActivityType } from "../../../types/ActivityType";
+import { BarcodeDecode } from "../../../types/Barcode";
+import { ActivitiesStackParamList } from "../Stacks";
 
 type Props = {
   navigation: StackNavigationProp<ActivitiesStackParamList, "StartActivity">;
@@ -20,18 +35,33 @@ type Props = {
 };
 
 interface FormValues {
-  freshman: Barcode.BarcodeDecode | undefined;
-  machine: Barcode.BarcodeDecode | undefined;
+  machine?: { IdMacchina: number };
+  activityType?: ActivityType;
+  phase?: { IdFase: number };
+  position?: { IdPosizione: number };
+  header?: { IdTestata: number };
 
-  freshmanBarcode: string;
-  machineBarcode: string;
+  barcode: {
+    machine: string;
+    phase: string;
+    position: string;
+    header: string;
+  };
 }
 
 const initialValues: FormValues = {
-  freshman: undefined,
   machine: undefined,
-  freshmanBarcode: "",
-  machineBarcode: "",
+  activityType: undefined,
+  phase: undefined,
+  position: undefined,
+  header: undefined,
+
+  barcode: {
+    machine: "",
+    phase: "",
+    position: "",
+    header: "",
+  },
 };
 
 const validationSchema = (actionType: ActionType) => {
@@ -41,7 +71,7 @@ const validationSchema = (actionType: ActionType) => {
       }
     : {};
   return Yup.object({
-    freshman: Yup.mixed().required("Il campo Matricola è richiesto"),
+    activityType: Yup.mixed().required("Il campo Tipo Attività è richiesto"),
     ...machine,
   });
 };
@@ -76,53 +106,38 @@ const StartActivity = (props: Props) => {
                 <Formik<FormValues>
                   initialValues={initialValues}
                   enableReinitialize={true}
-                  validationSchema={validationSchema}
+                  validationSchema={validationSchema(actionType)}
                   onSubmit={handleSubmit}
                 >
-                  {({
-                    handleSubmit,
-                    handleChange,
-                    handleBlur,
-                    errors,
-                    isSubmitting,
-                    isValid,
-                    setFieldValue,
-                    values,
-                    resetForm,
-                  }) => {
+                  {(formikProps) => {
+                    const {
+                      handleSubmit,
+                      handleChange,
+                      handleBlur,
+                      errors,
+                      isSubmitting,
+                      isValid,
+                      setFieldValue,
+                      values,
+                      resetForm,
+                    } = formikProps;
+
                     return (
                       <>
-                        <ScanFreshman
-                          label="Matricola"
-                          onChangeText={(x?: string) =>
-                            handleChange("freshmanBarcode")(x ?? "")
-                          }
-                          onDecodeValue={(x) => setFieldValue("freshman", x[0])}
-                          value={values.freshmanBarcode}
-                          returnKeyType="next"
-                          onBlur={handleBlur("freshman")}
-                          error={!!errors.freshman}
-                          errorText={errors.freshman}
-                          keyboardType="default"
-                        />
+                        <List.Accordion
+                          title="Dati Obbligatori"
+                          expanded={true}
+                        >
+                          <ActivityTypeFormSection {...formikProps} />
 
-                        {isRequiringMachine(actionType) && (
-                          <ScanFreshman
-                            label="Macchina"
-                            onChangeText={(x?: string) =>
-                              handleChange("machineBarcode")(x ?? "")
-                            }
-                            onDecodeValue={(x) =>
-                              setFieldValue("machine", x[0])
-                            }
-                            value={values.machineBarcode}
-                            returnKeyType="next"
-                            onBlur={handleBlur("machine")}
-                            error={!!errors.machine}
-                            errorText={errors.machine}
-                            keyboardType="default"
-                          />
-                        )}
+                          {isRequiringMachine(actionType) && (
+                            <MachineFormSection {...formikProps} />
+                          )}
+                        </List.Accordion>
+
+                        <List.Accordion title="Ordine Esecutivo">
+                          <ExecutiveOrderFormSection {...formikProps} />
+                        </List.Accordion>
 
                         <Button
                           mode="contained"

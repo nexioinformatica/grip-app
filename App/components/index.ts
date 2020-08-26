@@ -6,3 +6,4 @@ export * from "./ChooseOperator";
 export * from "./Dropdown";
 export * from "./RadioButton";
 export * from "./Drawer";
+export * from "./Form";

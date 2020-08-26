@@ -57,7 +57,7 @@ export const DialogPicker = <T,>({
               value={searchQuery}
             />
           </View>
-          <View style={{ height: 200, marginTop: 24 }}>
+          <View style={styles.list}>
             <Surface style={styles.surface}>
               <ScrollView>
                 {collection.map((x, i) => {
@@ -96,9 +96,11 @@ const styles = StyleSheet.create({
   surface: {
     elevation: 2,
     width: "100%",
+    height: "100%",
   },
   details: {
     alignItems: "flex-end",
     margin: 16,
   },
+  list: { height: 200, marginTop: 24 },
 });
