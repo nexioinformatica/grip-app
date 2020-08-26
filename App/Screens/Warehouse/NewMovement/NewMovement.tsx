@@ -1,6 +1,6 @@
 import { Formik } from "formik";
-import { Barcode } from "geom-api-ts-client";
-import React, { useState } from "react";
+import { Barcode, Warehouse } from "geom-api-ts-client";
+import React, { useState, useContext, useEffect } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button, Caption, Card, Snackbar, Title } from "react-native-paper";
 import * as Yup from "yup";
@@ -8,9 +8,23 @@ import * as Yup from "yup";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { ScanFreshman } from "../../../components";
-import { getReasonTypeName } from "../../../types/ReasonType";
+import { ScanFreshman, TextInputPicker } from "../../../components";
+import {
+  getReasonTypeName,
+  ReasonType,
+  isRequiringReason,
+} from "../../../types/ReasonType";
 import { MovementsStackParamList } from "../Stacks";
+import useCancellablePromise from "@rodw95/use-cancelable-promise";
+import { pipe } from "fp-ts/lib/pipeable";
+import { ApiContext } from "../../../stores";
+import { makeSettings } from "../../../util/api";
+import { toResultTask } from "../../../util/fp";
+import {
+  Reason,
+  Reasons,
+  ReasonItemsAdapterFactory,
+} from "../../../types/Reason";
 
 type Props = {
   navigation: StackNavigationProp<MovementsStackParamList, "NewMovement">;
@@ -19,18 +33,27 @@ type Props = {
 
 interface FormValues {
   freshman: Barcode.BarcodeDecode | undefined;
-
+  reason: ReasonType | undefined;
+  reasonTitle: string;
   freshmanBarcode: string;
 }
 
 const initialValues: FormValues = {
   freshman: undefined,
+  reason: undefined,
+  reasonTitle: "",
   freshmanBarcode: "",
 };
 
-const validationSchema = Yup.object({
-  freshman: Yup.mixed().required("Il campo Matricola è richiesto"),
-});
+const validationSchema = (reasonType: ReasonType) => {
+  const reason = isRequiringReason(reasonType)
+    ? { reason: Yup.mixed().required("Il campo Causale è richiesto") }
+    : {};
+  return Yup.object({
+    freshman: Yup.mixed().required("Il campo Matricola è richiesto"),
+    ...reason,
+  });
+};
 
 const NewMovement = (props: Props): React.ReactElement => {
   const {
@@ -38,7 +61,26 @@ const NewMovement = (props: Props): React.ReactElement => {
       params: { reasonType },
     },
   } = props;
+  const makeCancelable = useCancellablePromise();
+  const { call } = useContext(ApiContext);
   const [isError, setError] = useState(false);
+  const [reasons, setReasons] = useState<Reasons>([]);
+
+  const getReasons = () =>
+    makeCancelable(
+      pipe(
+        call(Warehouse.Reason.getCollection)({
+          settings: makeSettings(),
+        }),
+        toResultTask
+      )()
+        .then(setReasons)
+        .catch(() => setError(true))
+    );
+
+  useEffect(() => {
+    getReasons();
+  }, []);
 
   const handleSubmit = (values: FormValues) => {
     console.log(values);
@@ -61,7 +103,7 @@ const NewMovement = (props: Props): React.ReactElement => {
                 <Formik<FormValues>
                   initialValues={initialValues}
                   enableReinitialize={true}
-                  validationSchema={validationSchema}
+                  validationSchema={validationSchema(reasonType)}
                   onSubmit={handleSubmit}
                 >
                   {({
@@ -77,6 +119,22 @@ const NewMovement = (props: Props): React.ReactElement => {
                   }) => {
                     return (
                       <>
+                        {isRequiringReason(reasonType) && (
+                          <TextInputPicker<Reason>
+                            items={ReasonItemsAdapterFactory.fromReasons(
+                              reasons
+                            )}
+                            value={values.reasonTitle}
+                            onValueChange={(x) => {
+                              handleChange("reasonTitle")(x.title);
+                              setFieldValue("reason", x.value);
+                            }}
+                            label="Causale"
+                            error={!!errors.reason}
+                            errorText={errors.reason}
+                          />
+                        )}
+
                         <ScanFreshman
                           label="Matricola"
                           onChangeText={(x?: string) =>

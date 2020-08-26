@@ -17,3 +17,7 @@ export const getReasonTypeName = (reasonType: ReasonType): ReasonTypeName => {
   if (reasonType == ReasonTypeKey.LoadScrap) return "Carico Scarto";
   throw new Error("Invalid ActionType");
 };
+
+export const isRequiringReason = (reasonType: ReasonType): boolean => {
+  return reasonType === ReasonTypeKey.Specified;
+};
