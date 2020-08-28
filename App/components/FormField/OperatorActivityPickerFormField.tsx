@@ -17,17 +17,17 @@ import { Operator } from "../../types/Operator";
 import { makeSettings } from "../../util/api";
 import { toResultTask } from "../../util/fp";
 import { noop } from "../../util/noop";
-import { TextInputFail } from "../Auth/TextInputFail";
 import { TextInputPicker } from "../Dropdown";
+import { TextInputFail } from "../TextInput";
 
-interface OperatorActivityListFormValues {
+interface OperatorActivityPickerFormValues {
   operatorActivity?: OperatorActivity;
 }
 
 const operatorActivityItemAdapterFactory = new OperatorActivityItemAdapterFactory();
 
-export const OperatorActivityListFormField = <
-  T extends OperatorActivityListFormValues
+export const OperatorActivityPickerFormField = <
+  T extends OperatorActivityPickerFormValues
 >({
   operator,
   setFieldValue,

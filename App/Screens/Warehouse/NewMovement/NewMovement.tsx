@@ -1,30 +1,31 @@
 import { Formik } from "formik";
+import { pipe } from "fp-ts/lib/pipeable";
 import { Barcode, Warehouse } from "geom-api-ts-client";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button, Caption, Card, Snackbar, Title } from "react-native-paper";
 import * as Yup from "yup";
 
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-
-import { ScanFreshman, TextInputPicker } from "../../../components";
-import {
-  getReasonTypeName,
-  ReasonType,
-  isRequiringReason,
-} from "../../../types/ReasonType";
-import { MovementsStackParamList } from "../Stacks";
 import useCancellablePromise from "@rodw95/use-cancelable-promise";
-import { pipe } from "fp-ts/lib/pipeable";
+
+import { TextInputPicker } from "../../../components/Dropdown";
+import { ScanFreshman } from "../../../components/ScanInput";
 import { ApiContext } from "../../../stores";
-import { makeSettings } from "../../../util/api";
-import { toResultTask } from "../../../util/fp";
 import {
   Reason,
-  Reasons,
   ReasonItemsAdapterFactory,
+  Reasons,
 } from "../../../types/Reason";
+import {
+  getReasonTypeName,
+  isRequiringReason,
+  ReasonType,
+} from "../../../types/ReasonType";
+import { makeSettings } from "../../../util/api";
+import { toResultTask } from "../../../util/fp";
+import { MovementsStackParamList } from "../Stacks";
 
 type Props = {
   navigation: StackNavigationProp<MovementsStackParamList, "NewMovement">;

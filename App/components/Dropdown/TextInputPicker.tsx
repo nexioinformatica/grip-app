@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { TextInput, Props as TextInputProps } from "../Auth";
-import { DialogPicker } from "./DialogPicker";
+
 import { ListItem } from "../../types/Item";
+import { TextInput, TextInputProps } from "../TextInput";
+import { DialogPicker } from "./DialogPicker";
 
 type Props<T> = TextInputProps & {
   items: ListItem<T>[];

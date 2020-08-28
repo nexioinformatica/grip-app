@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Button, Card, List, Title, Switch } from "react-native-paper";
+import { Button, Card, List, Switch, Title } from "react-native-paper";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { RadioButton } from "../../../../components";
+import { RadioButton } from "../../../../components/RadioButton";
+import { getActionTypesData } from "../../../../data/ActionTypeResource";
 import {
   ActionType,
   ActionTypeKey,
   isRequiringMachine,
 } from "../../../../types/ActionType";
-import { getActionTypesData } from "../../../../data/ActionTypeResource";
 
 const StopActivityCard = (): React.ReactElement => {
   const navigation = useNavigation();

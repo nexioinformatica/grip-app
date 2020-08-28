@@ -14,8 +14,7 @@ import {
 } from "../../types/Operator";
 import { makeSettings } from "../../util/api";
 import { toResultTask } from "../../util/fp";
-import { TextInputFail } from "../Auth/TextInputFail";
-import { TextInput } from "../Auth";
+import { TextInput, TextInputFail } from "../TextInput";
 
 interface OperatorFormValues {
   operator?: OperatorT;

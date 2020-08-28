@@ -3,15 +3,19 @@ import React from "react";
 
 import { OperatorActivity } from "../../types/Activity";
 import { Operator } from "../../types/Operator";
-import { OperatorActivityListFormField } from "./OperatorActivityListFormField";
-import { OperatorFormField } from "./OperatorFormField";
+import {
+  OperatorFormField,
+  OperatorActivityPickerFormField,
+} from "../FormField";
 
-interface StopByOperatorFormValues {
+interface StopActivityByOperatorFormValues {
   operator?: Operator;
   operatorActivity?: OperatorActivity;
 }
 
-export const StopByOperatorFormSection = <T extends StopByOperatorFormValues>({
+export const StopActivityByOperatorFormSection = <
+  T extends StopActivityByOperatorFormValues
+>({
   ...formikProps
 }: FormikProps<T>): React.ReactElement => {
   const { values } = formikProps;
@@ -19,7 +23,7 @@ export const StopByOperatorFormSection = <T extends StopByOperatorFormValues>({
     <>
       <OperatorFormField {...formikProps} />
       {values.operator && (
-        <OperatorActivityListFormField
+        <OperatorActivityPickerFormField
           operator={values.operator}
           {...formikProps}
         />

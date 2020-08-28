@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Home } from "./Home";
-import { Appbar } from "../components/AppBar";
+import { Appbar } from "../components/Appbar";
 import { Profile } from "./Auth";
 import { Scan } from "./Scan";
 import { BarcodeEvent } from "../types";

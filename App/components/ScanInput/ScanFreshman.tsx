@@ -3,14 +3,14 @@ import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
 import { Barcode } from "geom-api-ts-client";
 import React, { useContext, useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { TextInput } from "react-native-paper";
 
 import { useNavigation } from "@react-navigation/native";
 
 import { ApiContext } from "../../stores/api";
 import { BarcodeEvent } from "../../types";
 import { makeSettings } from "../../util/api";
-import { TextInput } from "react-native-paper";
-import { StyleSheet, View, Text } from "react-native";
 import { theme } from "../../util/theme";
 
 type Props = React.ComponentProps<typeof TextInput> & {

@@ -12,15 +12,9 @@ import {
 import { Dialog, Portal, Snackbar } from "react-native-paper";
 import * as Yup from "yup";
 
-import {
-  Button,
-  Header,
-  Logo,
-  TextInput,
-  TextInputIcon,
-  BackgroundCenter,
-} from "../../components/Auth";
-import { OperatorList } from "../../components/ChooseOperator/OperatorList";
+import { BackgroundCenter, Button, Header, Logo } from "../../components/Auth";
+import { OperatorList } from "../../components/ChooseOperator";
+import { TextInput, TextInputIcon } from "../../components/TextInput";
 import { ApiContext, AuthContext, makeUser } from "../../stores";
 import { makeSettings } from "../../util/api";
 import { API_KEY } from "../../util/constants";

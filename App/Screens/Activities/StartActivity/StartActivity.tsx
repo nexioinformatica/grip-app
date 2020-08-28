@@ -15,10 +15,10 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import {
-  ActivityTypeFormSection,
-  ExecutiveOrderFormSection,
-  MachineFormSection,
-} from "../../../components";
+  ActivityTypePickerFormField,
+  MachineFormField,
+} from "../../../components/FormField";
+import { ExecutiveOrderFormSection } from "../../../components/FormSection";
 import {
   ActionType,
   getActionTypeName,
@@ -126,10 +126,10 @@ const StartActivity = (props: Props) => {
                           title="Dati Obbligatori"
                           expanded={true}
                         >
-                          <ActivityTypeFormSection {...formikProps} />
+                          <ActivityTypePickerFormField {...formikProps} />
 
                           {isRequiringMachine(actionType) && (
-                            <MachineFormSection {...formikProps} />
+                            <MachineFormField {...formikProps} />
                           )}
                         </List.Accordion>
 

@@ -1,22 +1,24 @@
-import React, { useContext, useState, useEffect } from "react";
 import { FormikProps } from "formik";
-import useCancellablePromise from "@rodw95/use-cancelable-promise";
-import { ApiContext } from "../../stores";
 import { pipe } from "fp-ts/lib/pipeable";
-import { makeSettings } from "../../util/api";
-import { toResultTask } from "../../util/fp";
+import { Machine as MachineApi } from "geom-api-ts-client";
+import React, { useContext, useEffect, useState } from "react";
+import { ActivityIndicator } from "react-native-paper";
+
+import useCancellablePromise from "@rodw95/use-cancelable-promise";
+
+import { ApiContext } from "../../stores";
+import { ListItem } from "../../types/Item";
 import {
   Machine,
-  Machines,
   MachineItemAdapterFactory,
+  Machines,
 } from "../../types/Machine";
-import { TextInputFail } from "../Auth/TextInputFail";
-import { ActivityIndicator } from "react-native-paper";
+import { makeSettings } from "../../util/api";
+import { toResultTask } from "../../util/fp";
 import { TextInputPicker } from "../Dropdown";
-import { Machine as MachineApi } from "geom-api-ts-client";
-import { ListItem } from "../../types/Item";
+import { TextInputFail } from "../TextInput";
 
-interface MachineFormValues {
+interface MachinePickerFormValues {
   machine?: Machine;
   barcode: {
     machine: string;
@@ -25,7 +27,7 @@ interface MachineFormValues {
 
 const machineItemAdapterFactory = new MachineItemAdapterFactory();
 
-export const MachineListFormSection = <T extends MachineFormValues>({
+export const MachinePickerFormField = <T extends MachinePickerFormValues>({
   setFieldValue,
   handleBlur,
   values,
@@ -68,22 +70,20 @@ export const MachineListFormSection = <T extends MachineFormValues>({
   if (isLoading) return <ActivityIndicator />;
 
   return (
-    <>
-      <TextInputPicker
-        label="Macchina*"
-        items={machineItemAdapterFactory.fromCollection(machineList)}
-        value={
-          values.machine
-            ? machineItemAdapterFactory.fromSingle(values.machine).title
-            : ""
-        }
-        onValueChange={(x: ListItem<Machine>) => {
-          setFieldValue("machine", x.value);
-        }}
-        onBlur={handleBlur("activityType")}
-        error={!!errors.machine}
-        errorText={errors.machine?.toString()}
-      />
-    </>
+    <TextInputPicker
+      label="Macchina*"
+      items={machineItemAdapterFactory.fromCollection(machineList)}
+      value={
+        values.machine
+          ? machineItemAdapterFactory.fromSingle(values.machine).title
+          : ""
+      }
+      onValueChange={(x: ListItem<Machine>) => {
+        setFieldValue("machine", x.value);
+      }}
+      onBlur={handleBlur("activityType")}
+      error={!!errors.machine}
+      errorText={errors.machine?.toString()}
+    />
   );
 };

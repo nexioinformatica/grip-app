@@ -1,10 +1,13 @@
+import { Activities } from "geom-api-ts-client";
 import React from "react";
+
 import { createStackNavigator } from "@react-navigation/stack";
-import { Appbar } from "../../components";
+
+import { Appbar } from "../../components/Appbar";
 import { Activities as ActivitiesScreen } from "./Activities";
 import { StartActivity } from "./StartActivity";
-import { Activities } from "geom-api-ts-client";
 import { StopActivity } from "./StopActivity.tsx";
+
 export type ActivitiesStackParamList = {
   Activities: undefined;
   StartActivity: { actionType: Activities.ActionType };

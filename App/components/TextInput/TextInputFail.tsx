@@ -3,7 +3,7 @@ import { TextInput, TextInputIcon } from "./TextInput";
 import { TouchableOpacity, View } from "react-native";
 import { noop } from "../../util/noop";
 
-export type Props = React.ComponentProps<typeof TextInput> & {
+type Props = React.ComponentProps<typeof TextInput> & {
   retry?: () => void;
 };
 

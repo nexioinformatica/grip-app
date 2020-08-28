@@ -1,22 +1,24 @@
-import React, { useContext, useState, useEffect } from "react";
+import { pipe } from "fp-ts/lib/pipeable";
+import { Operator } from "geom-api-ts-client";
+import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import {
-  List,
-  Avatar,
   ActivityIndicator,
+  Avatar,
   IconButton,
+  List,
 } from "react-native-paper";
-import { Operator } from "geom-api-ts-client";
-import { makeSettings } from "../../util/api";
-import { pipe } from "fp-ts/lib/pipeable";
-import { ApiContext } from "../../stores";
+
 import useCancellablePromise from "@rodw95/use-cancelable-promise";
-import { toResultTask } from "../../util/fp";
+
+import { ApiContext } from "../../stores";
 import { getInitials } from "../../types";
+import { makeSettings } from "../../util/api";
+import { toResultTask } from "../../util/fp";
 
 type Operator = Operator.Single;
 
-export interface Props {
+interface Props {
   onSelectedValue: (operator: Operator) => void;
 }
 
