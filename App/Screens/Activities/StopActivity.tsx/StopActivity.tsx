@@ -18,9 +18,9 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import {
-  StopByMachineFormSection,
-  StopByOperatorFormSection,
-} from "../../../components/Form";
+  StopActivityByMachineFormSection,
+  StopActivityByOperatorFormSection,
+} from "../../../components/FormSection";
 import { ApiContext } from "../../../stores";
 import {
   ActionType,
@@ -171,13 +171,17 @@ export const StopActivity = (props: Props): React.ReactElement => {
                           expanded={true}
                         >
                           {(isRequiringMachine(actionType) && (
-                            <StopByMachineFormSection
+                            <StopActivityByMachineFormSection
                               isMachineReadFromBarcode={
                                 isMachineReadFromBarcode
                               }
                               {...formikProps}
                             />
-                          )) || <StopByOperatorFormSection {...formikProps} />}
+                          )) || (
+                            <StopActivityByOperatorFormSection
+                              {...formikProps}
+                            />
+                          )}
                         </List.Accordion>
 
                         <Button

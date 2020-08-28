@@ -9,7 +9,7 @@ import {
   MachinePickerFormField,
 } from "../FormField";
 
-interface StopByMachineFormValues {
+interface StopActivityByMachineFormValues {
   machine?: Machine;
   machineActivity?: MachineActivity;
   barcode: {
@@ -17,7 +17,7 @@ interface StopByMachineFormValues {
   };
 }
 
-export const StopByMachineFormSection = <T extends StopByMachineFormValues>({
+export const StopActivityByMachineFormSection = <T extends StopActivityByMachineFormValues>({
   isMachineReadFromBarcode,
   ...formikProps
 }: FormikProps<T> & {
