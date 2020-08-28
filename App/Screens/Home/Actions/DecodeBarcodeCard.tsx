@@ -1,16 +1,17 @@
+import { View } from "native-base";
 import React, { useState } from "react";
+import { StyleSheet } from "react-native";
 import {
   Button,
   Card,
-  Paragraph,
-  Title,
-  Text,
-  Portal,
   Dialog,
+  Paragraph,
+  Portal,
+  Text,
+  Title,
 } from "react-native-paper";
-import { StyleSheet } from "react-native";
-import { View } from "native-base";
-import { ScanFreshman } from "../../../components";
+
+import { ScanFreshman } from "../../../components/ScanInput";
 import { BarcodeDecode } from "../../../types/Barcode";
 
 const DecodeBarcodeCard = () => {

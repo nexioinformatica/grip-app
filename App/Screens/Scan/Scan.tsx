@@ -1,8 +1,10 @@
-import React from "react";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RouteProp } from "@react-navigation/native";
-import { BarcodeScanner } from "../../components";
 import { BarCodeEvent } from "expo-barcode-scanner";
+import React from "react";
+
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+import { BarcodeScanner } from "../../components/BarcodeScanner";
 import { noop } from "../../util/noop";
 import { RootNavigatorParamList } from "../Navigators";
 

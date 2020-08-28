@@ -18,7 +18,7 @@ import {
   ActivityTypeFormSection,
   ExecutiveOrderFormSection,
   MachineFormSection,
-} from "../../../components";
+} from "../../../components/Form";
 import {
   ActionType,
   getActionTypeName,

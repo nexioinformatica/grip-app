@@ -1,17 +1,18 @@
-import React, { useState, useMemo } from "react";
+import * as A from "fp-ts/lib/Array";
+import { pipe } from "fp-ts/lib/pipeable";
+import React, { useMemo, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 import {
-  Portal,
-  Dialog,
   Button,
+  Caption,
+  Dialog,
+  Divider,
   List,
+  Portal,
   Searchbar,
   Surface,
-  Caption,
-  Divider,
 } from "react-native-paper";
-import { pipe } from "fp-ts/lib/pipeable";
-import * as A from "fp-ts/lib/Array";
-import { View, StyleSheet, ScrollView } from "react-native";
+
 import { ListItem } from "../../types/Item";
 
 type Props<T> = {

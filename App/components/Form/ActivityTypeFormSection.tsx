@@ -1,20 +1,22 @@
-import React, { useContext, useEffect, useState } from "react";
 import { FormikProps } from "formik";
-import {
-  ActivityTypes,
-  ActivityTypeItemAdapterFactory,
-  ActivityType,
-} from "../../types/ActivityType";
-import { TextInputPicker } from "../Dropdown";
-import useCancellablePromise from "@rodw95/use-cancelable-promise";
-import { ApiContext } from "../../stores";
 import { pipe } from "fp-ts/lib/pipeable";
 import { Activities } from "geom-api-ts-client";
+import React, { useContext, useEffect, useState } from "react";
+import { ActivityIndicator } from "react-native-paper";
+
+import useCancellablePromise from "@rodw95/use-cancelable-promise";
+
+import { ApiContext } from "../../stores";
+import {
+  ActivityType,
+  ActivityTypeItemAdapterFactory,
+  ActivityTypes,
+} from "../../types/ActivityType";
+import { ListItem } from "../../types/Item";
 import { makeSettings } from "../../util/api";
 import { toResultTask } from "../../util/fp";
-import { ActivityIndicator } from "react-native-paper";
-import { ListItem } from "../../types/Item";
-import { TextInputFail } from "../Auth/TextInputFail";
+import { TextInputPicker } from "../Dropdown";
+import { TextInputFail } from "../TextInput";
 
 interface ActivityTypeFormValues {
   activityType?: ActivityType;

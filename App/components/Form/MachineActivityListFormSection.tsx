@@ -1,22 +1,24 @@
-import React, { useContext, useState, useEffect } from "react";
 import { FormikProps } from "formik";
-import useCancellablePromise from "@rodw95/use-cancelable-promise";
-import { ApiContext } from "../../stores";
 import { pipe } from "fp-ts/lib/pipeable";
-import { makeSettings } from "../../util/api";
-import { toResultTask } from "../../util/fp";
-import { TextInputFail } from "../Auth/TextInputFail";
+import { Activities } from "geom-api-ts-client";
+import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native-paper";
-import { TextInputPicker } from "../Dropdown";
-import { ListItem } from "../../types/Item";
+
+import useCancellablePromise from "@rodw95/use-cancelable-promise";
+
+import { ApiContext } from "../../stores";
 import {
   MachineActivity,
-  MachineActivityList,
   MachineActivityItemAdapterFactory,
+  MachineActivityList,
 } from "../../types/Activity";
-import { Activities } from "geom-api-ts-client";
-import { noop } from "../../util/noop";
+import { ListItem } from "../../types/Item";
 import { Machine } from "../../types/Machine";
+import { makeSettings } from "../../util/api";
+import { toResultTask } from "../../util/fp";
+import { noop } from "../../util/noop";
+import { TextInputPicker } from "../Dropdown";
+import { TextInputFail } from "../TextInput";
 
 interface MachineActivityFormValues {
   machineActivity?: MachineActivity;

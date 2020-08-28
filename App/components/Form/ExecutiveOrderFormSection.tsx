@@ -1,8 +1,9 @@
-import React from "react";
 import { FormikProps } from "formik";
-import { ScanFreshman } from "../ScanInput";
-import { Barcode } from "geom-api-ts-client";
 import { pipe } from "fp-ts/lib/pipeable";
+import { Barcode } from "geom-api-ts-client";
+import React from "react";
+
+import { ScanFreshman } from "../ScanInput";
 
 interface ExecutiveOrder {
   phase?: { IdFase: number };

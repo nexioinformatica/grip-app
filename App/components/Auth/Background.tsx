@@ -1,8 +1,8 @@
 import React from "react";
 import {
   ImageBackground,
-  StyleSheet,
   KeyboardAvoidingView,
+  StyleSheet,
 } from "react-native";
 
 type Props = {

@@ -1,20 +1,22 @@
-import React, { useContext, useState, useEffect } from "react";
 import { FormikProps } from "formik";
-import useCancellablePromise from "@rodw95/use-cancelable-promise";
-import { ApiContext } from "../../stores";
 import { pipe } from "fp-ts/lib/pipeable";
-import { makeSettings } from "../../util/api";
-import { toResultTask } from "../../util/fp";
+import { Machine as MachineApi } from "geom-api-ts-client";
+import React, { useContext, useEffect, useState } from "react";
+import { ActivityIndicator } from "react-native-paper";
+
+import useCancellablePromise from "@rodw95/use-cancelable-promise";
+
+import { ApiContext } from "../../stores";
+import { ListItem } from "../../types/Item";
 import {
   Machine,
-  Machines,
   MachineItemAdapterFactory,
+  Machines,
 } from "../../types/Machine";
-import { TextInputFail } from "../Auth/TextInputFail";
-import { ActivityIndicator } from "react-native-paper";
+import { makeSettings } from "../../util/api";
+import { toResultTask } from "../../util/fp";
 import { TextInputPicker } from "../Dropdown";
-import { Machine as MachineApi } from "geom-api-ts-client";
-import { ListItem } from "../../types/Item";
+import { TextInputFail } from "../TextInput";
 
 interface MachineFormValues {
   machine?: Machine;

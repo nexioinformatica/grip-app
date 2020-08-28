@@ -3,7 +3,8 @@ import { View, StyleSheet, Text } from "react-native";
 import { TextInput as Input } from "react-native-paper";
 import { theme } from "../../util/theme";
 
-export type Props = React.ComponentProps<typeof Input> & { errorText?: string };
+type Props = React.ComponentProps<typeof Input> & { errorText?: string };
+export type TextInputProps = Props;
 
 const TextInput = ({ errorText, ...props }: Props) => (
   <View style={styles.container}>

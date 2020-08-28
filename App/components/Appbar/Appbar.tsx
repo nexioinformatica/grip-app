@@ -2,8 +2,8 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import {
   Appbar as AppbarPaper,
-  useTheme,
   IconButton,
+  useTheme,
 } from "react-native-paper";
 
 import { DrawerNavigationProp } from "@react-navigation/drawer";
