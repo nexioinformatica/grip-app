@@ -5,7 +5,7 @@ import { MachineActivity } from "../../types/Activity";
 import { Machine } from "../../types/Machine";
 import { MachineActivityPickerFormField } from "../FormField";
 import { MachineFormSection } from "./MachineFormSection";
-import { MachineListFormSection } from "./MachineListFormSection";
+import { MachinePickerFormField } from "../FormField";
 
 interface StopByMachineFormValues {
   machine?: Machine;
@@ -27,7 +27,7 @@ export const StopByMachineFormSection = <T extends StopByMachineFormValues>({
       {isMachineReadFromBarcode ? (
         <MachineFormSection {...formikProps} />
       ) : (
-        <MachineListFormSection {...formikProps} />
+        <MachinePickerFormField {...formikProps} />
       )}
       {values.machine && (
         <MachineActivityPickerFormField

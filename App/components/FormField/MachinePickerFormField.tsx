@@ -18,7 +18,7 @@ import { toResultTask } from "../../util/fp";
 import { TextInputPicker } from "../Dropdown";
 import { TextInputFail } from "../TextInput";
 
-interface MachineFormValues {
+interface MachinePickerFormValues {
   machine?: Machine;
   barcode: {
     machine: string;
@@ -27,7 +27,7 @@ interface MachineFormValues {
 
 const machineItemAdapterFactory = new MachineItemAdapterFactory();
 
-export const MachineListFormSection = <T extends MachineFormValues>({
+export const MachinePickerFormField = <T extends MachinePickerFormValues>({
   setFieldValue,
   handleBlur,
   values,
@@ -70,22 +70,20 @@ export const MachineListFormSection = <T extends MachineFormValues>({
   if (isLoading) return <ActivityIndicator />;
 
   return (
-    <>
-      <TextInputPicker
-        label="Macchina*"
-        items={machineItemAdapterFactory.fromCollection(machineList)}
-        value={
-          values.machine
-            ? machineItemAdapterFactory.fromSingle(values.machine).title
-            : ""
-        }
-        onValueChange={(x: ListItem<Machine>) => {
-          setFieldValue("machine", x.value);
-        }}
-        onBlur={handleBlur("activityType")}
-        error={!!errors.machine}
-        errorText={errors.machine?.toString()}
-      />
-    </>
+    <TextInputPicker
+      label="Macchina*"
+      items={machineItemAdapterFactory.fromCollection(machineList)}
+      value={
+        values.machine
+          ? machineItemAdapterFactory.fromSingle(values.machine).title
+          : ""
+      }
+      onValueChange={(x: ListItem<Machine>) => {
+        setFieldValue("machine", x.value);
+      }}
+      onBlur={handleBlur("activityType")}
+      error={!!errors.machine}
+      errorText={errors.machine?.toString()}
+    />
   );
 };
