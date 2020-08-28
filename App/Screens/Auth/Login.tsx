@@ -12,15 +12,14 @@ import {
 import { Dialog, Portal, Snackbar } from "react-native-paper";
 import * as Yup from "yup";
 
+import { BackgroundCenter, Button, Header, Logo } from "../../components/Auth";
+import { OperatorList } from "../../components/ChooseOperator";
+import { TextInput, TextInputIcon } from "../../components/TextInput";
 import { ApiContext, AuthContext, makeUser } from "../../stores";
 import { makeSettings } from "../../util/api";
 import { API_KEY } from "../../util/constants";
 import { teFold, teLeft, teRight } from "../../util/fp";
 import { theme } from "../../util/theme";
-import { BackgroundCenter, Logo, Button } from "../../components/Auth";
-import { Header } from "react-native/Libraries/NewAppScreen";
-import { TextInput, TextInputIcon } from "../../components/TextInput";
-import { OperatorList } from "../../components/ChooseOperator";
 
 const validationSchema = Yup.object({
   username: Yup.string().required().min(1),
