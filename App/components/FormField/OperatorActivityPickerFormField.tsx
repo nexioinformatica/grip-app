@@ -20,14 +20,14 @@ import { noop } from "../../util/noop";
 import { TextInputPicker } from "../Dropdown";
 import { TextInputFail } from "../TextInput";
 
-interface OperatorActivityListFormValues {
+interface OperatorActivityPickerFormValues {
   operatorActivity?: OperatorActivity;
 }
 
 const operatorActivityItemAdapterFactory = new OperatorActivityItemAdapterFactory();
 
-export const OperatorActivityListFormField = <
-  T extends OperatorActivityListFormValues
+export const OperatorActivityPickerFormField = <
+  T extends OperatorActivityPickerFormValues
 >({
   operator,
   setFieldValue,
