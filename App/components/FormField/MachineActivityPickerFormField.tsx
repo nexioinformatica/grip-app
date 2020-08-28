@@ -20,14 +20,14 @@ import { noop } from "../../util/noop";
 import { TextInputPicker } from "../Dropdown";
 import { TextInputFail } from "../TextInput";
 
-interface MachineActivityFormValues {
+interface MachineActivityPickerFormValues {
   machineActivity?: MachineActivity;
 }
 
 const machineActivityItemAdapterFactory = new MachineActivityItemAdapterFactory();
 
-export const MachineActivityListFormSection = <
-  T extends MachineActivityFormValues
+export const MachineActivityPickerFormField = <
+  T extends MachineActivityPickerFormValues
 >({
   machine,
   setFieldValue,
@@ -89,26 +89,23 @@ export const MachineActivityListFormSection = <
   if (isLoading) return <ActivityIndicator />;
 
   return (
-    <>
-      <TextInputPicker
-        label="Attività Macchina*"
-        items={machineActivityItemAdapterFactory.fromCollection(
-          machineActivityList
-        )}
-        value={
-          values.machineActivity
-            ? machineActivityItemAdapterFactory.fromSingle(
-                values.machineActivity
-              ).title
-            : ""
-        }
-        onValueChange={(x: ListItem<MachineActivity>) => {
-          setFieldValue("machineActivity", x.value);
-        }}
-        onBlur={handleBlur("machineActivity")}
-        error={!!errors.machineActivity}
-        errorText={errors.machineActivity?.toString()}
-      />
-    </>
+    <TextInputPicker
+      label="Attività Macchina*"
+      items={machineActivityItemAdapterFactory.fromCollection(
+        machineActivityList
+      )}
+      value={
+        values.machineActivity
+          ? machineActivityItemAdapterFactory.fromSingle(values.machineActivity)
+              .title
+          : ""
+      }
+      onValueChange={(x: ListItem<MachineActivity>) => {
+        setFieldValue("machineActivity", x.value);
+      }}
+      onBlur={handleBlur("machineActivity")}
+      error={!!errors.machineActivity}
+      errorText={errors.machineActivity?.toString()}
+    />
   );
 };

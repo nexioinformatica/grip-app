@@ -18,13 +18,15 @@ import { toResultTask } from "../../util/fp";
 import { TextInputPicker } from "../Dropdown";
 import { TextInputFail } from "../TextInput";
 
-interface ActivityTypeFormValues {
+interface ActivityTypePickerFormValues {
   activityType?: ActivityType;
 }
 
 const activityTypeItemAdapterFactory = new ActivityTypeItemAdapterFactory();
 
-export const ActivityTypePickerFormField = <T extends ActivityTypeFormValues>({
+export const ActivityTypePickerFormField = <
+  T extends ActivityTypePickerFormValues
+>({
   setFieldValue,
   handleBlur,
   values,

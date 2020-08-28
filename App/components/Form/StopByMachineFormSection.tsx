@@ -3,7 +3,7 @@ import React from "react";
 
 import { MachineActivity } from "../../types/Activity";
 import { Machine } from "../../types/Machine";
-import { MachineActivityListFormSection } from "./MachineActivityListFormSection";
+import { MachineActivityPickerFormField } from "../FormField";
 import { MachineFormSection } from "./MachineFormSection";
 import { MachineListFormSection } from "./MachineListFormSection";
 
@@ -30,7 +30,7 @@ export const StopByMachineFormSection = <T extends StopByMachineFormValues>({
         <MachineListFormSection {...formikProps} />
       )}
       {values.machine && (
-        <MachineActivityListFormSection
+        <MachineActivityPickerFormField
           machine={values.machine}
           {...formikProps}
         />
