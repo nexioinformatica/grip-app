@@ -1,6 +1,8 @@
 import React from "react";
 import { FormikProps } from "formik";
 import { ScanFreshman } from "../ScanInput";
+import { Barcode } from "geom-api-ts-client";
+import { pipe } from "fp-ts/lib/pipeable";
 
 interface ExecutiveOrder {
   phase?: { IdFase: number };
@@ -27,7 +29,10 @@ export const ExecutiveOrderFormSection = <T extends ExecutiveOrder>({
         label="Fase"
         onChangeText={(x?: string) => handleChange("barcode.phase")(x ?? "")}
         onDecodeValue={(x) =>
-          setFieldValue("phase", { IdPhase: x[0].Id.IdFase as number })
+          setFieldValue(
+            "phase",
+            pipe(x, Barcode.Util.getDecode<Barcode.PhaseDecode>("F"))
+          )
         }
         value={values.barcode.phase}
         returnKeyType="next"
@@ -40,9 +45,10 @@ export const ExecutiveOrderFormSection = <T extends ExecutiveOrder>({
         label="Posizione"
         onChangeText={(x?: string) => handleChange("barcode.position")(x ?? "")}
         onDecodeValue={(x) =>
-          setFieldValue("position", {
-            IdPosizione: x[0].Id.IdPosizione as number,
-          })
+          setFieldValue(
+            "position",
+            pipe(x, Barcode.Util.getDecode<Barcode.PositionDecode>("P"))
+          )
         }
         value={values.barcode.position}
         returnKeyType="next"
@@ -55,7 +61,10 @@ export const ExecutiveOrderFormSection = <T extends ExecutiveOrder>({
         label="Testata"
         onChangeText={(x?: string) => handleChange("barcode.header")(x ?? "")}
         onDecodeValue={(x) =>
-          setFieldValue("header", { IdTestata: x[0].Id.IdTestata })
+          setFieldValue(
+            "header",
+            pipe(x, Barcode.Util.getDecode<Barcode.HeaderDecode>("T"))
+          )
         }
         value={values.barcode.header}
         returnKeyType="next"

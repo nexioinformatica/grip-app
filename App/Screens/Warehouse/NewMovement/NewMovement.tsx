@@ -140,7 +140,17 @@ const NewMovement = (props: Props): React.ReactElement => {
                           onChangeText={(x?: string) =>
                             handleChange("freshmanBarcode")(x ?? "")
                           }
-                          onDecodeValue={(x) => setFieldValue("freshman", x[0])}
+                          onDecodeValue={(x) =>
+                            setFieldValue(
+                              "freshman",
+                              pipe(
+                                x,
+                                Barcode.Util.getDecode<Barcode.FreshmanDecode>(
+                                  "R"
+                                )
+                              )
+                            )
+                          }
                           value={values.freshmanBarcode}
                           returnKeyType="next"
                           onBlur={handleBlur("freshman")}

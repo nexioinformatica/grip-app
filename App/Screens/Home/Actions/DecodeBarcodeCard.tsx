@@ -56,7 +56,7 @@ const DecodeBarcodeCard = () => {
                   <View style={styles.mt16} key={i}>
                     <Title>{barcode}</Title>
                     <Text>Tipo: {x.Tipo}</Text>
-                    <Text>Contenuto: {JSON.stringify(x.Id)}</Text>
+                    <Text>Contenuto: {JSON.stringify(x.Oggetto)}</Text>
                   </View>
                 );
               })}

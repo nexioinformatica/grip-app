@@ -17,7 +17,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import {
   ActivityTypeFormSection,
   ExecutiveOrderFormSection,
-  ScanFreshman,
   MachineFormSection,
 } from "../../../components";
 import {
@@ -26,7 +25,6 @@ import {
   isRequiringMachine,
 } from "../../../types/ActionType";
 import { ActivityType } from "../../../types/ActivityType";
-import { BarcodeDecode } from "../../../types/Barcode";
 import { ActivitiesStackParamList } from "../Stacks";
 
 type Props = {
@@ -112,13 +110,13 @@ const StartActivity = (props: Props) => {
                   {(formikProps) => {
                     const {
                       handleSubmit,
-                      handleChange,
-                      handleBlur,
-                      errors,
+                      // handleChange,
+                      // handleBlur,
+                      // errors,
                       isSubmitting,
                       isValid,
-                      setFieldValue,
-                      values,
+                      // setFieldValue,
+                      // values,
                       resetForm,
                     } = formikProps;
 

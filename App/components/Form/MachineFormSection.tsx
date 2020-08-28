@@ -1,5 +1,8 @@
-import React from "react";
 import { FormikProps } from "formik";
+import { pipe } from "fp-ts/lib/pipeable";
+import { Barcode } from "geom-api-ts-client";
+import React from "react";
+
 import { ScanFreshman } from "../ScanInput";
 
 type MachineFormValues = {
@@ -20,7 +23,12 @@ export const MachineFormSection = <T extends MachineFormValues>({
     <ScanFreshman
       label="Macchina*"
       onChangeText={(x?: string) => handleChange("barcode.machine")(x ?? "")}
-      onDecodeValue={(x) => setFieldValue("machine", x[0].Id.IdMacchina)}
+      onDecodeValue={(x) =>
+        setFieldValue(
+          "machine",
+          pipe(x, Barcode.Util.getDecode<Barcode.MachineDecode>("M"))
+        )
+      }
       value={values.barcode.machine}
       returnKeyType="next"
       onBlur={handleBlur("machine")}
