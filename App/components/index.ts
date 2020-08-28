@@ -1,7 +1,6 @@
 export * from "./Appbar";
 export * from "./BarcodeScanner";
 export * from "./ScanInput";
-export * from "./SimpleCard";
 export * from "./ChooseOperator";
 export * from "./Dropdown";
 export * from "./RadioButton";
