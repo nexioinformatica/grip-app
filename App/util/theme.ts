@@ -11,7 +11,7 @@ export const theme = {
 };
 
 export const lightTheme = {
-  ...DefaultTheme,
+  ...theme,
 };
 
 export const darkTheme = {

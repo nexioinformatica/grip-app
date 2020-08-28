@@ -24,6 +24,7 @@ interface Context {
    * Refresh the token. If force is true, the token is refreshed even if it is not expiring.
    */
   refresh: (force?: boolean) => void;
+  isReady: boolean;
 }
 
 export const AuthContext = createContext<Context>({
@@ -31,6 +32,7 @@ export const AuthContext = createContext<Context>({
   logout: noop,
   login: noop,
   refresh: noop,
+  isReady: false,
 });
 
 export function AuthContextProvider({
@@ -40,6 +42,7 @@ export function AuthContextProvider({
 }): React.ReactElement {
   const { setError } = useContext(ErrorContext);
   const [_user, setUser] = useState<undefined | User>(undefined);
+  const [isReady, setReady] = useState<boolean>(false);
 
   const getRefresh = (u: User): TE.TaskEither<Error, Token> =>
     pipe(
@@ -69,7 +72,9 @@ export function AuthContextProvider({
       } catch (err) {
         setUser(undefined);
       }
-    })();
+    })().then(() => {
+      setReady(true);
+    });
   }, []);
 
   useEffect(() => {
@@ -118,7 +123,13 @@ export function AuthContextProvider({
 
   return (
     <AuthContext.Provider
-      value={{ user: user, logout: logout, login: login, refresh: refresh }}
+      value={{
+        user: user,
+        logout: logout,
+        login: login,
+        refresh: refresh,
+        isReady: isReady,
+      }}
     >
       {children}
     </AuthContext.Provider>

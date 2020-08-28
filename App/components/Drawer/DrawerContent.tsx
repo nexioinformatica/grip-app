@@ -141,8 +141,6 @@ const DrawerContent = (props: Props): React.ReactElement => {
                   props.navigation.navigate("Activities");
                 }}
               />
-              <List.Item title="Operatori" disabled={true} />
-              <List.Item title="Macchine" disabled={true} />
             </List.Accordion>
           </List.AccordionGroup>
         </Drawer.Section>
