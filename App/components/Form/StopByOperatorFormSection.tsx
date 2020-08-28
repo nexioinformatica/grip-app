@@ -4,7 +4,7 @@ import React from "react";
 import { OperatorActivity } from "../../types/Activity";
 import { Operator } from "../../types/Operator";
 import { OperatorActivityListFormField } from "./OperatorActivityListFormField";
-import { OperatorFormField } from "./OperatorFormField";
+import { OperatorFormField } from "../FormField";
 
 interface StopByOperatorFormValues {
   operator?: Operator;

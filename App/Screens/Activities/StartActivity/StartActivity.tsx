@@ -16,9 +16,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import {
   ActivityTypeFormSection,
-  ExecutiveOrderFormSection,
   MachineFormSection,
 } from "../../../components/Form";
+import { ExecutiveOrderFormSection } from "../../../components/FormSection";
 import {
   ActionType,
   getActionTypeName,
