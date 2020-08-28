@@ -12,7 +12,7 @@ type MachineFormValues = {
   };
 };
 
-export const MachineFormSection = <T extends MachineFormValues>({
+export const MachineFormField = <T extends MachineFormValues>({
   handleChange,
   setFieldValue,
   values,

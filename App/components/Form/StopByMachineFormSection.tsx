@@ -3,9 +3,11 @@ import React from "react";
 
 import { MachineActivity } from "../../types/Activity";
 import { Machine } from "../../types/Machine";
-import { MachineActivityPickerFormField } from "../FormField";
-import { MachineFormSection } from "./MachineFormSection";
-import { MachinePickerFormField } from "../FormField";
+import {
+  MachineActivityPickerFormField,
+  MachineFormField,
+  MachinePickerFormField,
+} from "../FormField";
 
 interface StopByMachineFormValues {
   machine?: Machine;
@@ -25,7 +27,7 @@ export const StopByMachineFormSection = <T extends StopByMachineFormValues>({
   return (
     <>
       {isMachineReadFromBarcode ? (
-        <MachineFormSection {...formikProps} />
+        <MachineFormField {...formikProps} />
       ) : (
         <MachinePickerFormField {...formikProps} />
       )}

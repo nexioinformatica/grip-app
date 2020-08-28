@@ -14,8 +14,10 @@ import * as Yup from "yup";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { MachineFormSection } from "../../../components/Form";
-import { ActivityTypePickerFormField } from "../../../components/FormField";
+import {
+  ActivityTypePickerFormField,
+  MachineFormField,
+} from "../../../components/FormField";
 import { ExecutiveOrderFormSection } from "../../../components/FormSection";
 import {
   ActionType,
@@ -127,7 +129,7 @@ const StartActivity = (props: Props) => {
                           <ActivityTypePickerFormField {...formikProps} />
 
                           {isRequiringMachine(actionType) && (
-                            <MachineFormSection {...formikProps} />
+                            <MachineFormField {...formikProps} />
                           )}
                         </List.Accordion>
 

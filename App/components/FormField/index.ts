@@ -1,6 +1,7 @@
 export * from "./ActivityTypePickerFormField";
 export * from "./HeaderFormField";
 export * from "./MachineActivityPickerFormField";
+export * from "./MachineFormField";
 export * from "./MachinePickerFormField";
 export * from "./OperatorActivityPickerFormField";
 export * from "./OperatorFormField";
