@@ -14,10 +14,8 @@ import * as Yup from "yup";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import {
-  ActivityTypeFormSection,
-  MachineFormSection,
-} from "../../../components/Form";
+import { MachineFormSection } from "../../../components/Form";
+import { ActivityTypePickerFormField } from "../../../components/FormField";
 import { ExecutiveOrderFormSection } from "../../../components/FormSection";
 import {
   ActionType,
@@ -126,7 +124,7 @@ const StartActivity = (props: Props) => {
                           title="Dati Obbligatori"
                           expanded={true}
                         >
-                          <ActivityTypeFormSection {...formikProps} />
+                          <ActivityTypePickerFormField {...formikProps} />
 
                           {isRequiringMachine(actionType) && (
                             <MachineFormSection {...formikProps} />

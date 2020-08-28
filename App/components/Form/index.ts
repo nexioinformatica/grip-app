@@ -1,4 +1,3 @@
-export * from "./ActivityTypeFormSection";
 export * from "./MachineFormSection";
 export * from "./MachineListFormSection";
 export * from "./MachineActivityListFormSection";

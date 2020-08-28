@@ -24,7 +24,7 @@ interface ActivityTypeFormValues {
 
 const activityTypeItemAdapterFactory = new ActivityTypeItemAdapterFactory();
 
-export const ActivityTypeFormSection = <T extends ActivityTypeFormValues>({
+export const ActivityTypePickerFormField = <T extends ActivityTypeFormValues>({
   setFieldValue,
   handleBlur,
   values,
@@ -67,23 +67,20 @@ export const ActivityTypeFormSection = <T extends ActivityTypeFormValues>({
   if (isLoading) return <ActivityIndicator />;
 
   return (
-    <>
-      <TextInputPicker
-        label="Tipo Attività*"
-        items={activityTypeItemAdapterFactory.fromCollection(activityTypes)}
-        value={
-          values.activityType
-            ? activityTypeItemAdapterFactory.fromSingle(values.activityType)
-                .title
-            : ""
-        }
-        onValueChange={(x: ListItem<ActivityType>) => {
-          setFieldValue("activityType", x.value);
-        }}
-        onBlur={handleBlur("activityType")}
-        error={!!errors.activityType}
-        errorText={errors.activityType?.toString()}
-      />
-    </>
+    <TextInputPicker
+      label="Tipo Attività*"
+      items={activityTypeItemAdapterFactory.fromCollection(activityTypes)}
+      value={
+        values.activityType
+          ? activityTypeItemAdapterFactory.fromSingle(values.activityType).title
+          : ""
+      }
+      onValueChange={(x: ListItem<ActivityType>) => {
+        setFieldValue("activityType", x.value);
+      }}
+      onBlur={handleBlur("activityType")}
+      error={!!errors.activityType}
+      errorText={errors.activityType?.toString()}
+    />
   );
 };
