@@ -4,15 +4,17 @@ import { StartActivityCard, StopActivityCard } from "./Actions";
 
 const ActivitiesScreen = () => {
   return (
-    <View style={styles.container}>
+    <View>
       <ScrollView>
-        <View>
+        <View style={styles.container}>
           <View>
-            <StartActivityCard />
-          </View>
+            <View>
+              <StartActivityCard />
+            </View>
 
-          <View style={styles.action}>
-            <StopActivityCard />
+            <View style={styles.action}>
+              <StopActivityCard />
+            </View>
           </View>
         </View>
       </ScrollView>

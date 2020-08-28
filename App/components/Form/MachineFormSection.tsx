@@ -26,7 +26,7 @@ export const MachineFormSection = <T extends MachineFormValues>({
       onDecodeValue={(x) =>
         setFieldValue(
           "machine",
-          pipe(x, Barcode.Util.getDecode<Barcode.MachineDecode>("M"))
+          pipe(x, Barcode.Util.getDecode<Barcode.MachineDecode>("M"))?.Oggetto
         )
       }
       value={values.barcode.machine}

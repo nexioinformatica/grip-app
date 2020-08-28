@@ -9,6 +9,7 @@ export type Props = React.ComponentProps<typeof TextInput> & {
 
 export const TextInputFail = ({
   retry,
+  errorText = "Caricamento dei dati fallito",
   ...rest
 }: Props): React.ReactElement => {
   const handleRetry = retry ? retry : noop;
@@ -21,7 +22,7 @@ export const TextInputFail = ({
           {...rest}
           right={<TextInputIcon name="reload" />}
           error={true}
-          errorText="Caricamento dei dati fallito"
+          errorText={errorText}
         />
       </View>
     </TouchableOpacity>
