@@ -1,12 +1,13 @@
 import { pipe } from "fp-ts/lib/pipeable";
 import { Operator } from "geom-api-ts-client";
 import React, { useContext, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import {
   ActivityIndicator,
   Avatar,
   IconButton,
   List,
+  Surface,
 } from "react-native-paper";
 
 import useCancellablePromise from "@rodw95/use-cancelable-promise";
@@ -56,9 +57,9 @@ const OperatorList = ({ onSelectedValue }: Props): React.ReactElement => {
 
   if (isError)
     return (
-      <View style={styles.warningBox}>
+      <Surface style={styles.warningBox}>
         <IconButton icon="alert" />
-      </View>
+      </Surface>
     );
 
   if (isLoading) return <ActivityIndicator />;

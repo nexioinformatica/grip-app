@@ -1,34 +1,42 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { Card, Title, Paragraph, FAB } from "react-native-paper";
-import { theme } from "../../util/theme";
+import {
+  Card,
+  Title,
+  Paragraph,
+  FAB,
+  Surface,
+  Caption,
+} from "react-native-paper";
 import { DecodeBarcodeCard } from "./Actions/DecodeBarcodeCard";
+
+// const theme = useTheme();
 
 export function Home(): React.ReactElement {
   return (
-    <View style={styles.container}>
-      <View>
+    <Surface style={styles.container}>
+      <Surface>
         <Card>
           <Card.Content>
             <Title>Yeah!</Title>
             <Paragraph>Nessuna attività in programma.</Paragraph>
-            <Paragraph style={{ ...styles.label, ...styles.mt16 }}>
+            <Caption style={{ ...styles.mt16 }}>
               Inizia un lavoro dal menù a sinistra.
-            </Paragraph>
+            </Caption>
           </Card.Content>
         </Card>
-      </View>
-      <View style={styles.box}>
+      </Surface>
+      <Surface style={styles.box}>
         <DecodeBarcodeCard />
-      </View>
+      </Surface>
       <FAB style={styles.fab} icon="information-outline" disabled={true}></FAB>
-    </View>
+    </Surface>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, margin: 16 },
+  container: { flex: 1, padding: 16 },
   box: {
     marginTop: 16,
   },
@@ -40,8 +48,5 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-  },
-  label: {
-    color: theme.colors.secondary,
   },
 });

@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { Button, Card, Title, List } from "react-native-paper";
+import { StyleSheet, Text } from "react-native";
+import { Button, Card, List, Title } from "react-native-paper";
+
+import { useNavigation } from "@react-navigation/native";
+
 import { RadioButton } from "../../../../components/RadioButton/RadioButton";
+import { FlatSurface } from "../../../../components/Surface";
 import { getActionTypesData } from "../../../../data/ActionTypeResource";
 import { ActionType, ActionTypeKey } from "../../../../types/ActionType";
-import { useNavigation } from "@react-navigation/native";
 
 const StartActivityCard = (): React.ReactElement => {
   const navigation = useNavigation();
@@ -16,7 +19,7 @@ const StartActivityCard = (): React.ReactElement => {
       <Card.Content>
         <Title>Inizio Attività</Title>
 
-        <View style={styles.mt16}>
+        <FlatSurface style={styles.mt16}>
           <List.Section title="Impostazioni">
             <List.Accordion title="Tipo Attività">
               <RadioButton<ActionType>
@@ -26,8 +29,8 @@ const StartActivityCard = (): React.ReactElement => {
               />
             </List.Accordion>
           </List.Section>
-        </View>
-        <View style={styles.mt16}>
+        </FlatSurface>
+        <FlatSurface style={styles.mt16}>
           <Button
             mode="contained"
             onPress={() =>
@@ -38,7 +41,7 @@ const StartActivityCard = (): React.ReactElement => {
           >
             <Text>Nuova Attività</Text>
           </Button>
-        </View>
+        </FlatSurface>
       </Card.Content>
     </Card>
   );

@@ -1,19 +1,21 @@
 import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 
+import { FlatSurface } from "../../../components/Surface";
 import { NewMovementCard } from "./Actions";
+import { Surface } from "react-native-paper";
 
 const Movements = () => {
   return (
-    <View style={styles.container}>
+    <Surface style={styles.container}>
       <ScrollView>
-        <View>
-          <View>
+        <Surface style={styles.content}>
+          <Surface>
             <NewMovementCard />
-          </View>
-        </View>
+          </Surface>
+        </Surface>
       </ScrollView>
-    </View>
+    </Surface>
   );
 };
 
@@ -22,5 +24,6 @@ const MovementsMemo = React.memo(Movements);
 export { MovementsMemo as Movements };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, margin: 16 },
+  container: { flex: 1 },
+  content: { margin: 16 },
 });

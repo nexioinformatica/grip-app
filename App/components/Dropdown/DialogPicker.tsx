@@ -1,7 +1,7 @@
 import * as A from "fp-ts/lib/Array";
 import { pipe } from "fp-ts/lib/pipeable";
 import React, { useMemo, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import {
   Button,
   Caption,
@@ -14,6 +14,7 @@ import {
 } from "react-native-paper";
 
 import { ListItem } from "../../types/Item";
+import { FlatSurface } from "../Surface";
 
 type Props<T> = {
   items: ListItem<T>[];
@@ -49,45 +50,47 @@ export const DialogPicker = <T,>({
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={hide}>
-        <Dialog.Title>Scegli</Dialog.Title>
-        <Dialog.Content>
-          <View>
-            <Searchbar
-              placeholder="Cerca"
-              onChangeText={onChangeSearch}
-              value={searchQuery}
-            />
-          </View>
-          <View style={styles.list}>
-            <Surface style={styles.surface}>
-              <ScrollView>
-                {collection.map((x, i) => {
-                  const onItemSelected = () => handleItemSelected(x);
-                  return (
-                    <View key={i}>
-                      <List.Item
-                        title={x.title}
-                        description={x.description}
-                        left={x.left}
-                        onPress={onItemSelected}
-                      />
-                      <Divider />
-                    </View>
-                  );
-                })}
-              </ScrollView>
-              <View style={styles.details}>
-                <Caption>
-                  {collection.length}{" "}
-                  {collection.length === 1 ? "elemento" : "elementi"}
-                </Caption>
-              </View>
-            </Surface>
-          </View>
-        </Dialog.Content>
-        <Dialog.Actions>
-          <Button onPress={hide}>Chiudi</Button>
-        </Dialog.Actions>
+        <FlatSurface>
+          <Dialog.Title>Scegli</Dialog.Title>
+          <Dialog.Content>
+            <FlatSurface>
+              <Searchbar
+                placeholder="Cerca"
+                onChangeText={onChangeSearch}
+                value={searchQuery}
+              />
+            </FlatSurface>
+            <FlatSurface style={styles.list}>
+              <Surface style={styles.surface}>
+                <ScrollView>
+                  {collection.map((x, i) => {
+                    const onItemSelected = () => handleItemSelected(x);
+                    return (
+                      <FlatSurface key={i}>
+                        <List.Item
+                          title={x.title}
+                          description={x.description}
+                          left={x.left}
+                          onPress={onItemSelected}
+                        />
+                        <Divider />
+                      </FlatSurface>
+                    );
+                  })}
+                </ScrollView>
+                <FlatSurface style={styles.details}>
+                  <Caption>
+                    {collection.length}{" "}
+                    {collection.length === 1 ? "elemento" : "elementi"}
+                  </Caption>
+                </FlatSurface>
+              </Surface>
+            </FlatSurface>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hide}>Chiudi</Button>
+          </Dialog.Actions>
+        </FlatSurface>
       </Dialog>
     </Portal>
   );
@@ -101,7 +104,7 @@ const styles = StyleSheet.create({
   },
   details: {
     alignItems: "flex-end",
-    margin: 16,
+    padding: 16,
   },
   list: { height: 200, marginTop: 24 },
 });

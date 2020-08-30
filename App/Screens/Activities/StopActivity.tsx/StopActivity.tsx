@@ -3,13 +3,14 @@ import { pipe } from "fp-ts/lib/pipeable";
 import * as TE from "fp-ts/lib/TaskEither";
 import { Activities } from "geom-api-ts-client";
 import React, { useContext, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import {
   Button,
   Caption,
   Card,
   List,
-  Snackbar,
+  Surface,
+  Text,
   Title,
 } from "react-native-paper";
 import * as Yup from "yup";
@@ -21,6 +22,8 @@ import {
   StopActivityByMachineFormSection,
   StopActivityByOperatorFormSection,
 } from "../../../components/FormSection";
+import { Snackbar } from "../../../components/Snackbar";
+import { FlatSurface } from "../../../components/Surface";
 import { ApiContext } from "../../../stores";
 import {
   ActionType,
@@ -136,9 +139,9 @@ export const StopActivity = (props: Props): React.ReactElement => {
   };
 
   return (
-    <View style={{ height: "100%" }}>
+    <Surface style={{ height: "100%" }}>
       <ScrollView>
-        <View style={styles.container}>
+        <Surface style={styles.container}>
           <Card>
             <Card.Content>
               <Title>Stop Attività</Title>
@@ -149,7 +152,11 @@ export const StopActivity = (props: Props): React.ReactElement => {
                 {isMachineReadFromBarcode ? "Barcode" : "Lista"}
               </Caption>
 
-              <View style={styles.mt16}>
+              <FlatSurface
+                style={{
+                  ...styles.mt16,
+                }}
+              >
                 <Formik<FormValues>
                   initialValues={initialValues}
                   enableReinitialize={true}
@@ -205,10 +212,10 @@ export const StopActivity = (props: Props): React.ReactElement => {
                     );
                   }}
                 </Formik>
-              </View>
+              </FlatSurface>
             </Card.Content>
           </Card>
-        </View>
+        </Surface>
       </ScrollView>
       <Snackbar
         visible={isError}
@@ -228,7 +235,7 @@ export const StopActivity = (props: Props): React.ReactElement => {
       >
         <Text>Operazione effettuata con successo</Text>
       </Snackbar>
-    </View>
+    </Surface>
   );
 };
 
@@ -236,4 +243,5 @@ const styles = StyleSheet.create({
   container: { flex: 1, margin: 16 },
   divider: { width: "100%", marginTop: 16, height: 2 },
   mt16: { marginTop: 16 },
+  formContainer: { elevation: 0 },
 });

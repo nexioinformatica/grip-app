@@ -3,21 +3,20 @@ import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
 import { Barcode } from "geom-api-ts-client";
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { TextInput } from "react-native-paper";
+import { StyleSheet } from "react-native";
+import { Surface, useTheme, Text } from "react-native-paper";
 
 import { useNavigation } from "@react-navigation/native";
 
 import { ApiContext } from "../../stores/api";
 import { BarcodeEvent } from "../../types";
 import { makeSettings } from "../../util/api";
-import { theme } from "../../util/theme";
+import { TextInput, TextInputIcon } from "../TextInput";
 
 type Props = React.ComponentProps<typeof TextInput> & {
   value?: string | undefined;
   onChangeText: (value: string | undefined) => void;
   onDecodeValue: (decodedValue: Barcode.BarcodeDecode) => void;
-  errorText?: string;
 };
 
 /**
@@ -36,6 +35,7 @@ export const ScanFreshman = ({
   ...rest
 }: Props): React.ReactElement => {
   const navigation = useNavigation();
+  const theme = useTheme();
   const { callPublic } = useContext(ApiContext);
 
   const [isDecoding, setDecoding] = useState(false);
@@ -80,7 +80,7 @@ export const ScanFreshman = ({
   useEffect(() => {
     if (isDecodingFailed)
       setStatusIcon(
-        <TextInput.Icon
+        <TextInputIcon
           name="alert-circle"
           onPress={() => {
             // we need to clean previous value in order to redo the barcode decode
@@ -91,41 +91,22 @@ export const ScanFreshman = ({
         />
       );
 
-    if (isDecoding) setStatusIcon(<TextInput.Icon name="magnify" />);
+    if (isDecoding) setStatusIcon(<TextInputIcon name="magnify" />);
 
     if (!isDecoding && !isDecodingFailed)
-      setStatusIcon(<TextInput.Icon name="camera" onPress={onIconPress} />);
+      setStatusIcon(<TextInputIcon name="camera" onPress={onIconPress} />);
   }, [isDecoding, isDecodingFailed]);
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        right={statusIcon}
-        style={styles.input}
-        selectionColor={theme.colors.primary}
-        underlineColor="transparent"
-        mode="outlined"
-        {...rest}
-      />
-      {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
-    </View>
+    <TextInput
+      value={value}
+      onChangeText={onChangeText}
+      right={statusIcon}
+      selectionColor={theme.colors.primary}
+      underlineColor="transparent"
+      mode="outlined"
+      errorText={errorText}
+      {...rest}
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    marginVertical: 12,
-  },
-  input: {
-    backgroundColor: theme.colors.surface,
-  },
-  error: {
-    fontSize: 14,
-    color: theme.colors.error,
-    paddingHorizontal: 4,
-    paddingTop: 4,
-  },
-});

@@ -1,24 +1,26 @@
 import React from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
+import { Surface } from "react-native-paper";
+
 import { StartActivityCard, StopActivityCard } from "./Actions";
 
 const ActivitiesScreen = () => {
   return (
-    <View>
+    <Surface style={styles.container}>
       <ScrollView>
-        <View style={styles.container}>
-          <View>
-            <View>
+        <Surface style={styles.content}>
+          <Surface>
+            <Surface>
               <StartActivityCard />
-            </View>
+            </Surface>
 
-            <View style={styles.action}>
+            <Surface style={styles.action}>
               <StopActivityCard />
-            </View>
-          </View>
-        </View>
+            </Surface>
+          </Surface>
+        </Surface>
       </ScrollView>
-    </View>
+    </Surface>
   );
 };
 
@@ -27,7 +29,8 @@ const ActivitiesScreenMemo = React.memo(ActivitiesScreen);
 export { ActivitiesScreenMemo as Activities };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, margin: 16 },
+  container: { flex: 1 },
+  content: { padding: 16 },
   divider: { width: "100%", marginTop: 16, height: 2 },
   mt16: { marginTop: 16 },
   action: { marginTop: 24 },

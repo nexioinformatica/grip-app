@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Button, Card, List, Switch, Title } from "react-native-paper";
+import { StyleSheet, Text } from "react-native";
+import { Button, Card, List, Surface, Switch, Title } from "react-native-paper";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -11,6 +11,7 @@ import {
   ActionTypeKey,
   isRequiringMachine,
 } from "../../../../types/ActionType";
+import { FlatSurface } from "../../../../components/Surface";
 
 const StopActivityCard = (): React.ReactElement => {
   const navigation = useNavigation();
@@ -23,7 +24,7 @@ const StopActivityCard = (): React.ReactElement => {
       <Card.Content>
         <Title>Stop Attività</Title>
 
-        <View style={styles.mt16}>
+        <FlatSurface style={styles.mt16}>
           <List.Section title="Impostazioni">
             <List.Accordion title="Tipo Attività">
               <RadioButton<ActionType>
@@ -47,8 +48,8 @@ const StopActivityCard = (): React.ReactElement => {
               </List.Accordion>
             )}
           </List.Section>
-        </View>
-        <View style={styles.mt16}>
+        </FlatSurface>
+        <FlatSurface style={styles.mt16}>
           <Button
             mode="contained"
             onPress={() =>
@@ -60,7 +61,7 @@ const StopActivityCard = (): React.ReactElement => {
           >
             <Text>Stop Attività</Text>
           </Button>
-        </View>
+        </FlatSurface>
       </Card.Content>
     </Card>
   );

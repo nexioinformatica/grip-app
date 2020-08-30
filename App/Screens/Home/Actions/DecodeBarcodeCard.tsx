@@ -1,4 +1,3 @@
-import { View } from "native-base";
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import {
@@ -9,6 +8,7 @@ import {
   Portal,
   Text,
   Title,
+  Surface,
 } from "react-native-paper";
 
 import { ScanFreshman } from "../../../components/ScanInput";
@@ -51,17 +51,17 @@ const DecodeBarcodeCard = () => {
         <Dialog visible={isVisible} onDismiss={hideDialog}>
           <Dialog.Title>Barcode Decode</Dialog.Title>
           <Dialog.Content>
-            <View style={{ height: 200, marginTop: 24 }}>
+            <Surface style={{ height: 200, marginTop: 24 }}>
               {barcodeData.map((x, i) => {
                 return (
-                  <View style={styles.mt16} key={i}>
+                  <Surface style={styles.mt16} key={i}>
                     <Title>{barcode}</Title>
                     <Text>Tipo: {x.Tipo}</Text>
                     <Text>Contenuto: {JSON.stringify(x.Oggetto)}</Text>
-                  </View>
+                  </Surface>
                 );
               })}
-            </View>
+            </Surface>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={hideDialog}>Chiudi</Button>

@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import {
   Avatar,
   Caption,
   Drawer,
   List,
   Paragraph,
+  Surface,
   Switch,
   Text,
   Title,
@@ -78,35 +79,35 @@ const DrawerContent = (props: Props): React.ReactElement => {
   );
 
   return (
-    <DrawerContentScrollView {...props}>
-      <View style={styles.drawerContent}>
-        <View style={styles.userInfoSection}>
+    <Surface style={styles.drawerContent}>
+      <DrawerContentScrollView {...props}>
+        <Surface style={styles.userInfoSection}>
           {avatar}
 
-          <View
+          <Surface
             style={{
               marginTop: 20,
             }}
           >
             {userName}
-          </View>
+          </Surface>
 
           <Caption style={styles.caption}>@{user.username}</Caption>
-          <View style={styles.row}>
-            <View style={styles.section}>
+          <Surface style={styles.row}>
+            <Surface style={styles.section}>
               <Paragraph style={[styles.paragraph, styles.caption]}>
                 202
               </Paragraph>
               <Caption style={styles.caption}>Following</Caption>
-            </View>
-            <View style={styles.section}>
+            </Surface>
+            <Surface style={styles.section}>
               <Paragraph style={[styles.paragraph, styles.caption]}>
                 159
               </Paragraph>
               <Caption style={styles.caption}>Followers</Caption>
-            </View>
-          </View>
-        </View>
+            </Surface>
+          </Surface>
+        </Surface>
         <Drawer.Section style={styles.drawerSection} focusable={false}>
           <List.Item
             title="Dashboard"
@@ -158,17 +159,17 @@ const DrawerContent = (props: Props): React.ReactElement => {
           />
         </Drawer.Section>
         <Drawer.Section title="Prefrenze" focusable={false}>
-          <TouchableRipple onPress={theme.toggle} disabled={true}>
-            <View style={styles.preference}>
+          <TouchableRipple onPress={theme.toggle}>
+            <Surface style={styles.preference}>
               <Text>Dark Theme</Text>
-              <View pointerEvents="none">
-                <Switch value={theme.current === "dark"} disabled={true} />
-              </View>
-            </View>
+              <Surface pointerEvents="none">
+                <Switch value={theme.current === "dark"} />
+              </Surface>
+            </Surface>
           </TouchableRipple>
         </Drawer.Section>
-      </View>
-    </DrawerContentScrollView>
+      </DrawerContentScrollView>
+    </Surface>
   );
 };
 

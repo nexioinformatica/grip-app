@@ -1,23 +1,30 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { TextInput as Input } from "react-native-paper";
-import { theme } from "../../util/theme";
+import { StyleSheet } from "react-native";
+import { TextInput as Input, Text, useTheme } from "react-native-paper";
+import { FlatSurface } from "../Surface";
 
 type Props = React.ComponentProps<typeof Input> & { errorText?: string };
 export type TextInputProps = Props;
 
-const TextInput = ({ errorText, ...props }: Props) => (
-  <View style={styles.container}>
-    <Input
-      style={styles.input}
-      selectionColor={theme.colors.primary}
-      underlineColor="transparent"
-      mode="outlined"
-      {...props}
-    />
-    {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
-  </View>
-);
+const TextInput = ({ errorText, ...props }: Props) => {
+  const theme = useTheme();
+  return (
+    <FlatSurface style={{ ...styles.container }}>
+      <Input
+        selectionColor="#fff"
+        underlineColor="transparent"
+        mode="outlined"
+        theme={{ colors: { background: theme.colors.surface } }}
+        {...props}
+      />
+      {errorText ? (
+        <Text style={{ ...styles.error, color: theme.colors.error }}>
+          {errorText}
+        </Text>
+      ) : null}
+    </FlatSurface>
+  );
+};
 
 const TextInputMemo = React.memo(TextInput);
 
@@ -30,12 +37,8 @@ const styles = StyleSheet.create({
     width: "100%",
     marginVertical: 12,
   },
-  input: {
-    backgroundColor: theme.colors.surface,
-  },
   error: {
     fontSize: 14,
-    color: theme.colors.error,
     paddingHorizontal: 4,
     paddingTop: 4,
   },

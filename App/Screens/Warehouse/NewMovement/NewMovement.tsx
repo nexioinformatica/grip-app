@@ -2,8 +2,16 @@ import { Formik } from "formik";
 import { pipe } from "fp-ts/lib/pipeable";
 import { Barcode, Warehouse } from "geom-api-ts-client";
 import React, { useContext, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Button, Caption, Card, Snackbar, Title } from "react-native-paper";
+import { ScrollView, StyleSheet } from "react-native";
+import {
+  Button,
+  Caption,
+  Card,
+  Surface,
+  Text,
+  Title,
+  useTheme,
+} from "react-native-paper";
 import * as Yup from "yup";
 
 import { RouteProp } from "@react-navigation/native";
@@ -12,6 +20,8 @@ import useCancellablePromise from "@rodw95/use-cancelable-promise";
 
 import { TextInputPicker } from "../../../components/Dropdown";
 import { ScanFreshman } from "../../../components/ScanInput";
+import { Snackbar } from "../../../components/Snackbar";
+import { FlatSurface } from "../../../components/Surface";
 import { ApiContext } from "../../../stores";
 import {
   Reason,
@@ -63,6 +73,7 @@ const NewMovement = (props: Props): React.ReactElement => {
     },
   } = props;
   const makeCancelable = useCancellablePromise();
+  const theme = useTheme();
   const { call } = useContext(ApiContext);
   const [isError, setError] = useState(false);
   const [reasons, setReasons] = useState<Reasons>([]);
@@ -92,15 +103,15 @@ const NewMovement = (props: Props): React.ReactElement => {
   };
 
   return (
-    <View style={{ height: "100%" }}>
+    <Surface style={{ height: "100%" }}>
       <ScrollView>
-        <View style={styles.container}>
+        <FlatSurface style={styles.container}>
           <Card>
             <Card.Content>
               <Title>Nuovo Movimento</Title>
               <Caption>{getReasonTypeName(reasonType)}</Caption>
 
-              <View style={styles.mt16}>
+              <FlatSurface style={styles.mt16}>
                 <Formik<FormValues>
                   initialValues={initialValues}
                   enableReinitialize={true}
@@ -181,10 +192,10 @@ const NewMovement = (props: Props): React.ReactElement => {
                     );
                   }}
                 </Formik>
-              </View>
+              </FlatSurface>
             </Card.Content>
           </Card>
-        </View>
+        </FlatSurface>
       </ScrollView>
       <Snackbar
         visible={isError}
@@ -192,10 +203,11 @@ const NewMovement = (props: Props): React.ReactElement => {
           setError(false);
         }}
         duration={3000}
+        style={{ backgroundColor: theme.colors.surface }}
       >
         <Text>Coff coff, qualcosa è andato storto</Text>
       </Snackbar>
-    </View>
+    </Surface>
   );
 };
 

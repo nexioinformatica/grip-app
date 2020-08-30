@@ -1,12 +1,13 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import {
   Button,
   Caption,
   Card,
   List,
-  Snackbar,
+  Surface,
+  Text,
   Title,
 } from "react-native-paper";
 import * as Yup from "yup";
@@ -19,6 +20,8 @@ import {
   MachineFormField,
 } from "../../../components/FormField";
 import { ExecutiveOrderFormSection } from "../../../components/FormSection";
+import { Snackbar } from "../../../components/Snackbar";
+import { FlatSurface } from "../../../components/Surface";
 import {
   ActionType,
   getActionTypeName,
@@ -91,16 +94,16 @@ const StartActivity = (props: Props) => {
   };
 
   return (
-    <View style={{ height: "100%" }}>
+    <Surface style={{ height: "100%" }}>
       <ScrollView>
-        <View style={styles.container}>
+        <Surface style={styles.container}>
           <Card>
             <Card.Content>
               <Title>Inizia Attività</Title>
 
               <Caption>{getActionTypeName(actionType)}</Caption>
 
-              <View style={styles.mt16}>
+              <FlatSurface style={{ ...styles.mt16 }}>
                 <Formik<FormValues>
                   initialValues={initialValues}
                   enableReinitialize={true}
@@ -158,10 +161,10 @@ const StartActivity = (props: Props) => {
                     );
                   }}
                 </Formik>
-              </View>
+              </FlatSurface>
             </Card.Content>
           </Card>
-        </View>
+        </Surface>
       </ScrollView>
       <Snackbar
         visible={isError}
@@ -172,7 +175,7 @@ const StartActivity = (props: Props) => {
       >
         <Text>Coff coff, qualcosa è andato storto</Text>
       </Snackbar>
-    </View>
+    </Surface>
   );
 };
 
@@ -184,4 +187,5 @@ const styles = StyleSheet.create({
   container: { flex: 1, margin: 16 },
   divider: { width: "100%", marginTop: 16, height: 2 },
   mt16: { marginTop: 16 },
+  formContainer: { elevation: 0 },
 });

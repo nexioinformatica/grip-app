@@ -1,7 +1,7 @@
 import { pipe } from "fp-ts/lib/pipeable";
 import { Operator } from "geom-api-ts-client";
 import React, { useContext, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import {
   ActivityIndicator,
   Avatar,
@@ -11,7 +11,9 @@ import {
   Divider,
   List,
   Paragraph,
+  Text,
   Title,
+  Surface,
 } from "react-native-paper";
 
 import useCancellablePromise from "@rodw95/use-cancelable-promise";
@@ -20,6 +22,7 @@ import { ApiContext, AuthContext } from "../../stores";
 import { getExpiringIn, getInitials } from "../../types/User";
 import { makeSettings } from "../../util/api";
 import { toResultTask } from "../../util/fp";
+import { FlatSurface } from "../../components/Surface";
 
 export const Profile = (): React.ReactElement => {
   const { user, logout, refresh } = useContext(AuthContext);
@@ -61,120 +64,132 @@ export const Profile = (): React.ReactElement => {
 
   if (isError) {
     return (
-      <View>
-        <Text>Sorry, there was a problem</Text>
-        <Button onPress={updateData}>
-          <Text>Retry</Text>
-        </Button>
-      </View>
+      <Surface style={styles.container}>
+        <ScrollView>
+          <Surface style={styles.content}>
+            <Text>Sorry, there was a problem</Text>
+            <Button onPress={updateData}>
+              <Text>Retry</Text>
+            </Button>
+          </Surface>
+        </ScrollView>
+      </Surface>
     );
   }
 
   if (isLoading)
     return (
-      <View style={{ flex: 1, margin: 16 }}>
-        <ActivityIndicator />
-      </View>
+      <Surface style={styles.container}>
+        <ScrollView>
+          <Surface style={styles.content}>
+            <ActivityIndicator />
+          </Surface>
+        </ScrollView>
+      </Surface>
     );
 
   return (
-    <ScrollView>
-      <View style={{ flex: 1, margin: 16 }}>
-        <Card>
-          <Card.Content>
-            <View style={{ alignItems: "center" }}>
-              <Avatar.Text
-                size={96}
-                label={getInitials(operator?.Nome ?? "")}
-              />
-              <Title style={styles.title}>{operator?.Nome}</Title>
-              <Paragraph>@{operator?.UserName}</Paragraph>
+    <Surface style={styles.container}>
+      <ScrollView>
+        <Surface style={styles.content}>
+          <Card>
+            <Card.Content>
+              <FlatSurface style={{ alignItems: "center" }}>
+                <Avatar.Text
+                  size={96}
+                  label={getInitials(operator?.Nome ?? "")}
+                />
+                <Title style={styles.title}>{operator?.Nome}</Title>
+                <Paragraph>@{operator?.UserName}</Paragraph>
 
-              <Divider style={styles.divider} />
+                <Divider style={styles.divider} />
 
-              <View style={{ width: "100%" }}>
-                <List.Section title="Informazioni Aggiuntive">
-                  <List.Item
-                    title="Abilitato API"
-                    right={(props) => (
-                      <Checkbox
-                        {...props}
-                        status={
-                          operator?.AbilitatoAPI ? "checked" : "unchecked"
-                        }
-                      />
-                    )}
-                  />
-                  <List.Item
-                    title="Abilitato Attività Reparto"
-                    right={(props) => (
-                      <Checkbox
-                        {...props}
-                        status={
-                          operator?.AbilitatoAttivitaReparto
-                            ? "checked"
-                            : "unchecked"
-                        }
-                      />
-                    )}
-                  />
-                </List.Section>
-              </View>
+                <FlatSurface style={{ width: "100%" }}>
+                  <List.Section title="Informazioni Aggiuntive">
+                    <List.Item
+                      title="Abilitato API"
+                      right={(props) => (
+                        <Checkbox
+                          {...props}
+                          status={
+                            operator?.AbilitatoAPI ? "checked" : "unchecked"
+                          }
+                        />
+                      )}
+                    />
+                    <List.Item
+                      title="Abilitato Attività Reparto"
+                      right={(props) => (
+                        <Checkbox
+                          {...props}
+                          status={
+                            operator?.AbilitatoAttivitaReparto
+                              ? "checked"
+                              : "unchecked"
+                          }
+                        />
+                      )}
+                    />
+                  </List.Section>
+                </FlatSurface>
 
-              <Divider style={styles.divider} />
+                <Divider style={styles.divider} />
 
-              <View style={{ width: "100%" }}>
-                <List.Section title="Informazioni Accesso">
-                  <List.Item
-                    title="Access Token"
-                    right={(props) => (
-                      <View style={{ alignSelf: "center" }} {...props}>
-                        <Text>
-                          {access_token?.substr(access_token.length - 6)}
-                        </Text>
-                      </View>
-                    )}
-                  />
-                  <List.Item
-                    title="Refresh Token"
-                    right={(props) => (
-                      <View style={{ alignSelf: "center" }} {...props}>
-                        <Text>
-                          {refresh_token?.substr(refresh_token.length - 6)}
-                        </Text>
-                      </View>
-                    )}
-                  />
-                  <List.Item
-                    title="Scadenza"
-                    right={(props) => (
-                      <View style={{ alignSelf: "center" }} {...props}>
-                        <Text>{getExpiringIn(user)}</Text>
-                      </View>
-                    )}
-                  />
-                </List.Section>
-                <Button onPress={() => refresh(true)}>
-                  <Text>Aggiorna Token</Text>
-                </Button>
-              </View>
+                <FlatSurface style={{ width: "100%" }}>
+                  <List.Section title="Informazioni Accesso">
+                    <List.Item
+                      title="Access Token"
+                      right={(props) => (
+                        <FlatSurface style={{ alignSelf: "center" }} {...props}>
+                          <Text>
+                            {access_token?.substr(access_token.length - 6)}
+                          </Text>
+                        </FlatSurface>
+                      )}
+                    />
+                    <List.Item
+                      title="Refresh Token"
+                      right={(props) => (
+                        <FlatSurface style={{ alignSelf: "center" }} {...props}>
+                          <Text>
+                            {refresh_token?.substr(refresh_token.length - 6)}
+                          </Text>
+                        </FlatSurface>
+                      )}
+                    />
+                    <List.Item
+                      title="Scadenza"
+                      right={(props) => (
+                        <FlatSurface style={{ alignSelf: "center" }} {...props}>
+                          <Text>{getExpiringIn(user)}</Text>
+                        </FlatSurface>
+                      )}
+                    />
+                  </List.Section>
+                  <Button onPress={() => refresh(true)}>
+                    <Text>Aggiorna Token</Text>
+                  </Button>
+                </FlatSurface>
 
-              <Divider style={styles.divider} />
+                <Divider style={styles.divider} />
 
-              <View style={{ width: "100%", marginTop: 16 }}>
-                <Button mode="contained" onPress={() => logout()}>
-                  <Text>Logout</Text>
-                </Button>
-              </View>
-            </View>
-          </Card.Content>
-        </Card>
-      </View>
-    </ScrollView>
+                <FlatSurface style={{ width: "100%", marginTop: 16 }}>
+                  <Button mode="contained" onPress={() => logout()}>
+                    <Text>Logout</Text>
+                  </Button>
+                </FlatSurface>
+              </FlatSurface>
+            </Card.Content>
+          </Card>
+        </Surface>
+      </ScrollView>
+    </Surface>
   );
 };
 
 const styles = StyleSheet.create({
+  container: { flex: 1 },
+  content: { padding: 16 },
   title: {
     fontWeight: "bold",
     fontSize: 28,

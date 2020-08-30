@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { Button, Card, List, Title } from "react-native-paper";
 
 import { useNavigation } from "@react-navigation/native";
@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { RadioButton } from "../../../../components/RadioButton/RadioButton";
 import { getReasonTypesData } from "../../../../data/ReasonTypeResource";
 import { ReasonType, ReasonTypeKey } from "../../../../types/ReasonType";
+import { FlatSurface } from "../../../../components/Surface";
 
 const NewMovementCard = (): React.ReactElement => {
   const navigation = useNavigation();
@@ -19,7 +20,7 @@ const NewMovementCard = (): React.ReactElement => {
       <Card.Content>
         <Title>Nuovo Movimento</Title>
 
-        <View style={styles.mt16}>
+        <FlatSurface style={styles.mt16}>
           <List.Section title="Impostazioni">
             <List.Accordion title="Tipo Causale">
               <RadioButton<ReasonType>
@@ -29,9 +30,9 @@ const NewMovementCard = (): React.ReactElement => {
               />
             </List.Accordion>
           </List.Section>
-        </View>
+        </FlatSurface>
 
-        <View style={styles.mt16}>
+        <FlatSurface style={styles.mt16}>
           <Button
             mode="contained"
             onPress={() =>
@@ -42,7 +43,7 @@ const NewMovementCard = (): React.ReactElement => {
           >
             <Text>Nuovo Movimento</Text>
           </Button>
-        </View>
+        </FlatSurface>
       </Card.Content>
     </Card>
   );

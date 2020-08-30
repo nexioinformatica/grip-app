@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { ListItem } from "../../types/Item";
+import { FlatSurface } from "../Surface";
 import { TextInput, TextInputProps } from "../TextInput";
 import { DialogPicker } from "./DialogPicker";
 
@@ -34,9 +34,9 @@ export const TextInputPicker = <T,>({
   return (
     <>
       <TouchableOpacity onPress={showDialog}>
-        <View pointerEvents="none">
+        <FlatSurface pointerEvents="none">
           <TextInput value={value} editable={false} {...rest} />
-        </View>
+        </FlatSurface>
       </TouchableOpacity>
 
       <DialogPicker<T>

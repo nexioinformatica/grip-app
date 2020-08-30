@@ -2,16 +2,11 @@ import { Formik } from "formik";
 import { pipe } from "fp-ts/lib/pipeable";
 import { Authentication } from "geom-api-ts-client";
 import React, { useContext, useState } from "react";
-import {
-  Linking,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Dialog, Portal, Snackbar } from "react-native-paper";
+import { Linking, StyleSheet, TouchableOpacity } from "react-native";
+import { Caption, Dialog, Portal, Surface, Text } from "react-native-paper";
 import * as Yup from "yup";
 
+import { Snackbar } from "../../components/Snackbar";
 import { BackgroundCenter, Button, Header, Logo } from "../../components/Auth";
 import { OperatorList } from "../../components/ChooseOperator";
 import { TextInput, TextInputIcon } from "../../components/TextInput";
@@ -127,24 +122,26 @@ export const Login = (): React.ReactElement => {
 
               <Portal>
                 <Dialog visible={isVisible} onDismiss={hideDialog}>
-                  <Dialog.Title>Operatore</Dialog.Title>
-                  <Dialog.Content>
-                    <Text>
-                      Scegli un&apos;operatore dalla lista, verrà utilizzato il
-                      nome utente per il login.
-                    </Text>
-                    <View style={{ height: 200, marginTop: 24 }}>
-                      <OperatorList
-                        onSelectedValue={(operator) => {
-                          hideDialog();
-                          handleChange("username")(operator.UserName ?? "");
-                        }}
-                      />
-                    </View>
-                  </Dialog.Content>
-                  <Dialog.Actions>
-                    <Button onPress={hideDialog}>Chiudi</Button>
-                  </Dialog.Actions>
+                  <Surface style={{ elevation: 0 }}>
+                    <Dialog.Title>Operatore</Dialog.Title>
+                    <Dialog.Content>
+                      <Text>
+                        Scegli un&apos;operatore dalla lista, verrà utilizzato
+                        il nome utente per il login.
+                      </Text>
+                      <Surface style={{ height: 200, marginTop: 24 }}>
+                        <OperatorList
+                          onSelectedValue={(operator) => {
+                            hideDialog();
+                            handleChange("username")(operator.UserName ?? "");
+                          }}
+                        />
+                      </Surface>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                      <Button onPress={hideDialog}>Chiudi</Button>
+                    </Dialog.Actions>
+                  </Surface>
                 </Dialog>
               </Portal>
             </>
@@ -152,17 +149,17 @@ export const Login = (): React.ReactElement => {
         }}
       </Formik>
 
-      <View style={styles.row}>
-        <Text style={styles.label}>Non trovi il tuo account? Contatta il </Text>
+      <Surface style={styles.row}>
+        <Caption>Non trovi il tuo account? Contatta il </Caption>
         <TouchableOpacity
           onPress={() => {
             Linking.openURL("https://grip.nexioapp.com/support");
           }}
         >
-          <Text style={styles.link}>supporto</Text>
+          <Caption style={styles.link}>supporto</Caption>
         </TouchableOpacity>
-        <Text>.</Text>
-      </View>
+        <Caption>.</Caption>
+      </Surface>
 
       <Snackbar
         visible={isError}
