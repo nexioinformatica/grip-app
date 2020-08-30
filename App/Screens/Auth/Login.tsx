@@ -6,9 +6,13 @@ import { Linking, StyleSheet, TouchableOpacity } from "react-native";
 import { Caption, Dialog, Portal, Surface, Text } from "react-native-paper";
 import * as Yup from "yup";
 
-import { Snackbar } from "../../components/Snackbar";
 import { BackgroundCenter, Button, Header, Logo } from "../../components/Auth";
 import { OperatorList } from "../../components/ChooseOperator";
+import {
+  PasswordFormField,
+  UsernameFormField,
+} from "../../components/FormField";
+import { Snackbar } from "../../components/Snackbar";
 import { TextInput, TextInputIcon } from "../../components/TextInput";
 import { ApiContext, AuthContext, makeUser } from "../../stores";
 import { makeSettings } from "../../util/api";
@@ -73,43 +77,21 @@ export const Login = (): React.ReactElement => {
         validationSchema={validationSchema}
         onSubmit={handleLogin}
       >
-        {({
-          handleSubmit,
-          handleChange,
-          handleBlur,
-          errors,
-          isSubmitting,
-          isValid,
-          values,
-        }) => {
+        {(formikProps) => {
+          const {
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            errors,
+            isSubmitting,
+            isValid,
+            values,
+          } = formikProps;
+
           return (
             <>
-              <TextInput
-                label="Username"
-                returnKeyType="next"
-                value={values.username}
-                onChangeText={handleChange("username")}
-                onBlur={handleBlur("username")}
-                error={!!errors.username}
-                errorText={errors.username}
-                autoCapitalize="none"
-                autoCompleteType="username"
-                textContentType="username"
-                keyboardType="default"
-                right={
-                  <TextInputIcon onPress={showDialog} name="account-circle" />
-                }
-              />
-
-              <TextInput
-                label="Password"
-                returnKeyType="done"
-                value={values.password}
-                onChangeText={handleChange("password")}
-                error={!!errors.password}
-                errorText={errors.password}
-                secureTextEntry
-              />
+              <UsernameFormField {...formikProps} />
+              <PasswordFormField {...formikProps} />
 
               <Button
                 mode="contained"
@@ -119,31 +101,6 @@ export const Login = (): React.ReactElement => {
               >
                 Login
               </Button>
-
-              <Portal>
-                <Dialog visible={isVisible} onDismiss={hideDialog}>
-                  <Surface style={{ elevation: 0 }}>
-                    <Dialog.Title>Operatore</Dialog.Title>
-                    <Dialog.Content>
-                      <Text>
-                        Scegli un&apos;operatore dalla lista, verrà utilizzato
-                        il nome utente per il login.
-                      </Text>
-                      <Surface style={{ height: 200, marginTop: 24 }}>
-                        <OperatorList
-                          onSelectedValue={(operator) => {
-                            hideDialog();
-                            handleChange("username")(operator.UserName ?? "");
-                          }}
-                        />
-                      </Surface>
-                    </Dialog.Content>
-                    <Dialog.Actions>
-                      <Button onPress={hideDialog}>Chiudi</Button>
-                    </Dialog.Actions>
-                  </Surface>
-                </Dialog>
-              </Portal>
             </>
           );
         }}

@@ -5,5 +5,7 @@ export * from "./MachineFormField";
 export * from "./MachinePickerFormField";
 export * from "./OperatorActivityPickerFormField";
 export * from "./OperatorFormField";
+export * from "./PasswordFormField";
 export * from "./PhaseFormField";
 export * from "./PositionFormField";
+export * from "./UsernameFormField";
