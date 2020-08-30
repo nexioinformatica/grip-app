@@ -50,7 +50,7 @@ const SingleLinePlaceholder = () => (
 const DrawerContent = (props: Props): React.ReactElement => {
   const { call } = useContext(ApiContext);
   const { user } = useContext(AuthContext);
-  const { theme } = useContext(PreferencesContext);
+  const preferences = useContext(PreferencesContext);
   const makeCancellable = useCancellablePromise();
   const [realName, setRealName] = useState<string | undefined>(undefined);
 
@@ -153,17 +153,13 @@ const DrawerContent = (props: Props): React.ReactElement => {
               props.navigation.navigate("Profile");
             }}
           />
-          <List.Item
-            left={(props) => <List.Icon {...props} icon="tune" />}
-            title="Preferenze"
-          />
         </Drawer.Section>
         <Drawer.Section title="Prefrenze" focusable={false}>
-          <TouchableRipple onPress={theme.toggle}>
+          <TouchableRipple onPress={preferences.theme.toggle}>
             <Surface style={styles.preference}>
               <Text>Dark Theme</Text>
               <Surface pointerEvents="none">
-                <Switch value={theme.current === "dark"} />
+                <Switch value={preferences.theme.current === "dark"} />
               </Surface>
             </Surface>
           </TouchableRipple>
