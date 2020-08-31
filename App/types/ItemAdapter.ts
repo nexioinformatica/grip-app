@@ -14,10 +14,10 @@ export class ItemAdapter<T> implements ListItem<T> {
   }
 }
 
-export abstract class ItemAdapterFactory<T> {
-  abstract fromSingle(single: T): ItemAdapter<T>;
+export abstract class ItemAdapterFactory<T, U = T> {
+  abstract fromSingle(single: U): ItemAdapter<T>;
 
-  fromCollection(collection: T[]): ItemAdapter<T>[] {
+  fromCollection(collection: U[]): ItemAdapter<T>[] {
     return collection.map((x) => this.fromSingle(x));
   }
 }

@@ -6,7 +6,7 @@ import React from "react";
 import { ScanFreshman } from "../ScanInput";
 
 interface PositionFormValues {
-  position?: { IdPosizione: number };
+  position?: Barcode.PositionDecode;
 
   barcode: {
     position: string;

@@ -11,6 +11,7 @@ import {
   Text,
   Title,
   useTheme,
+  List,
 } from "react-native-paper";
 import * as Yup from "yup";
 
@@ -19,7 +20,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import useCancellablePromise from "@rodw95/use-cancelable-promise";
 
 import { TextInputPicker } from "../../../components/Dropdown";
-import { ScanFreshman } from "../../../components/ScanInput";
 import { Snackbar } from "../../../components/Snackbar";
 import { FlatSurface } from "../../../components/Surface";
 import { ApiContext } from "../../../stores";
@@ -36,6 +36,13 @@ import {
 import { makeSettings } from "../../../util/api";
 import { toResultTask } from "../../../util/fp";
 import { MovementsStackParamList } from "../Stacks";
+import {
+  FreshmanFormField,
+  SubdivisionFormField,
+  NewSubdivisionFormField,
+} from "../../../components/FormField";
+import { ExecutiveOrderFormSection } from "../../../components/FormSection";
+import { Subdivision } from "../../../types/Subdivision";
 
 type Props = {
   navigation: StackNavigationProp<MovementsStackParamList, "NewMovement">;
@@ -43,17 +50,39 @@ type Props = {
 };
 
 interface FormValues {
-  freshman: Barcode.BarcodeDecode | undefined;
   reason: ReasonType | undefined;
   reasonTitle: string;
-  freshmanBarcode: string;
+
+  freshman?: Barcode.FreshmanDecode;
+  phase?: Barcode.PhaseDecode;
+  position?: Barcode.PositionDecode;
+  header?: Barcode.HeaderDecode;
+  subdivision?: Subdivision;
+
+  barcode: {
+    freshman: string;
+    phase: string;
+    position: string;
+    header: string;
+  };
 }
 
 const initialValues: FormValues = {
   freshman: undefined,
   reason: undefined,
+  phase: undefined,
+  position: undefined,
+  header: undefined,
+  subdivision: undefined,
+
   reasonTitle: "",
-  freshmanBarcode: "",
+
+  barcode: {
+    freshman: "",
+    phase: "",
+    position: "",
+    header: "",
+  },
 };
 
 const validationSchema = (reasonType: ReasonType) => {
@@ -76,6 +105,7 @@ const NewMovement = (props: Props): React.ReactElement => {
   const theme = useTheme();
   const { call } = useContext(ApiContext);
   const [isError, setError] = useState(false);
+  const [isSuccess, setSuccess] = useState(false);
   const [reasons, setReasons] = useState<Reasons>([]);
 
   const getReasons = () =>
@@ -97,9 +127,9 @@ const NewMovement = (props: Props): React.ReactElement => {
   const handleSubmit = (values: FormValues) => {
     console.log(values);
     // TODO: implement real handle submit
-    return Promise.reject().catch(() => {
-      setError(true);
-    });
+    return Promise.reject()
+      .then(() => setSuccess(true))
+      .catch(() => setError(true));
   };
 
   return (
@@ -118,58 +148,57 @@ const NewMovement = (props: Props): React.ReactElement => {
                   validationSchema={validationSchema(reasonType)}
                   onSubmit={handleSubmit}
                 >
-                  {({
-                    handleSubmit,
-                    handleChange,
-                    handleBlur,
-                    errors,
-                    isSubmitting,
-                    isValid,
-                    setFieldValue,
-                    values,
-                    resetForm,
-                  }) => {
+                  {(formikProps) => {
+                    const {
+                      handleSubmit,
+                      handleChange,
+                      errors,
+                      isSubmitting,
+                      isValid,
+                      setFieldValue,
+                      values,
+                      resetForm,
+                    } = formikProps;
                     return (
                       <>
-                        {isRequiringReason(reasonType) && (
-                          <TextInputPicker<Reason>
-                            items={ReasonItemsAdapterFactory.fromReasons(
-                              reasons
-                            )}
-                            value={values.reasonTitle}
-                            onValueChange={(x) => {
-                              handleChange("reasonTitle")(x.title);
-                              setFieldValue("reason", x.value);
-                            }}
-                            label="Causale"
-                            error={!!errors.reason}
-                            errorText={errors.reason}
-                          />
-                        )}
+                        <List.Accordion title="Movimento" expanded={true}>
+                          {isRequiringReason(reasonType) && (
+                            <TextInputPicker<Reason>
+                              items={ReasonItemsAdapterFactory.fromReasons(
+                                reasons
+                              )}
+                              value={values.reasonTitle}
+                              onValueChange={(x) => {
+                                handleChange("reasonTitle")(x.title);
+                                setFieldValue("reason", x.value);
+                              }}
+                              label="Causale"
+                              error={!!errors.reason}
+                              errorText={errors.reason}
+                            />
+                          )}
 
-                        <ScanFreshman
-                          label="Matricola"
-                          onChangeText={(x?: string) =>
-                            handleChange("freshmanBarcode")(x ?? "")
-                          }
-                          onDecodeValue={(x) =>
-                            setFieldValue(
-                              "freshman",
-                              pipe(
-                                x,
-                                Barcode.Util.getDecode<Barcode.FreshmanDecode>(
-                                  "R"
-                                )
-                              )
-                            )
-                          }
-                          value={values.freshmanBarcode}
-                          returnKeyType="next"
-                          onBlur={handleBlur("freshman")}
-                          error={!!errors.freshman}
-                          errorText={errors.freshman}
-                          keyboardType="default"
-                        />
+                          <FreshmanFormField
+                            {...formikProps}
+                            label="Matricola*"
+                          />
+                          {values.freshman && (
+                            <>
+                              <SubdivisionFormField
+                                {...formikProps}
+                                freshman={values.freshman.Oggetto}
+                              />
+                              <NewSubdivisionFormField />
+                            </>
+                          )}
+                        </List.Accordion>
+
+                        <List.Accordion
+                          title="Ordine Esecutivo"
+                          style={styles.mt16}
+                        >
+                          <ExecutiveOrderFormSection {...formikProps} />
+                        </List.Accordion>
 
                         <Button
                           mode="contained"
@@ -178,7 +207,7 @@ const NewMovement = (props: Props): React.ReactElement => {
                           loading={isSubmitting}
                           onPress={handleSubmit}
                         >
-                          <Text>Invia</Text>
+                          Invia
                         </Button>
                         <Button
                           mode="text"
@@ -186,7 +215,7 @@ const NewMovement = (props: Props): React.ReactElement => {
                           disabled={isSubmitting}
                           onPress={resetForm}
                         >
-                          <Text>Reset</Text>
+                          Reset
                         </Button>
                       </>
                     );
@@ -206,6 +235,16 @@ const NewMovement = (props: Props): React.ReactElement => {
         style={{ backgroundColor: theme.colors.surface }}
       >
         <Text>Coff coff, qualcosa è andato storto</Text>
+      </Snackbar>
+      <Snackbar
+        visible={isSuccess}
+        onDismiss={() => {
+          setSuccess(false);
+        }}
+        duration={3000}
+        style={{ backgroundColor: theme.colors.surface }}
+      >
+        <Text>Operazione effettuata con successo</Text>
       </Snackbar>
     </Surface>
   );

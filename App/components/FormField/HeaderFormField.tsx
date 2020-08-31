@@ -6,7 +6,7 @@ import React from "react";
 import { ScanFreshman } from "../ScanInput";
 
 interface HeaderFormValues {
-  header?: { IdTestata: number };
+  header?: Barcode.HeaderDecode;
 
   barcode: {
     header: string;

@@ -1,16 +1,17 @@
 import { FormikProps } from "formik";
+import { Barcode } from "geom-api-ts-client";
 import React from "react";
 
 import {
+  HeaderFormField,
   PhaseFormField,
   PositionFormField,
-  HeaderFormField,
 } from "../FormField";
 
-interface ExecutiveOrder {
-  phase?: { IdFase: number };
-  position?: { IdPosizione: number };
-  header?: { IdTestata: number };
+interface ExecutiveOrderFormValues {
+  phase?: Barcode.PhaseDecode;
+  position?: Barcode.PositionDecode;
+  header?: Barcode.HeaderDecode;
 
   barcode: {
     phase: string;
@@ -19,7 +20,7 @@ interface ExecutiveOrder {
   };
 }
 
-export const ExecutiveOrderFormSection = <T extends ExecutiveOrder>(
+export const ExecutiveOrderFormSection = <T extends ExecutiveOrderFormValues>(
   formikProps: FormikProps<T>
 ): React.ReactElement => {
   return (

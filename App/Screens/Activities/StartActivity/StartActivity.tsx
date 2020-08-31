@@ -29,6 +29,7 @@ import {
 } from "../../../types/ActionType";
 import { ActivityType } from "../../../types/ActivityType";
 import { ActivitiesStackParamList } from "../Stacks";
+import { Barcode } from "geom-api-ts-client";
 
 type Props = {
   navigation: StackNavigationProp<ActivitiesStackParamList, "StartActivity">;
@@ -38,9 +39,9 @@ type Props = {
 interface FormValues {
   machine?: { IdMacchina: number };
   activityType?: ActivityType;
-  phase?: { IdFase: number };
-  position?: { IdPosizione: number };
-  header?: { IdTestata: number };
+  phase?: Barcode.PhaseDecode;
+  position?: Barcode.PositionDecode;
+  header?: Barcode.HeaderDecode;
 
   barcode: {
     machine: string;

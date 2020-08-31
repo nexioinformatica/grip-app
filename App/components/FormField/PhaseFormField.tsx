@@ -6,7 +6,7 @@ import React from "react";
 import { ScanFreshman } from "../ScanInput";
 
 interface PhaseFormValues {
-  phase?: { IdFase: number };
+  phase?: Barcode.PhaseDecode;
 
   barcode: {
     phase: string;
