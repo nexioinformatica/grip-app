@@ -1,7 +1,6 @@
 import React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
-import { FlatSurface } from "../../../components/Surface";
 import { NewMovementCard } from "./Actions";
 import { Surface } from "react-native-paper";
 

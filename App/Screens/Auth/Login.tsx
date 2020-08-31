@@ -3,17 +3,15 @@ import { pipe } from "fp-ts/lib/pipeable";
 import { Authentication } from "geom-api-ts-client";
 import React, { useContext, useState } from "react";
 import { Linking, StyleSheet, TouchableOpacity } from "react-native";
-import { Caption, Dialog, Portal, Surface, Text } from "react-native-paper";
+import { Caption, Surface, Text } from "react-native-paper";
 import * as Yup from "yup";
 
 import { BackgroundCenter, Button, Header, Logo } from "../../components/Auth";
-import { OperatorList } from "../../components/ChooseOperator";
 import {
   PasswordFormField,
   UsernameFormField,
 } from "../../components/FormField";
 import { Snackbar } from "../../components/Snackbar";
-import { TextInput, TextInputIcon } from "../../components/TextInput";
 import { ApiContext, AuthContext, makeUser } from "../../stores";
 import { makeSettings } from "../../util/api";
 import { API_KEY } from "../../util/constants";
@@ -61,11 +59,6 @@ export const Login = (): React.ReactElement => {
       )
     )();
 
-  const [isVisible, setVisible] = useState(false);
-
-  const hideDialog = () => setVisible(false);
-  const showDialog = () => setVisible(true);
-
   return (
     <BackgroundCenter>
       <Logo />
@@ -78,15 +71,7 @@ export const Login = (): React.ReactElement => {
         onSubmit={handleLogin}
       >
         {(formikProps) => {
-          const {
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            errors,
-            isSubmitting,
-            isValid,
-            values,
-          } = formikProps;
+          const { handleSubmit, isSubmitting, isValid } = formikProps;
 
           return (
             <>

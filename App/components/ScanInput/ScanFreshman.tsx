@@ -3,8 +3,7 @@ import * as T from "fp-ts/lib/Task";
 import * as TE from "fp-ts/lib/TaskEither";
 import { Barcode } from "geom-api-ts-client";
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
-import { Surface, useTheme, Text } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 
 import { useNavigation } from "@react-navigation/native";
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text } from "react-native";
-import { Button, Card, List, Surface, Switch, Title } from "react-native-paper";
+import { Button, Card, List, Switch, Title } from "react-native-paper";
 
 import { useNavigation } from "@react-navigation/native";
 

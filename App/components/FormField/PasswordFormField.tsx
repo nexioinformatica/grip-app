@@ -11,7 +11,7 @@ export const PasswordFormField = <T extends PasswordFormValues>({
   handleChange,
   handleBlur,
   errors,
-}: FormikProps<T>) => (
+}: FormikProps<T>): React.ReactElement => (
   <TextInput
     label="Password"
     returnKeyType="done"

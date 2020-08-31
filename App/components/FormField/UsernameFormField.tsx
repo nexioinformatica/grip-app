@@ -1,15 +1,20 @@
-import React, { useContext, useState, useEffect } from "react";
 import { FormikProps } from "formik";
-import { IconTextInputPicker } from "../Dropdown";
-import useCancellablePromise from "@rodw95/use-cancelable-promise";
-import { ApiContext } from "../../stores";
-import { Operator } from "../../types/Operator";
 import { pipe } from "fp-ts/lib/pipeable";
 import { Operator as OperatorApi } from "geom-api-ts-client";
+import React, { useContext, useEffect, useState } from "react";
+import { ActivityIndicator } from "react-native-paper";
+
+import useCancellablePromise from "@rodw95/use-cancelable-promise";
+
+import { ApiContext } from "../../stores";
+import {
+  Operator,
+  UsernameOperatorItemAdapterFactory,
+} from "../../types/Operator";
 import { makeSettings } from "../../util/api";
 import { toResultTask } from "../../util/fp";
+import { IconTextInputPicker } from "../Dropdown";
 import { TextInputFail } from "../TextInput";
-import { ActivityIndicator } from "react-native-paper";
 
 interface UsernameFormValues {
   username: string;
@@ -29,8 +34,7 @@ export const UsernameFormField = <T extends UsernameFormValues>({
 
   const [operators, setOperators] = useState<Operator[]>([]);
 
-  // const handleSelected = (x: Operator) => onSelectedValue(x);
-  const operatorItemAdapterFactory = new OperatorItemAdapterFactory();
+  const adapter = new UsernameOperatorItemAdapterFactory();
 
   const getOperators = () => {
     setLoading(false);
@@ -77,23 +81,8 @@ export const UsernameFormField = <T extends UsernameFormValues>({
       autoCompleteType="username"
       textContentType="username"
       keyboardType="default"
-      items={operatorItemAdapterFactory.fromCollection(operators)}
+      items={adapter.fromCollection(operators)}
       rightIcon="account-circle"
     />
   );
 };
-
-export class OperatorItemAdapterFactory {
-  fromSingle(single: Operator) {
-    return {
-      key: single.IdOperatore.toString(),
-      title: `${single.Nome}`,
-      description: `${single.UserName}`,
-      value: single.UserName ?? "",
-    };
-  }
-
-  fromCollection(collection: Operator[]) {
-    return collection.map((x) => this.fromSingle(x));
-  }
-}

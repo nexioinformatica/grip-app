@@ -14,3 +14,17 @@ export class OperatorItemAdapterFactory extends ItemAdapterFactory<Operator> {
     };
   }
 }
+
+export class UsernameOperatorItemAdapterFactory extends ItemAdapterFactory<
+  string,
+  Operator
+> {
+  fromSingle(single: Operator): ItemAdapter<string> {
+    return {
+      key: single.IdOperatore.toString(),
+      title: `${single.Nome}`,
+      description: `${single.UserName}`,
+      value: single.UserName ?? "",
+    };
+  }
+}

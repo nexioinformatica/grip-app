@@ -61,7 +61,7 @@ const getThemeOrDefault = getItemOrDefault<ThemeType, string>(notNullParser)(
   (x) => x === "light" || x === "dark"
 );
 
-const fireSentryError = (reason: any) => {
+const fireSentryError = (reason: unknown) => {
   sentryError("PreferencesContext")(
     reason instanceof Error ? reason : new Error(reason as string)
   );
