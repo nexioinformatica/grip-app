@@ -198,7 +198,7 @@ export const StopActivity = (props: Props): React.ReactElement => {
                           loading={isSubmitting}
                           onPress={handleSubmit}
                         >
-                          <Text>Invia</Text>
+                          Invia
                         </Button>
                         <Button
                           mode="text"
@@ -206,7 +206,7 @@ export const StopActivity = (props: Props): React.ReactElement => {
                           disabled={isSubmitting}
                           onPress={resetForm}
                         >
-                          <Text>Reset</Text>
+                          Reset
                         </Button>
                       </>
                     );

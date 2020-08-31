@@ -6,7 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { Appbar } from "../../components/Appbar";
 import { Activities as ActivitiesScreen } from "./Activities";
 import { StartActivity } from "./StartActivity";
-import { StopActivity } from "./StopActivity.tsx";
+import { StopActivity } from "./StopActivity";
 
 export type ActivitiesStackParamList = {
   Activities: undefined;

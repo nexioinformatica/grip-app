@@ -175,7 +175,7 @@ export const Profile = (): React.ReactElement => {
 
                 <FlatSurface style={{ width: "100%", marginTop: 16 }}>
                   <Button mode="contained" onPress={() => logout()}>
-                    <Text>Logout</Text>
+                    Logout
                   </Button>
                 </FlatSurface>
               </FlatSurface>

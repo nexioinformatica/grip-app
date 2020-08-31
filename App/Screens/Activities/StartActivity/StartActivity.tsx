@@ -148,7 +148,7 @@ const StartActivity = (props: Props) => {
                           loading={isSubmitting}
                           onPress={handleSubmit}
                         >
-                          <Text>Invia</Text>
+                          Invia
                         </Button>
                         <Button
                           mode="text"
@@ -156,7 +156,7 @@ const StartActivity = (props: Props) => {
                           disabled={isSubmitting}
                           onPress={resetForm}
                         >
-                          <Text>Reset</Text>
+                          Reset
                         </Button>
                       </>
                     );

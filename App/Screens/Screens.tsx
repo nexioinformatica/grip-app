@@ -3,7 +3,7 @@ import { Text } from "react-native";
 
 import { AuthContext, ErrorContext, PreferencesContext } from "../stores";
 import { LoginNavigator, RootNavigator } from "./Navigators";
-import { Splash as SpashScreen } from "./Spash";
+import { Splash as SpashScreen } from "./Splash";
 
 const Screens = (): React.ReactElement => {
   const { error } = useContext(ErrorContext);

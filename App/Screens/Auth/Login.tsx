@@ -3,7 +3,7 @@ import { pipe } from "fp-ts/lib/pipeable";
 import { Authentication } from "geom-api-ts-client";
 import React, { useContext, useState } from "react";
 import { Linking, StyleSheet, TouchableOpacity } from "react-native";
-import { Caption, Surface, Text } from "react-native-paper";
+import { Caption, Surface } from "react-native-paper";
 import * as Yup from "yup";
 
 import { BackgroundCenter, Button, Header, Logo } from "../../components/Auth";
@@ -109,7 +109,7 @@ export const Login = (): React.ReactElement => {
           setError(false);
         }}
       >
-        <Text>Coff coff, qualcosa è andato storto</Text>
+        Coff coff, qualcosa è andato storto
       </Snackbar>
     </BackgroundCenter>
   );
