@@ -6,9 +6,9 @@ import {
   Dialog,
   Paragraph,
   Portal,
+  Surface,
   Text,
   Title,
-  Surface,
 } from "react-native-paper";
 
 import { ScanFreshman } from "../../../components/ScanInput";
