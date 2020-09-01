@@ -1,8 +1,7 @@
 import React from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 import { noop } from "../../util/noop";
-import { FlatSurface } from "../Surface";
 import { TextInput, TextInputIcon } from "./TextInput";
 
 type Props = React.ComponentProps<typeof TextInput> & {
@@ -18,7 +17,7 @@ export const TextInputFail = ({
 
   return (
     <TouchableOpacity onPress={handleRetry}>
-      <FlatSurface pointerEvents="none">
+      <View pointerEvents="none">
         <TextInput
           editable={false}
           {...rest}
@@ -26,7 +25,7 @@ export const TextInputFail = ({
           error={true}
           errorText={errorText}
         />
-      </FlatSurface>
+      </View>
     </TouchableOpacity>
   );
 };

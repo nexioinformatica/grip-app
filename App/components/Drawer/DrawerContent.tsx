@@ -60,7 +60,9 @@ const DrawerContent = (props: Props): React.ReactElement => {
     pipe(
       pipe(call(Operator.getMe)({ settings: makeSettings() }), toResultTask)(),
       makeCancellable
-    ).then((x) => setRealName(x.Nome));
+    )
+      .then((x) => setRealName(x.Nome))
+      .catch();
 
   useEffect(() => {
     getMe();

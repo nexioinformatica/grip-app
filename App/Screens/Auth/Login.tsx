@@ -2,8 +2,8 @@ import { Formik } from "formik";
 import { pipe } from "fp-ts/lib/pipeable";
 import { Authentication } from "geom-api-ts-client";
 import React, { useContext, useState } from "react";
-import { Linking, StyleSheet, TouchableOpacity } from "react-native";
-import { Caption, Surface } from "react-native-paper";
+import { Linking, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Caption, Text } from "react-native-paper";
 import * as Yup from "yup";
 
 import { BackgroundCenter, Button, Header, Logo } from "../../components/Auth";
@@ -74,7 +74,7 @@ export const Login = (): React.ReactElement => {
           const { handleSubmit, isSubmitting, isValid } = formikProps;
 
           return (
-            <>
+            <View style={{ elevation: 0, width: "100%" }}>
               <UsernameFormField {...formikProps} />
               <PasswordFormField {...formikProps} />
 
@@ -86,12 +86,12 @@ export const Login = (): React.ReactElement => {
               >
                 Login
               </Button>
-            </>
+            </View>
           );
         }}
       </Formik>
 
-      <Surface style={styles.row}>
+      <View style={styles.row}>
         <Caption>Non trovi il tuo account? Contatta il </Caption>
         <TouchableOpacity
           onPress={() => {
@@ -101,7 +101,7 @@ export const Login = (): React.ReactElement => {
           <Caption style={styles.link}>supporto</Caption>
         </TouchableOpacity>
         <Caption>.</Caption>
-      </Surface>
+      </View>
 
       <Snackbar
         visible={isError}
@@ -109,7 +109,7 @@ export const Login = (): React.ReactElement => {
           setError(false);
         }}
       >
-        Coff coff, qualcosa è andato storto
+        <Text>Coff coff, qualcosa è andato storto</Text>
       </Snackbar>
     </BackgroundCenter>
   );

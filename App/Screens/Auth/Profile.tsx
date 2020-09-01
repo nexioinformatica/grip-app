@@ -1,7 +1,7 @@
 import { pipe } from "fp-ts/lib/pipeable";
 import { Operator } from "geom-api-ts-client";
 import React, { useContext, useEffect, useState } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import {
   ActivityIndicator,
   Avatar,
@@ -14,6 +14,7 @@ import {
   Text,
   Title,
   Surface,
+  IconButton,
 } from "react-native-paper";
 
 import useCancellablePromise from "@rodw95/use-cancelable-promise";
@@ -66,12 +67,20 @@ export const Profile = (): React.ReactElement => {
     return (
       <Surface style={styles.container}>
         <ScrollView>
-          <Surface style={styles.content}>
-            <Text>Sorry, there was a problem</Text>
-            <Button onPress={updateData}>
-              <Text>Retry</Text>
-            </Button>
-          </Surface>
+          <View style={styles.content}>
+            <View style={{ alignSelf: "center", alignItems: "center" }}>
+              <IconButton icon="alert" onPress={updateData} />
+              <Text>Si è verificato un errore</Text>
+            </View>
+            <View style={styles.actions}>
+              <Button onPress={updateData} mode="outlined">
+                <Text>Rirova</Text>
+              </Button>
+              <Button onPress={logout}>
+                <Text>Logout</Text>
+              </Button>
+            </View>
+          </View>
         </ScrollView>
       </Surface>
     );
@@ -81,9 +90,9 @@ export const Profile = (): React.ReactElement => {
     return (
       <Surface style={styles.container}>
         <ScrollView>
-          <Surface style={styles.content}>
+          <View style={styles.content}>
             <ActivityIndicator />
-          </Surface>
+          </View>
         </ScrollView>
       </Surface>
     );
@@ -91,7 +100,7 @@ export const Profile = (): React.ReactElement => {
   return (
     <Surface style={styles.container}>
       <ScrollView>
-        <Surface style={styles.content}>
+        <View style={styles.content}>
           <Card>
             <Card.Content>
               <FlatSurface style={{ alignItems: "center" }}>
@@ -181,7 +190,7 @@ export const Profile = (): React.ReactElement => {
               </FlatSurface>
             </Card.Content>
           </Card>
-        </Surface>
+        </View>
       </ScrollView>
     </Surface>
   );
@@ -200,4 +209,5 @@ const styles = StyleSheet.create({
     lineHeight: 14,
   },
   divider: { width: "80%", marginTop: 16, height: 2 },
+  actions: { marginTop: 16 },
 });

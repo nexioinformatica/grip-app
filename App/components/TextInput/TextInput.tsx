@@ -1,7 +1,6 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { TextInput as Input, Text, useTheme } from "react-native-paper";
-import { FlatSurface } from "../Surface";
 
 type Props = React.ComponentProps<typeof Input> & { errorText?: string };
 export type TextInputProps = Props;
@@ -9,7 +8,7 @@ export type TextInputProps = Props;
 const TextInput = ({ errorText, ...props }: Props) => {
   const theme = useTheme();
   return (
-    <FlatSurface style={{ ...styles.container }}>
+    <View style={{ ...styles.container }}>
       <Input
         selectionColor="#fff"
         underlineColor="transparent"
@@ -22,7 +21,7 @@ const TextInput = ({ errorText, ...props }: Props) => {
           {errorText}
         </Text>
       ) : null}
-    </FlatSurface>
+    </View>
   );
 };
 
