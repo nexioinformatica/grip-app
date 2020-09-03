@@ -10,5 +10,7 @@ export * from "./OperatorFormField";
 export * from "./PasswordFormField";
 export * from "./PhaseFormField";
 export * from "./PositionFormField";
+export * from "./ResetButton";
+export * from "./SendButton";
 export * from "./SubdivisionFormField";
 export * from "./UsernameFormField";
