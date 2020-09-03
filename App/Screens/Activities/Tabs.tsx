@@ -1,8 +1,10 @@
 import React from "react";
-import { IconButton, useTheme } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { ByOperator, ByMachine } from "./ActivityCollection";
+
+import { getIcon } from "../../util/ui";
+import { ByMachine, ByOperator } from "./ActivityCollection";
 import { StartActivity } from "./StartActivity";
 import { StopActivity } from "./StopActivity";
 
@@ -60,12 +62,4 @@ export const ActivityTab = (): React.ReactElement => {
       />
     </Tab.Navigator>
   );
-};
-
-const getIcon = (icon: string) => (props: {
-  focused: boolean;
-  color: string;
-  size: number;
-}): React.ReactNode | undefined => {
-  return <IconButton icon={icon} {...props} />;
 };

@@ -1,3 +1,3 @@
-export * from "./NewMovement";
-export * from "./Stacks";
+export * from "./Stack";
+export * from "./Tab";
 export * from "./Movements";

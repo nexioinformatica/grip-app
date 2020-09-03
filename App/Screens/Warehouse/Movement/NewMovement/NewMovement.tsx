@@ -7,11 +7,11 @@ import {
   Button,
   Caption,
   Card,
+  List,
   Surface,
   Text,
   Title,
   useTheme,
-  List,
 } from "react-native-paper";
 import * as Yup from "yup";
 
@@ -19,34 +19,37 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import useCancellablePromise from "@rodw95/use-cancelable-promise";
 
-import { TextInputPicker } from "../../../components/Dropdown";
-import { Snackbar } from "../../../components/Snackbar";
-import { FlatSurface } from "../../../components/Surface";
-import { ApiContext } from "../../../stores";
+import { TextInputPicker } from "../../../../components/Dropdown";
+import {
+  FreshmanFormField,
+  NewSubdivisionFormField,
+  SubdivisionFormField,
+} from "../../../../components/FormField";
+import { ExecutiveOrderFormSection } from "../../../../components/FormSection";
+import { RadioButton } from "../../../../components/RadioButton";
+import { Snackbar } from "../../../../components/Snackbar";
+import { FlatSurface } from "../../../../components/Surface";
+import { getReasonTypesData } from "../../../../data/ReasonTypeResource";
+import { ApiContext } from "../../../../stores";
 import {
   Reason,
   ReasonItemsAdapterFactory,
   Reasons,
-} from "../../../types/Reason";
+} from "../../../../types/Reason";
 import {
   getReasonTypeName,
   isRequiringReason,
   ReasonType,
-} from "../../../types/ReasonType";
-import { makeSettings } from "../../../util/api";
-import { toResultTask } from "../../../util/fp";
-import { MovementsStackParamList } from "../Stacks";
-import {
-  FreshmanFormField,
-  SubdivisionFormField,
-  NewSubdivisionFormField,
-} from "../../../components/FormField";
-import { ExecutiveOrderFormSection } from "../../../components/FormSection";
-import { Subdivision } from "../../../types/Subdivision";
+  ReasonTypeKey,
+} from "../../../../types/ReasonType";
+import { Subdivision } from "../../../../types/Subdivision";
+import { makeSettings } from "../../../../util/api";
+import { toResultTask } from "../../../../util/fp";
+import { MovementStackParamList } from "../Stack";
 
 type Props = {
-  navigation: StackNavigationProp<MovementsStackParamList, "NewMovement">;
-  route: RouteProp<MovementsStackParamList, "NewMovement">;
+  navigation: StackNavigationProp<MovementStackParamList, "NewMovement">;
+  route: RouteProp<MovementStackParamList, "NewMovement">;
 };
 
 interface FormValues {
@@ -95,15 +98,13 @@ const validationSchema = (reasonType: ReasonType) => {
   });
 };
 
-const NewMovement = (props: Props): React.ReactElement => {
-  const {
-    route: {
-      params: { reasonType },
-    },
-  } = props;
+const NewMovement = (_props: Props): React.ReactElement => {
+  const [reasonType, setReasonType] = useState(ReasonTypeKey.LoadRemnant);
+
   const makeCancelable = useCancellablePromise();
-  const theme = useTheme();
   const { call } = useContext(ApiContext);
+  const theme = useTheme();
+
   const [isError, setError] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [reasons, setReasons] = useState<Reasons>([]);
@@ -161,6 +162,13 @@ const NewMovement = (props: Props): React.ReactElement => {
                     } = formikProps;
                     return (
                       <>
+                        <List.Accordion title="Tipo Causale">
+                          <RadioButton<ReasonType>
+                            selected={reasonType.toString()}
+                            onSelectedChange={({ v }) => setReasonType(v)}
+                            items={getReasonTypesData()}
+                          />
+                        </List.Accordion>
                         <List.Accordion title="Movimento" expanded={true}>
                           {isRequiringReason(reasonType) && (
                             <TextInputPicker<Reason>
