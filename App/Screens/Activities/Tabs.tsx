@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { getIcon } from "../../util/ui";
 import { ByMachine, ByOperator } from "./ActivityCollection";
+import { EndActivity } from "./EndActivity";
 import { StartActivity } from "./StartActivity";
 import { StopActivity } from "./StopActivity";
 
@@ -13,6 +14,7 @@ export type ActivityTabNavigator = {
   ListByMachine: undefined;
   StartActivity: undefined;
   StopActivity: undefined;
+  EndActivity: undefined;
 };
 
 export const ActivityTab = (): React.ReactElement => {
@@ -56,7 +58,15 @@ export const ActivityTab = (): React.ReactElement => {
         name="StopActivity"
         component={StopActivity}
         options={{
-          tabBarLabel: "Stop",
+          tabBarLabel: "Pausa",
+          tabBarIcon: getIcon("pause"),
+        }}
+      />
+      <Tab.Screen
+        name="EndActivity"
+        component={EndActivity}
+        options={{
+          tabBarLabel: "Fine",
           tabBarIcon: getIcon("stop"),
         }}
       />
