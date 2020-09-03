@@ -127,25 +127,54 @@ const DrawerContent = (props: Props): React.ReactElement => {
               <List.Item
                 title="Movimenti"
                 onPress={() => {
-                  props.navigation.navigate("Movements");
+                  props.navigation.navigate("Warehouse", {
+                    screen: "Movement",
+                  });
                 }}
               />
             </List.Accordion>
           </List.AccordionGroup>
-          <List.AccordionGroup>
+          <List.Item
+            title="Attività"
+            left={(props) => <List.Icon {...props} icon="animation-play" />}
+            onPress={() => {
+              props.navigation.navigate("Activity", { screeen: "Root" });
+            }}
+          />
+          {/* <List.AccordionGroup>
             <List.Accordion
               title="Attività"
               id="2"
               left={(props) => <List.Icon {...props} icon="animation-play" />}
             >
               <List.Item
-                title="Attività"
+                title="Start/Stop"
                 onPress={() => {
-                  props.navigation.navigate("Activities");
+                  props.navigation.navigate("Activities", {
+                    screen: "Activities",
+                  });
+                }}
+              />
+              <List.Item
+                title="Attività Operatore"
+                onPress={() => {
+                  props.navigation.navigate("Activities", {
+                    screen: "ByOperator",
+                    params: {},
+                  });
+                }}
+              />
+              <List.Item
+                title="Attività Macchina"
+                onPress={() => {
+                  props.navigation.navigate("Activities", {
+                    screen: "ByMachine",
+                    params: {},
+                  });
                 }}
               />
             </List.Accordion>
-          </List.AccordionGroup>
+          </List.AccordionGroup> */}
         </Drawer.Section>
         <Drawer.Section title="Impostazioni" focusable={false}>
           <List.Item

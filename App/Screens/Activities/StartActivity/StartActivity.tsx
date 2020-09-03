@@ -1,15 +1,9 @@
 import { Formik } from "formik";
+import { Barcode } from "geom-api-ts-client";
+import { ActionTypeKey } from "geom-api-ts-client/dist/resources/activities";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
-import {
-  Button,
-  Caption,
-  Card,
-  List,
-  Surface,
-  Text,
-  Title,
-} from "react-native-paper";
+import { Button, Caption, Card, List, Surface, Text } from "react-native-paper";
 import * as Yup from "yup";
 
 import { RouteProp } from "@react-navigation/native";
@@ -20,20 +14,21 @@ import {
   MachineFormField,
 } from "../../../components/FormField";
 import { ExecutiveOrderFormSection } from "../../../components/FormSection";
+import { RadioButton } from "../../../components/RadioButton";
 import { Snackbar } from "../../../components/Snackbar";
 import { FlatSurface } from "../../../components/Surface";
+import { getActionTypesData } from "../../../data/ActionTypeResource";
 import {
   ActionType,
   getActionTypeName,
   isRequiringMachine,
 } from "../../../types/ActionType";
 import { ActivityType } from "../../../types/ActivityType";
-import { ActivitiesStackParamList } from "../Stacks";
-import { Barcode } from "geom-api-ts-client";
+import { ActivityTabNavigator } from "../Tabs";
 
 type Props = {
-  navigation: StackNavigationProp<ActivitiesStackParamList, "StartActivity">;
-  route: RouteProp<ActivitiesStackParamList, "StartActivity">;
+  navigation: StackNavigationProp<ActivityTabNavigator, "StartActivity">;
+  route: RouteProp<ActivityTabNavigator, "StartActivity">;
 };
 
 interface FormValues {
@@ -78,12 +73,10 @@ const validationSchema = (actionType: ActionType) => {
   });
 };
 
-const StartActivity = (props: Props) => {
-  const {
-    route: {
-      params: { actionType },
-    },
-  } = props;
+const StartActivity = (_props: Props) => {
+  const [actionType, setActionType] = useState(
+    ActionTypeKey.MachineAndOperator
+  );
   const [isError, setError] = useState(false);
 
   const handleSubmit = (values: FormValues) => {
@@ -99,9 +92,8 @@ const StartActivity = (props: Props) => {
       <ScrollView>
         <Surface style={styles.container}>
           <Card>
+            <Card.Title title="Start attività" />
             <Card.Content>
-              <Title>Inizia Attività</Title>
-
               <Caption>{getActionTypeName(actionType)}</Caption>
 
               <FlatSurface style={{ ...styles.mt16 }}>
@@ -114,18 +106,21 @@ const StartActivity = (props: Props) => {
                   {(formikProps) => {
                     const {
                       handleSubmit,
-                      // handleChange,
-                      // handleBlur,
-                      // errors,
                       isSubmitting,
                       isValid,
-                      // setFieldValue,
-                      // values,
                       resetForm,
                     } = formikProps;
 
                     return (
                       <>
+                        <List.Accordion title="Tipo Azione">
+                          <RadioButton<ActionType>
+                            selected={actionType.toString()}
+                            onSelectedChange={({ v }) => setActionType(v)}
+                            items={getActionTypesData()}
+                          />
+                        </List.Accordion>
+
                         <List.Accordion
                           title="Dati Obbligatori"
                           expanded={true}

@@ -6,16 +6,16 @@ import { NavigationContainer } from "@react-navigation/native";
 import { HomeStack, ProfileStack } from "./Stacks";
 import { DrawerContent } from "../components/Drawer";
 import { Login } from "./Auth";
-import { MovementsStack } from "./Warehouse";
+import { WarehouseStack } from "./Warehouse";
 import { Scan } from "./Scan";
-import { ActivitiesStack } from "./Activities";
+import { ActivitiyStack } from "./Activities";
 import { BarcodeEvent } from "../types";
 
 export type RootNavigatorParamList = {
   Home: undefined;
   Profile: undefined;
-  Movements: undefined;
-  Activities: undefined;
+  Warehouse: undefined;
+  Activity: undefined;
   Scan: { onBarcodeScanned?: (barcode: BarcodeEvent) => void };
 };
 
@@ -27,8 +27,8 @@ export const RootNavigator = (): React.ReactElement => {
       <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
         <Drawer.Screen name="Home" component={HomeStack} />
         <Drawer.Screen name="Profile" component={ProfileStack} />
-        <Drawer.Screen name="Movements" component={MovementsStack} />
-        <Drawer.Screen name="Activities" component={ActivitiesStack} />
+        <Drawer.Screen name="Warehouse" component={WarehouseStack} />
+        <Drawer.Screen name="Activity" component={ActivitiyStack} />
         <Drawer.Screen name="Scan" component={Scan} />
       </Drawer.Navigator>
     </NavigationContainer>
