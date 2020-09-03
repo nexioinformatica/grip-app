@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   Text,
   Button,
-  useTheme,
   Card,
 } from "react-native-paper";
 import { pipe } from "fp-ts/lib/pipeable";

@@ -118,63 +118,20 @@ const DrawerContent = (props: Props): React.ReactElement => {
               props.navigation.navigate("Home");
             }}
           />
-          <List.AccordionGroup>
-            <List.Accordion
-              title="Magazzino"
-              id="1"
-              left={(props) => <List.Icon {...props} icon="warehouse" />}
-            >
-              <List.Item
-                title="Movimenti"
-                onPress={() => {
-                  props.navigation.navigate("Warehouse", {
-                    screen: "Movement",
-                  });
-                }}
-              />
-            </List.Accordion>
-          </List.AccordionGroup>
           <List.Item
             title="Attività"
             left={(props) => <List.Icon {...props} icon="animation-play" />}
             onPress={() => {
-              props.navigation.navigate("Activity", { screeen: "Root" });
+              props.navigation.navigate("Activity");
             }}
           />
-          {/* <List.AccordionGroup>
-            <List.Accordion
-              title="Attività"
-              id="2"
-              left={(props) => <List.Icon {...props} icon="animation-play" />}
-            >
-              <List.Item
-                title="Start/Stop"
-                onPress={() => {
-                  props.navigation.navigate("Activities", {
-                    screen: "Activities",
-                  });
-                }}
-              />
-              <List.Item
-                title="Attività Operatore"
-                onPress={() => {
-                  props.navigation.navigate("Activities", {
-                    screen: "ByOperator",
-                    params: {},
-                  });
-                }}
-              />
-              <List.Item
-                title="Attività Macchina"
-                onPress={() => {
-                  props.navigation.navigate("Activities", {
-                    screen: "ByMachine",
-                    params: {},
-                  });
-                }}
-              />
-            </List.Accordion>
-          </List.AccordionGroup> */}
+          <List.Item
+            title="Magazzino"
+            left={(props) => <List.Icon {...props} icon="warehouse" />}
+            onPress={() => {
+              props.navigation.navigate("Warehouse");
+            }}
+          />
         </Drawer.Section>
         <Drawer.Section title="Impostazioni" focusable={false}>
           <List.Item
@@ -188,7 +145,7 @@ const DrawerContent = (props: Props): React.ReactElement => {
         <Drawer.Section title="Prefrenze" focusable={false}>
           <TouchableRipple onPress={preferences.theme.toggle}>
             <Surface style={styles.preference}>
-              <Text>Dark Theme</Text>
+              <Text>Tema scuro</Text>
               <Surface pointerEvents="none">
                 <Switch value={preferences.theme.current === "dark"} />
               </Surface>
