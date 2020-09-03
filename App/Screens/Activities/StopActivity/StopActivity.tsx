@@ -10,8 +10,8 @@ import {
   Card,
   List,
   Surface,
+  Switch,
   Text,
-  Title,
 } from "react-native-paper";
 import * as Yup from "yup";
 
@@ -22,8 +22,10 @@ import {
   StopActivityByMachineFormSection,
   StopActivityByOperatorFormSection,
 } from "../../../components/FormSection";
+import { RadioButton } from "../../../components/RadioButton";
 import { Snackbar } from "../../../components/Snackbar";
 import { FlatSurface } from "../../../components/Surface";
+import { getActionTypesData } from "../../../data/ActionTypeResource";
 import { ApiContext } from "../../../stores";
 import {
   ActionType,
@@ -36,11 +38,11 @@ import { Machine } from "../../../types/Machine";
 import { Operator } from "../../../types/Operator";
 import { makeSettings } from "../../../util/api";
 import { teLeft, toResultTask } from "../../../util/fp";
-import { ActivitiesStackParamList } from "../Stacks";
+import { ActivityTabNavigator } from "../Tabs";
 
 type Props = {
-  navigation: StackNavigationProp<ActivitiesStackParamList, "StopActivity">;
-  route: RouteProp<ActivitiesStackParamList, "StopActivity">;
+  navigation: StackNavigationProp<ActivityTabNavigator, "StopActivity">;
+  route: RouteProp<ActivityTabNavigator, "StopActivity">;
 };
 
 interface FormValues {
@@ -86,12 +88,12 @@ const validationSchema = (actionType: ActionType) => {
   });
 };
 
-export const StopActivity = (props: Props): React.ReactElement => {
-  const {
-    route: {
-      params: { actionType, isMachineReadFromBarcode },
-    },
-  } = props;
+export const StopActivity = (_props: Props): React.ReactElement => {
+  const [actionType, setActionType] = useState(
+    ActionTypeKey.MachineAndOperator
+  );
+  const [isMachineReadFromBarcode, setMachineReadFromBarcode] = useState(false);
+
   const { call } = useContext(ApiContext);
   const [isError, setError] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
@@ -143,9 +145,8 @@ export const StopActivity = (props: Props): React.ReactElement => {
       <ScrollView>
         <Surface style={styles.container}>
           <Card>
+            <Card.Title title="Stop attività" />
             <Card.Content>
-              <Title>Stop Attività</Title>
-
               <Caption>{getActionTypeName(actionType)}</Caption>
               <Caption>
                 Macchina letta da{" "}
@@ -173,6 +174,29 @@ export const StopActivity = (props: Props): React.ReactElement => {
 
                     return (
                       <>
+                        <List.Accordion title="Tipo Attività">
+                          <RadioButton<ActionType>
+                            selected={actionType.toString()}
+                            onSelectedChange={({ v }) => setActionType(v)}
+                            items={getActionTypesData()}
+                          />
+                        </List.Accordion>
+
+                        {isRequiringMachine(actionType) && (
+                          <List.Accordion title="Scelta Macchina">
+                            <List.Item
+                              title="Da Barcode"
+                              description="Scegli la macchina da barcode o da una lista"
+                              right={() => (
+                                <Switch
+                                  value={isMachineReadFromBarcode}
+                                  onValueChange={setMachineReadFromBarcode}
+                                />
+                              )}
+                            />
+                          </List.Accordion>
+                        )}
+
                         <List.Accordion
                           title="Dati Obbligatori"
                           expanded={true}

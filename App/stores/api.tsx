@@ -15,15 +15,17 @@ import { Token } from "geom-api-ts-client/dist/auth";
  * public and the user is setted.
  */
 
+export type Call = <T, U>(
+  task: (params: U & { token: string | Auth.Token }) => TE.TaskEither<Error, T>
+) => (input: U) => TE.TaskEither<Error, T>;
+
+export type CallPublic = <T, U>(
+  task: (params: U) => TE.TaskEither<Error, T>
+) => (input: U) => TE.TaskEither<Error, T>;
+
 interface Context {
-  call: <T, U>(
-    task: (
-      params: U & { token: string | Auth.Token }
-    ) => TE.TaskEither<Error, T>
-  ) => (input: U) => TE.TaskEither<Error, T>;
-  callPublic: <T, U>(
-    task: (params: U) => TE.TaskEither<Error, T>
-  ) => (input: U) => TE.TaskEither<Error, T>;
+  call: Call;
+  callPublic: CallPublic;
 }
 
 export const ApiContext = createContext<Context>({
