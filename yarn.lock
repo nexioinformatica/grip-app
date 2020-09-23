@@ -3612,10 +3612,10 @@ gensync@^1.0.0-beta.1:
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.1.tgz#58f4361ff987e5ff6e1e7a210827aa371eaac269"
   integrity sha512-r8EC6NO1sngH/zdD9fiRDLdcgnbayXah+mLgManTaIZJqEC1MZstmnox8KpnI2/fxQwrp5OpCOYWLp4rBl4Jcg==
 
-geom-api-ts-client@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/geom-api-ts-client/-/geom-api-ts-client-1.6.0.tgz#3ce14630f0b5b24be0598195c2cbfbba1ce0e4ba"
-  integrity sha512-B87qWMn3jIoRrCIO9ecUIH5bER4z2aW7h8adxVR7t1s2go791EIde/lf+352/zRjK5+7pPxAVrvzKSwjsmEfuQ==
+geom-api-ts-client@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/geom-api-ts-client/-/geom-api-ts-client-1.7.0.tgz#a03aaad6f99234f4ad3e149dd36cd5b8c5106047"
+  integrity sha512-9YRy5Bc70fgqMQUlfI+AyzKDZc3qVTHkNAsQicULF/FDvT/HH8B+3PTCNemes6LWa1+hXL1jHieaG8wEFcgWww==
   dependencies:
     axios "^0.19.2"
     fp-ts "^2.8.1"

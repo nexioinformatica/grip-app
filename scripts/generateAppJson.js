@@ -41,8 +41,6 @@ let overrides = buildOverrides(variables);
 console.log(`Writing overrides to ${APP_JSON} ...`);
 writeAppJson(defaultAppJson, overrides);
 
-console.log("OK");
-
 // script stop
 
 // *******************************************************
