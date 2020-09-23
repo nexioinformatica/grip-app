@@ -15,35 +15,26 @@ import {
 } from "react-native-paper";
 import * as Yup from "yup";
 
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-
 import {
   StopActivityByMachineFormSection,
   StopActivityByOperatorFormSection,
-} from "../../../components/FormSection";
-import { RadioButton } from "../../../components/RadioButton";
-import { Snackbar } from "../../../components/Snackbar";
-import { FlatSurface } from "../../../components/Surface";
-import { getActionTypesData } from "../../../data/ActionTypeResource";
-import { ApiContext } from "../../../stores";
+} from "../../../../components/FormSection";
+import { RadioButton } from "../../../../components/RadioButton";
+import { Snackbar } from "../../../../components/Snackbar";
+import { FlatSurface } from "../../../../components/Surface";
+import { getActionTypesData } from "../../../../data/ActionTypeResource";
+import { ApiContext } from "../../../../stores";
 import {
   ActionType,
   ActionTypeKey,
   getActionTypeName,
   isRequiringMachine,
-} from "../../../types/ActionType";
-import { MachineActivity, OperatorActivity } from "../../../types/Activity";
-import { Machine } from "../../../types/Machine";
-import { Operator } from "../../../types/Operator";
-import { makeSettings } from "../../../util/api";
-import { teLeft, toResultTask } from "../../../util/fp";
-import { ActivityTabNavigator } from "../Tabs";
-
-type Props = {
-  navigation: StackNavigationProp<ActivityTabNavigator, "StopActivity">;
-  route: RouteProp<ActivityTabNavigator, "StopActivity">;
-};
+} from "../../../../types/ActionType";
+import { MachineActivity, OperatorActivity } from "../../../../types/Activity";
+import { Machine } from "../../../../types/Machine";
+import { Operator } from "../../../../types/Operator";
+import { makeSettings } from "../../../../util/api";
+import { teLeft, toResultTask } from "../../../../util/fp";
 
 interface FormValues {
   machine?: Machine;
@@ -88,7 +79,7 @@ const validationSchema = (actionType: ActionType) => {
   });
 };
 
-export const StopActivity = (_props: Props): React.ReactElement => {
+export const StopActivity = (): React.ReactElement => {
   const [actionType, setActionType] = useState(
     ActionTypeKey.MachineAndOperator
   );
@@ -145,7 +136,7 @@ export const StopActivity = (_props: Props): React.ReactElement => {
       <ScrollView>
         <Surface style={styles.container}>
           <Card>
-            <Card.Title title="Stop attività" />
+            <Card.Title title="Pausa attività" />
             <Card.Content>
               <Caption>{getActionTypeName(actionType)}</Caption>
               <Caption>

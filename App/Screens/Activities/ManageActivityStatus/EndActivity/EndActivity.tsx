@@ -8,17 +8,20 @@ import * as Yup from "yup";
 
 import useCancellablePromise from "@rodw95/use-cancelable-promise";
 
-import { Container, Content } from "../../../components/Container";
+import { Container, Content } from "../../../../components/Container";
 import {
   PhaseFormField,
   ResetButton,
   SendButton,
-} from "../../../components/FormField";
-import { ErrorSnackbar, SuccessSnackbar } from "../../../components/Snackbar";
-import { end } from "../../../data/JobResource";
-import { ApiContext } from "../../../stores";
-import { makeSettings } from "../../../util/api";
-import { toResultTask } from "../../../util/fp";
+} from "../../../../components/FormField";
+import {
+  ErrorSnackbar,
+  SuccessSnackbar,
+} from "../../../../components/Snackbar";
+import { end } from "../../../../data/JobResource";
+import { ApiContext } from "../../../../stores";
+import { makeSettings } from "../../../../util/api";
+import { toResultTask } from "../../../../util/fp";
 
 interface FormValues {
   phase?: Barcode.PhaseDecode;
@@ -37,7 +40,7 @@ const validationSchema = Yup.object({
   phase: Yup.mixed().required("Il campo Fase è richiesto."),
 });
 
-export const EndActivity = () => {
+export const EndActivity = (): React.ReactElement => {
   const makeCancellable = useCancellablePromise();
   const { call } = useContext(ApiContext);
 
@@ -63,7 +66,7 @@ export const EndActivity = () => {
       <ScrollView>
         <Content>
           <Card>
-            <Card.Title title="Fine Attività" />
+            <Card.Title title="Fine attività" />
             <Card.Content>
               <Formik<FormValues>
                 initialValues={initialValues}

@@ -7,38 +7,29 @@ import { ScrollView, StyleSheet } from "react-native";
 import { Button, Caption, Card, List, Surface } from "react-native-paper";
 import * as Yup from "yup";
 
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 
 import {
   ActivityTypePickerFormField,
   MachineFormField,
-} from "../../../components/FormField";
-import { ExecutiveOrderFormSection } from "../../../components/FormSection";
-import { RadioButton } from "../../../components/RadioButton";
+} from "../../../../components/FormField";
+import { ExecutiveOrderFormSection } from "../../../../components/FormSection";
+import { RadioButton } from "../../../../components/RadioButton";
 import {
   ErrorSnackbar,
-  Snackbar,
   SuccessSnackbar,
-} from "../../../components/Snackbar";
-import { FlatSurface } from "../../../components/Surface";
-import { getActionTypesData } from "../../../data/ActionTypeResource";
-import { ApiContext } from "../../../stores";
+} from "../../../../components/Snackbar";
+import { FlatSurface } from "../../../../components/Surface";
+import { getActionTypesData } from "../../../../data/ActionTypeResource";
+import { ApiContext } from "../../../../stores";
 import {
   ActionType,
   getActionTypeName,
   isRequiringMachine,
-} from "../../../types/ActionType";
-import { ActivityType } from "../../../types/ActivityType";
-import { makeSettings } from "../../../util/api";
-import { toResultTask } from "../../../util/fp";
-import { ActivityTabNavigator } from "../Tabs";
-
-type Props = {
-  navigation: StackNavigationProp<ActivityTabNavigator, "StartActivity">;
-  route: RouteProp<ActivityTabNavigator, "StartActivity">;
-};
+} from "../../../../types/ActionType";
+import { ActivityType } from "../../../../types/ActivityType";
+import { makeSettings } from "../../../../util/api";
+import { toResultTask } from "../../../../util/fp";
 
 interface FormValues {
   machine?: { IdMacchina: number };
@@ -82,7 +73,7 @@ const validationSchema = (actionType: ActionType) => {
   });
 };
 
-export const StartActivity = (_props: Props) => {
+export const StartActivity = (): React.ReactElement => {
   const makeCancelable = useCancelablePromise();
   const { call } = useContext(ApiContext);
   const [actionType, setActionType] = useState(
