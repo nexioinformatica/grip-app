@@ -29,15 +29,15 @@ export const Home = ({ navigation }: Props): React.ReactElement => {
 
       <FAB.Group
         open={isOpen}
-        icon={isOpen ? "close" : "plus"}
+        icon={isOpen ? "close" : "format-list-bulleted"}
         actions={[
           {
-            icon: "format-list-bulleted",
+            icon: "account-details",
             label: "Attività operatore",
             onPress: () => navigation.navigate("ListByOperator"),
           },
           {
-            icon: "format-list-bulleted",
+            icon: "screw-machine-round-top",
             label: "Attività macchina",
             onPress: () => navigation.navigate("ListByMachine"),
           },
