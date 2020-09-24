@@ -31,7 +31,7 @@ export const SizeFormField = <T extends SizeFormValues>({
   values,
   errors,
   setFieldValue,
-}: Props<T>) => {
+}: Props<T>): React.ReactElement => {
   const adapter = new SizeItemAdapterFactory();
 
   const handleChangeText = (v: string) =>

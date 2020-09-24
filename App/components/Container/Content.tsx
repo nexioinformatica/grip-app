@@ -5,7 +5,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const Content = ({ children }: Props) => (
+export const Content = ({ children }: Props): React.ReactElement => (
   <View style={styles.content}>{children}</View>
 );
 

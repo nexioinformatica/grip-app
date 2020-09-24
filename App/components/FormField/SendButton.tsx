@@ -11,7 +11,7 @@ export const SendButton = <T,>({
   handleSubmit,
   children,
   ...rest
-}: Props<T>) => (
+}: Props<T>): React.ReactElement => (
   <Button
     mode="contained"
     style={styles.mt16}

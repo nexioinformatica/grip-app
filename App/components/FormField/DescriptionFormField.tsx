@@ -13,7 +13,7 @@ export const DescriptionFormField = <T extends DescriptionFormValues>({
   handleChange,
   errors,
   values,
-}: Props<T>) => (
+}: Props<T>): React.ReactElement => (
   <TextInput
     label="Descrizione"
     onChangeText={(x?: string) => handleChange("description")(x ?? "")}

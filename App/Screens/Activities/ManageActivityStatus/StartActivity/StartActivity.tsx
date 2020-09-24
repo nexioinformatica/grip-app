@@ -199,6 +199,7 @@ const makeValue = (actionType: ActionTypeKey) => (
   formValues: FormValues
 ): Activities.NewActivity => ({
   TipoAzione: actionType,
+  /* eslint-disable @typescript-eslint/no-non-null-assertion */
   IdTipoAttivita: formValues.activityType!.IdTipoAttivita,
   IdMacchina: formValues.machine?.IdMacchina,
   IdFaseLavorazioneOrdine: formValues.phase?.Oggetto.IdFase,

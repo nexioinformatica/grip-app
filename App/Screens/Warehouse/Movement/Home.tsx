@@ -10,7 +10,7 @@ type Props = {
   navigation: StackNavigationProp<MovementStackParamList, "Home">;
 };
 
-export const Home = ({ navigation }: Props) => {
+export const Home = ({ navigation }: Props): React.ReactElement => {
   return (
     <Surface style={styles.container}>
       <ScrollView>

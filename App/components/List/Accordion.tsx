@@ -12,7 +12,7 @@ export const Accordion = ({
   onPress,
   children,
   ...rest
-}: Props) => {
+}: Props): React.ReactElement => {
   const [isExpanded, setExpanded] = useState(
     expanded || expandedDefault || false
   );

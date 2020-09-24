@@ -7,7 +7,10 @@ type Props = {
   setSuccess: (x: boolean) => void;
 };
 
-export const SuccessSnackbar = ({ isSuccess, setSuccess }: Props) => {
+export const SuccessSnackbar = ({
+  isSuccess,
+  setSuccess,
+}: Props): React.ReactElement => {
   return (
     <Snackbar
       visible={isSuccess}

@@ -21,7 +21,7 @@ type Props<T> = FormikProps<T> & { freshman?: { IdArticolo: number } };
 export const ShapePickerFormField = <T extends ShapePickerFormValues>({
   freshman,
   ...formikProps
-}: Props<T>) => {
+}: Props<T>): React.ReactElement => {
   const makeCancelable = useCancelablePromise();
   const { call } = useContext(ApiContext);
 

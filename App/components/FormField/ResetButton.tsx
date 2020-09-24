@@ -10,7 +10,7 @@ export const ResetButton = <T,>({
   resetForm,
   children,
   ...rest
-}: Props<T>) => (
+}: Props<T>): React.ReactElement => (
   <Button
     mode="text"
     disabled={isSubmitting}

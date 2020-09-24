@@ -54,6 +54,7 @@ export const EndActivity = (): React.ReactElement => {
     setSuccess(false);
 
     return pipe(
+      /* eslint-disable @typescript-eslint/no-non-null-assertion */
       pipe(values.phase!.Oggetto.IdFase, apiMethod, toResultTask)(),
       makeCancellable
     )

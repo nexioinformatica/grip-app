@@ -10,7 +10,7 @@ type Props = {
 export const ErrorSnackbar = ({
   isError: isSuccess,
   setError: setSuccess,
-}: Props) => {
+}: Props): React.ReactElement => {
   return (
     <Snackbar
       visible={isSuccess}

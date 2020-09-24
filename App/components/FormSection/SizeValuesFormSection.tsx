@@ -14,7 +14,7 @@ type Props<T> = FormikProps<T> & {
 export const SizeValuesFormSection = <T extends SizeValuesFormValues>({
   sizes,
   ...formikProps
-}: Props<T>) => {
+}: Props<T>): React.ReactElement => {
   return (
     <>
       {sizes.map((s, i) => {

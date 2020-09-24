@@ -9,7 +9,3 @@ export const makeValues = (
   Descrizione: values.description,
   Dimensioni: values.sizeValues,
 });
-
-export const handleSubmit = (values: NewSubdivisionFormValues) => {
-  return;
-};
