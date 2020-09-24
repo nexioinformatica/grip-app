@@ -55,7 +55,7 @@ export const SubdivisionFormField = <T extends SubdivisionFormValues>({
   if (!freshman) {
     return (
       <TextInputFail
-        label="Suddivisione*"
+        label="Suddivisione"
         errorText="Specificare una matricola per caricare la relativa lista di suddivisioni"
         retry={noop}
       />
@@ -81,7 +81,7 @@ export const SubdivisionFormField = <T extends SubdivisionFormValues>({
   return (
     <TouchableOpacity onPress={() => getSubdivisions(freshman.IdMatricola)}>
       <TextInputPicker
-        label="Suddivisione*"
+        label="Suddivisione"
         items={adapter.fromCollection(subdivisions)}
         value={
           values.subdivision ? adapter.fromSingle(values.subdivision).title : ""

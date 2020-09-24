@@ -20,9 +20,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import useCancellablePromise from "@rodw95/use-cancelable-promise";
 
 import { TextInputPicker } from "../../../../components/Dropdown";
+import { NewSubdivisionButton } from "../../../../components/FormComponent/NewSubdivisionButton";
 import {
   FreshmanFormField,
-  NewSubdivisionFormField,
   SubdivisionFormField,
 } from "../../../../components/FormField";
 import { ExecutiveOrderFormSection } from "../../../../components/FormSection";
@@ -39,6 +39,7 @@ import {
 import {
   getReasonTypeName,
   isRequiringReason,
+  isRequiringSubdivision,
   ReasonType,
   ReasonTypeKey,
 } from "../../../../types/ReasonType";
@@ -92,9 +93,14 @@ const validationSchema = (reasonType: ReasonType) => {
   const reason = isRequiringReason(reasonType)
     ? { reason: Yup.mixed().required("Il campo Causale è richiesto") }
     : {};
+
+  const subdivision = isRequiringSubdivision(reasonType)
+    ? { subdivision: Yup.mixed().required("Il campo Suddivisione è richiesto") }
+    : {};
   return Yup.object({
     freshman: Yup.mixed().required("Il campo Matricola è richiesto"),
     ...reason,
+    ...subdivision,
   });
 };
 
@@ -153,13 +159,14 @@ const NewMovement = (_props: Props): React.ReactElement => {
                     const {
                       handleSubmit,
                       handleChange,
+                      setFieldValue,
+                      resetForm,
                       errors,
                       isSubmitting,
                       isValid,
-                      setFieldValue,
                       values,
-                      resetForm,
                     } = formikProps;
+
                     return (
                       <>
                         <List.Accordion title="Tipo Causale">
@@ -190,15 +197,19 @@ const NewMovement = (_props: Props): React.ReactElement => {
                             {...formikProps}
                             label="Matricola*"
                           />
-                          {values.freshman && (
-                            <>
-                              <SubdivisionFormField
-                                {...formikProps}
-                                freshman={values.freshman.Oggetto}
-                              />
-                              <NewSubdivisionFormField />
-                            </>
-                          )}
+
+                          {isRequiringSubdivision(reasonType) &&
+                            values.freshman && (
+                              <>
+                                <SubdivisionFormField
+                                  {...formikProps}
+                                  freshman={values.freshman.Oggetto}
+                                />
+                                <NewSubdivisionButton
+                                  freshman={values.freshman.Oggetto}
+                                />
+                              </>
+                            )}
                         </List.Accordion>
 
                         <List.Accordion
