@@ -21,7 +21,7 @@ export const MachineFormField = <T extends MachineFormValues>({
 }: FormikProps<T>): React.ReactElement => {
   return (
     <ScanFreshman
-      label="Macchina*"
+      label="Macchina"
       onChangeText={(x?: string) => handleChange("barcode.machine")(x ?? "")}
       onDecodeValue={(x) =>
         setFieldValue(

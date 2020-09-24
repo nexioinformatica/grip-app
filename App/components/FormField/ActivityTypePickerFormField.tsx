@@ -64,13 +64,13 @@ export const ActivityTypePickerFormField = <
   }, []);
 
   if (isError)
-    return <TextInputFail label="Tipo Attività*" retry={getActivityTypes} />;
+    return <TextInputFail label="Tipo Attività" retry={getActivityTypes} />;
 
   if (isLoading) return <ActivityIndicator />;
 
   return (
     <TextInputPicker
-      label="Tipo Attività*"
+      label="Tipo Attività"
       items={activityTypeItemAdapterFactory.fromCollection(activityTypes)}
       value={
         values.activityType

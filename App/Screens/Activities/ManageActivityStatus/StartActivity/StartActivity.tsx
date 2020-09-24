@@ -12,6 +12,7 @@ import useCancelablePromise from "@rodw95/use-cancelable-promise";
 import {
   ActivityTypePickerFormField,
   MachineFormField,
+  PhaseFormField,
 } from "../../../../components/FormField";
 import { ExecutiveOrderFormSection } from "../../../../components/FormSection";
 import { RadioButton } from "../../../../components/RadioButton";
@@ -69,6 +70,7 @@ const validationSchema = (actionType: ActionType) => {
     : {};
   return Yup.object({
     activityType: Yup.mixed().required("Il campo Tipo Attività è richiesto"),
+    phase: Yup.mixed().required("Il campo Fase è richiesto"),
     ...machine,
   });
 };
@@ -146,6 +148,8 @@ export const StartActivity = (): React.ReactElement => {
                           {isRequiringMachine(actionType) && (
                             <MachineFormField {...formikProps} />
                           )}
+
+                          <PhaseFormField {...formikProps} />
                         </List.Accordion>
 
                         <List.Accordion title="Ordine Esecutivo">
