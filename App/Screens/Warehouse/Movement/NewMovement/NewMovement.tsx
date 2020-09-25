@@ -43,7 +43,6 @@ import {
   isRequiringReason,
   isRequiringSubdivision,
   ReasonType,
-  ReasonTypeKey,
 } from "../../../../types/ReasonType";
 import { Subdivision } from "../../../../types/Subdivision";
 import { makeSettings } from "../../../../util/api";
@@ -106,8 +105,8 @@ const validationSchema = (reasonType: ReasonType) => {
   });
 };
 
-const NewMovement = (_props: Props): React.ReactElement => {
-  const [reasonType, setReasonType] = useState(ReasonTypeKey.LoadRemnant);
+const NewMovement = ({ route }: Props): React.ReactElement => {
+  const [reasonType, setReasonType] = useState(route.params.defaultReasonType);
 
   const makeCancelable = useCancellablePromise();
   const { call } = useContext(ApiContext);
