@@ -4,6 +4,7 @@ import { FAB, Portal, Provider } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 
 import { ActionTypeKey } from "../../../types/ActionType";
+import { ReasonTypeKey } from "../../../types/ReasonType";
 
 export const Fabs = (): React.ReactElement => {
   const navigation = useNavigation();
@@ -13,30 +14,48 @@ export const Fabs = (): React.ReactElement => {
     <Provider>
       <Portal>
         <FAB.Group
-          visible={true}
+          visible={false}
           open={isOpen}
           icon={isOpen ? "rocket" : "plus"}
           actions={[
             {
-              icon: "stop",
-              label: "Pausa Attvità",
+              icon: "tab-minus",
+              label: "Scarico lamiera",
               onPress: () =>
-                navigation.navigate("Activities", {
-                  screen: "StopActivity",
+                // TODO: fix navigation, see issue #13
+                navigation.navigate("Warehouse", {
+                  screen: "Movement",
                   params: {
-                    actionType: ActionTypeKey.MachineAndOperator,
-                    isMachineReadFromBarcode: true,
+                    screen: "NewMovement",
+                    params: { defaultReasonType: ReasonTypeKey.UnloadProd },
+                  },
+                }),
+            },
+            {
+              icon: "shape-polygon-plus",
+              label: "Carico avanzo",
+              onPress: () =>
+                // TODO: fix navigation, see issue #13
+                navigation.navigate("Warehouse", {
+                  screen: "Movement",
+                  params: {
+                    screen: "NewMovement",
+                    params: { defaultReasonType: ReasonTypeKey.LoadRemnant },
                   },
                 }),
             },
             {
               icon: "play",
-              label: "Inizia Attività",
+              label: "Inizia attività",
               onPress: () =>
-                navigation.navigate("Activities", {
-                  screen: "StartActivity",
+                // TODO: fix navigation, see issue #13
+                navigation.navigate("Activity", {
+                  tab: "ManageActivityStatus",
                   params: {
-                    actionType: ActionTypeKey.MachineAndOperator,
+                    screen: "StartActivity",
+                    params: {
+                      defaultActionType: ActionTypeKey.MachineAndOperator,
+                    },
                   },
                 }),
             },

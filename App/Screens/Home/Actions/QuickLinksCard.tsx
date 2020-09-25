@@ -1,30 +1,65 @@
-import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { Children } from "react";
 import { StyleSheet } from "react-native";
-import { Button, Card, List } from "react-native-paper";
+import { Button, Card } from "react-native-paper";
+
+import { MyList } from "../../../components/List";
+
+const Link = ({
+  onPress,
+  children,
+}: {
+  onPress?: () => void;
+  children: React.ReactNode;
+}) => (
+  <Button mode="outlined" onPress={onPress}>
+    {children}
+  </Button>
+);
+
+const ActivityQuickLinksSection = (): React.ReactElement => {
+  const navigation = useNavigation();
+
+  const handleShow = () =>
+    navigation.navigate("Activity", {
+      screen: "InProgressActivities",
+    });
+
+  const handleManage = () =>
+    navigation.navigate("Activity", {
+      screen: "ManageActivityStatus",
+    });
+
+  return (
+    <MyList.Accordion title="Attività" expandedDefault={false}>
+      <Link onPress={handleShow}>Visualizza</Link>
+      <Link onPress={handleManage}>Gestisci</Link>
+    </MyList.Accordion>
+  );
+};
+
+const WarehouseQuickLinksSection = (): React.ReactElement => {
+  const navigation = useNavigation();
+
+  const handleMovement = () =>
+    navigation.navigate("Warehouse", {
+      screen: "Movement",
+    });
+
+  return (
+    <MyList.Accordion title="Magazzino" expandedDefault={false}>
+      <Link onPress={handleMovement}>Movimento</Link>
+    </MyList.Accordion>
+  );
+};
 
 export const QuickLinksCard = (): React.ReactElement => {
-  const [isExpanded, setExpanded] = useState(true);
-  const toggleExpanded = () => setExpanded(!isExpanded);
   return (
     <Card>
       <Card.Title title="Azioni rapide" />
       <Card.Content>
-        <List.Accordion
-          title="Azioni Rapide"
-          expanded={isExpanded}
-          onPress={toggleExpanded}
-        >
-          <Button mode="outlined">Inizia Attivita</Button>
-          <Button mode="outlined" style={styles.button}>
-            Pausa Attivita
-          </Button>
-          <Button mode="outlined" style={styles.button}>
-            Ferma Attivita
-          </Button>
-          <Button mode="outlined" style={styles.button}>
-            Avanzo a Magazzino
-          </Button>
-        </List.Accordion>
+        <ActivityQuickLinksSection />
+        <WarehouseQuickLinksSection />
       </Card.Content>
     </Card>
   );

@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { StyleSheet, ScrollView, View } from "react-native";
-import { Surface, Text, FAB, Card } from "react-native-paper";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Card, FAB, Surface, Text } from "react-native-paper";
+
 import { StackNavigationProp } from "@react-navigation/stack";
+
+import { ActionTypeKey } from "../../../types/ActionType";
 import { ManageActivityStatusParamList } from "./Stack";
 
 type Props = {
@@ -39,12 +42,18 @@ export const Home = ({ navigation }: Props): React.ReactElement => {
           {
             icon: "pause",
             label: "Pausa",
-            onPress: () => navigation.navigate("StopActivity"),
+            onPress: () =>
+              navigation.navigate("StopActivity", {
+                defaultActionType: ActionTypeKey.MachineAndOperator,
+              }),
           },
           {
             icon: "play",
             label: "Inizia",
-            onPress: () => navigation.navigate("StartActivity"),
+            onPress: () =>
+              navigation.navigate("StartActivity", {
+                defaultActionType: ActionTypeKey.MachineAndOperator,
+              }),
           },
         ]}
         visible={true}

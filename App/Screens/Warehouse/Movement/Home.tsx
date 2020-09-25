@@ -4,6 +4,7 @@ import { Card, FAB, Surface, Text } from "react-native-paper";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { ReasonTypeKey } from "../../../types/ReasonType";
 import { MovementStackParamList } from "./Stack";
 
 type Props = {
@@ -29,7 +30,11 @@ export const Home = ({ navigation }: Props): React.ReactElement => {
       <FAB
         style={styles.fab}
         icon="plus"
-        onPress={() => navigation.navigate("NewMovement")}
+        onPress={() =>
+          navigation.navigate("NewMovement", {
+            defaultReasonType: ReasonTypeKey.UnloadProd,
+          })
+        }
       />
     </Surface>
   );
