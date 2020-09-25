@@ -15,6 +15,9 @@ import {
 } from "react-native-paper";
 import * as Yup from "yup";
 
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
 import {
   StopActivityByMachineFormSection,
   StopActivityByOperatorFormSection,
@@ -35,6 +38,15 @@ import { Machine } from "../../../../types/Machine";
 import { Operator } from "../../../../types/Operator";
 import { makeSettings } from "../../../../util/api";
 import { teLeft, toResultTask } from "../../../../util/fp";
+import { ManageActivityStatusParamList } from "../Stack";
+
+type Props = {
+  navigation: StackNavigationProp<
+    ManageActivityStatusParamList,
+    "StopActivity"
+  >;
+  route: RouteProp<ManageActivityStatusParamList, "StopActivity">;
+};
 
 interface FormValues {
   machine?: Machine;
@@ -79,10 +91,8 @@ const validationSchema = (actionType: ActionType) => {
   });
 };
 
-export const StopActivity = (): React.ReactElement => {
-  const [actionType, setActionType] = useState(
-    ActionTypeKey.MachineAndOperator
-  );
+export const StopActivity = ({ route }: Props): React.ReactElement => {
+  const [actionType, setActionType] = useState(route.params.defaultActionType);
   const [isMachineReadFromBarcode, setMachineReadFromBarcode] = useState(false);
 
   const { call } = useContext(ApiContext);

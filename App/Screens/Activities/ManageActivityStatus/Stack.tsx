@@ -7,11 +7,12 @@ import { EndActivity } from "./EndActivity";
 import { StartActivity } from "./StartActivity";
 import { StopActivity } from "./StopActivity";
 import { Home } from "./Home";
+import { ActionType, ActionTypeKey } from "../../../types/ActionType";
 
 export type ManageActivityStatusParamList = {
   Home: undefined;
-  StartActivity: undefined;
-  StopActivity: undefined;
+  StartActivity: { defaultActionType: ActionType };
+  StopActivity: { defaultActionType: ActionType };
   EndActivity: undefined;
 };
 
@@ -35,12 +36,14 @@ export const ManageActivityStatusStack = (): React.ReactElement => {
       <Stack.Screen
         name="StartActivity"
         component={StartActivity}
+        initialParams={{ defaultActionType: ActionTypeKey.MachineAndOperator }}
         options={{ headerTitle: "Inizia Attività" }}
       />
 
       <Stack.Screen
         name="StopActivity"
         component={StopActivity}
+        initialParams={{ defaultActionType: ActionTypeKey.MachineAndOperator }}
         options={{ headerTitle: "Pausa Attività" }}
       />
 

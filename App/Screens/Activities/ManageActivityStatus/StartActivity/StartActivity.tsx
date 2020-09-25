@@ -7,6 +7,8 @@ import { ScrollView, StyleSheet } from "react-native";
 import { Button, Caption, Card, List, Surface } from "react-native-paper";
 import * as Yup from "yup";
 
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import useCancelablePromise from "@rodw95/use-cancelable-promise";
 
 import {
@@ -31,6 +33,15 @@ import {
 import { ActivityType } from "../../../../types/ActivityType";
 import { makeSettings } from "../../../../util/api";
 import { toResultTask } from "../../../../util/fp";
+import { ManageActivityStatusParamList } from "../Stack";
+
+type Props = {
+  navigation: StackNavigationProp<
+    ManageActivityStatusParamList,
+    "StartActivity"
+  >;
+  route: RouteProp<ManageActivityStatusParamList, "StartActivity">;
+};
 
 interface FormValues {
   machine?: { IdMacchina: number };
@@ -75,12 +86,10 @@ const validationSchema = (actionType: ActionType) => {
   });
 };
 
-export const StartActivity = (): React.ReactElement => {
+export const StartActivity = ({ route }: Props): React.ReactElement => {
   const makeCancelable = useCancelablePromise();
   const { call } = useContext(ApiContext);
-  const [actionType, setActionType] = useState(
-    ActionTypeKey.MachineAndOperator
-  );
+  const [actionType, setActionType] = useState(route.params.defaultActionType);
 
   const [isSuccess, setSuccess] = useState(false);
   const [isError, setError] = useState(false);
