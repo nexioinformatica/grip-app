@@ -9,7 +9,6 @@ import {
   Card,
   List,
   Surface,
-  Text,
   Title,
   useTheme,
 } from "react-native-paper";
@@ -27,7 +26,10 @@ import {
 } from "../../../../components/FormField";
 import { ExecutiveOrderFormSection } from "../../../../components/FormSection";
 import { RadioButton } from "../../../../components/RadioButton";
-import { Snackbar } from "../../../../components/Snackbar";
+import {
+  ErrorSnackbar,
+  SuccessSnackbar,
+} from "../../../../components/Snackbar";
 import { FlatSurface } from "../../../../components/Surface";
 import { getReasonTypesData } from "../../../../data/ReasonTypeResource";
 import { ApiContext } from "../../../../stores";
@@ -109,7 +111,6 @@ const NewMovement = (_props: Props): React.ReactElement => {
 
   const makeCancelable = useCancellablePromise();
   const { call } = useContext(ApiContext);
-  const theme = useTheme();
 
   const [isError, setError] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
@@ -127,17 +128,25 @@ const NewMovement = (_props: Props): React.ReactElement => {
         .catch(() => setError(true))
     );
 
+  const handleSubmit = (values: FormValues) =>
+    makeCancelable(
+      pipe(
+        pipe(
+          {
+            settings: makeSettings(),
+            value: makeValue(reasonType)(values),
+          },
+          call(Warehouse.Movement.create)
+        ),
+        toResultTask
+      )()
+        .then(() => setSuccess(true))
+        .catch(() => setError(true))
+    );
+
   useEffect(() => {
     getReasons();
   }, []);
-
-  const handleSubmit = (values: FormValues) => {
-    console.log(values);
-    // TODO: implement real handle submit
-    return Promise.reject()
-      .then(() => setSuccess(true))
-      .catch(() => setError(true));
-  };
 
   return (
     <Surface style={{ height: "100%" }}>
@@ -245,26 +254,8 @@ const NewMovement = (_props: Props): React.ReactElement => {
           </Card>
         </FlatSurface>
       </ScrollView>
-      <Snackbar
-        visible={isError}
-        onDismiss={() => {
-          setError(false);
-        }}
-        duration={3000}
-        style={{ backgroundColor: theme.colors.surface }}
-      >
-        <Text>Coff coff, qualcosa è andato storto</Text>
-      </Snackbar>
-      <Snackbar
-        visible={isSuccess}
-        onDismiss={() => {
-          setSuccess(false);
-        }}
-        duration={3000}
-        style={{ backgroundColor: theme.colors.surface }}
-      >
-        <Text>Operazione effettuata con successo</Text>
-      </Snackbar>
+      <SuccessSnackbar isSuccess={isSuccess} setSuccess={setSuccess} />
+      <ErrorSnackbar isError={isError} setError={setError} />
     </Surface>
   );
 };
@@ -277,4 +268,13 @@ const styles = StyleSheet.create({
   container: { flex: 1, margin: 16 },
   divider: { width: "100%", marginTop: 16, height: 2 },
   mt16: { marginTop: 16 },
+});
+
+const makeValue = (reasonType: ReasonType) => (
+  values: FormValues
+): Warehouse.Movement.NewMovement => ({
+  TipoCausale: reasonType,
+  IdArticolo: values.freshman!.Oggetto.IdArticolo,
+  Matricole: [values.freshman!.Oggetto.IdMatricola],
+  Quantita: [1],
 });
