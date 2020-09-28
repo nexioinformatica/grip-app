@@ -42,7 +42,6 @@ const DecodeBarcodeCard = () => {
             value={barcode}
             returnKeyType="send"
             keyboardType="default"
-            disabled={true}
           />
         </Card.Content>
       </Card>

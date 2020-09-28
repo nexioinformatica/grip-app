@@ -35,7 +35,7 @@ export const ScanFreshman = ({
 }: Props): React.ReactElement => {
   const navigation = useNavigation();
   const theme = useTheme();
-  const { callPublic } = useContext(ApiContext);
+  const { call } = useContext(ApiContext);
 
   const [isDecoding, setDecoding] = useState(false);
   const [isDecodingFailed, setDecodingFailed] = useState(false);
@@ -61,10 +61,11 @@ export const ScanFreshman = ({
     if (value) {
       setDecoding(true);
       pipe(
-        callPublic(Barcode.decode)({
-          value: { Code: value },
+        {
+          value: { Codice: value },
           settings: makeSettings(),
-        }),
+        },
+        call(Barcode.decode),
         TE.fold(onDecodeError, onDecodeSuccess)
       )();
     }
