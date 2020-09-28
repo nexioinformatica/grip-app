@@ -15,7 +15,7 @@ export const API_BASE_URL =
  * Whether to use HTTP schema for APIs.
  */
 export const API_USE_HTTP: boolean =
-  Constants.manifest.extra.agilecomApiUseHttp || false;
+  Constants.manifest.extra.agilecomApiUseHttp === "true" || false;
 
 /**
  * Number of milliseconds for api request timeout.
