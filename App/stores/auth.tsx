@@ -11,6 +11,7 @@ import { User } from "../types";
 import { makeSettings, logErrorIfAny } from "../util/api";
 import { noop } from "../util/noop";
 import { ErrorContext } from "./error";
+import { API_KEY } from "../util/constants";
 
 const USER_STORAGE_KEY = "user";
 
@@ -50,6 +51,7 @@ export function AuthContextProvider({
         value: {
           refresh_token: u.token.refresh_token,
           grant_type: "refresh_token",
+          client_id: API_KEY,
         },
         settings: makeSettings(),
       }),

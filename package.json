@@ -39,7 +39,7 @@
     "expo-permissions": "~9.0.1",
     "formik": "^2.1.4",
     "fp-ts": "^2.5.3",
-    "geom-api-ts-client": "^1.7.1",
+    "geom-api-ts-client": "^1.7.3",
     "hoist-non-react-statics": "^3.3.2",
     "io-ts": "^2.2.3",
     "lodash": "^4.17.20",
