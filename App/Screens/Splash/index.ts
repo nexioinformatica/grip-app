@@ -1,1 +1,1 @@
-export * from "./Splash";
+export * from "./Splahs";

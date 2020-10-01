@@ -1,124 +1,30 @@
-import { BarCodeEvent } from "expo-barcode-scanner";
-import { Warehouse } from "geom-api-ts-client";
-import { Container, Root } from "native-base";
 import React, { useContext } from "react";
+import { Text } from "react-native";
 
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-
-import { AppBar } from "../components";
-import { AuthContext, ErrorContext } from "../stores";
-import { Login, Profile } from "./Auth";
-import { Error } from "./Error";
-import { Home } from "./Home";
-import { StartProcessing } from "./Processing";
-import { Scan } from "./Scan";
-import { NewMovement } from "./Warehouse";
-
-export type RootStackParamList = {
-  Home: undefined;
-  StartProcessing: undefined;
-  NewMovement: {
-    reasonTypeDefault: Warehouse.Movement.ReasonTypeKey | undefined;
-  };
-  Scan: { onBarcodeScanned?: (barcode: BarCodeEvent) => void };
-  Profile: undefined;
-};
-
-export type LoginStackParamList = {
-  Login: undefined;
-};
-
-export type ErrorStackParamList = {
-  Error: { error: Error; onClear: () => void };
-};
-
-const RootStack = ((): React.ReactElement => {
-  const Stack = createStackNavigator<RootStackParamList>();
-
-  return (
-    <>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: true,
-          header: function appBar(props) {
-            return <AppBar {...props} />;
-          },
-        }}
-      >
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen
-          name="StartProcessing"
-          options={{ title: "Inizio Lavorazione" }}
-          component={StartProcessing}
-        />
-        <Stack.Screen
-          name="NewMovement"
-          options={{ title: "Nuovo Movimento" }}
-          component={NewMovement}
-        />
-        <Stack.Screen name="Scan" component={Scan} />
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={{ title: "Profilo" }}
-        />
-      </Stack.Navigator>
-    </>
-  );
-})();
-
-const LoginStack = ((): React.ReactElement => {
-  const Stack = createStackNavigator<LoginStackParamList>();
-
-  return (
-    <>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={Login} />
-      </Stack.Navigator>
-    </>
-  );
-})();
-
-const ErrorStack = ((): React.ReactElement => {
-  const Stack = createStackNavigator<ErrorStackParamList>();
-
-  return (
-    <>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Error" component={Error} />
-      </Stack.Navigator>
-    </>
-  );
-})();
-
-/**
- * Wrap content into the basic structure.
- * @param children The content to wrap.
- */
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-const wrap = (children: any): React.ReactElement => {
-  return (
-    <Root>
-      <Container style={{ flex: 1 }}>
-        <NavigationContainer>{children}</NavigationContainer>
-      </Container>
-    </Root>
-  );
-};
+import { AuthContext, ErrorContext, PreferencesContext } from "../stores";
+import { LoginNavigator, RootNavigator } from "./Navigators";
+import { Splash as SpashScreen } from "./Splash";
 
 const Screens = (): React.ReactElement => {
   const { error } = useContext(ErrorContext);
-  const { user } = useContext(AuthContext);
+  const auth = useContext(AuthContext);
+  const preferences = useContext(PreferencesContext);
 
-  // Login Stack
-  if (!user()) return wrap(LoginStack);
+  const user = auth.user;
 
-  // Error Stack
-  if (error) return wrap(ErrorStack);
+  if (!auth.isReady || !preferences.isReady) return <SpashScreen />;
 
-  // Root Stack
-  return wrap(RootStack);
+  if (!user) return <LoginNavigator />;
+
+  // TODO: replace this with an ErrorNavigator
+  if (error)
+    return (
+      <Text>
+        There was an error :( {error.message} {error.stack}
+      </Text>
+    );
+
+  return <RootNavigator />;
 };
 
 export { Screens };

@@ -1,76 +1,63 @@
-import { Warehouse } from "geom-api-ts-client";
-import { Button, Content, H1, Text, NativeBase } from "native-base";
 import React from "react";
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
+import { Card, Surface } from "react-native-paper";
 
-import { StackNavigationProp } from "@react-navigation/stack";
+import {
+  DecodeBarcodeCard,
+  Fabs,
+  InProgressActivitiesSurface,
+  OlderActivityInProgressSurface,
+  QuickLinksCard,
+  WelcomeCard,
+} from "./Actions";
 
-import { SimpleCard } from "../../components";
-import { RootStackParamList } from "../Screens";
-
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
-type HomeProps = {
-  navigation: HomeScreenNavigationProp;
-};
-
-const StartProcessingButton = (props: NativeBase.Button) => {
+export function Home(): React.ReactElement {
   return (
-    <Button {...props}>
-      <Text>Inizio Lavorazione</Text>
-    </Button>
-  );
-};
+    <Surface style={styles.container}>
+      <ScrollView>
+        <Surface style={styles.content}>
+          <Surface>
+            <WelcomeCard />
+          </Surface>
+          <Surface style={{ flex: 1, flexDirection: "row" }}>
+            <Card style={{ ...styles.box, flex: 1, marginRight: 8 }}>
+              <Card.Content>
+                <InProgressActivitiesSurface />
+              </Card.Content>
+            </Card>
+            <Card style={{ ...styles.box, flex: 1, marginLeft: 8 }}>
+              <Card.Content>
+                <OlderActivityInProgressSurface />
+              </Card.Content>
+            </Card>
+          </Surface>
+          <Surface style={styles.box}>
+            <QuickLinksCard />
+          </Surface>
+          <Surface style={styles.box}>
+            <DecodeBarcodeCard />
+          </Surface>
+        </Surface>
+      </ScrollView>
 
-const ScrapToWarehouseButton = (props: NativeBase.Button) => {
-  return (
-    <Button {...props}>
-      <Text>Scarto a Magazzino</Text>
-    </Button>
-  );
-};
-
-export function Home(props: HomeProps): React.ReactElement {
-  const { navigation } = props;
-
-  const handleStartProcessingButtonPress = () => {
-    navigation.navigate("StartProcessing");
-  };
-
-  const handleScrapToWarehouseButtonPress = () => {
-    navigation.navigate("NewMovement", {
-      reasonTypeDefault: Warehouse.Movement.ReasonTypeKey.LoadRemnant,
-    });
-  };
-
-  return (
-    <>
-      <Content padder>
-        <SimpleCard>
-          <H1>Azioni</H1>
-          <Text>Inizia scegliendo una delle azioni elencate qui sotto.</Text>
-        </SimpleCard>
-        <SimpleCard>
-          <StartProcessingButton
-            full
-            style={styles.action}
-            onPress={handleStartProcessingButtonPress}
-          />
-          <ScrapToWarehouseButton
-            full
-            style={styles.action}
-            onPress={handleScrapToWarehouseButtonPress}
-          />
-        </SimpleCard>
-      </Content>
-    </>
+      <Fabs />
+    </Surface>
   );
 }
 
 const styles = StyleSheet.create({
-  title: {
-    marginBottom: 10,
+  container: { flex: 1 },
+  content: { padding: 16 },
+  box: {
+    marginTop: 16,
   },
-  action: {
-    marginBottom: 5,
+  mt16: {
+    marginTop: 16,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 });

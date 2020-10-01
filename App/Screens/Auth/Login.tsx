@@ -1,142 +1,141 @@
-import { Field, Formik } from "formik";
+import { Formik } from "formik";
 import { pipe } from "fp-ts/lib/pipeable";
-import * as T from "fp-ts/lib/Task";
-import * as TE from "fp-ts/lib/TaskEither";
-import { Authentication, Operator } from "geom-api-ts-client";
-import { Button, Container, Content, H1, H2, Text, Toast } from "native-base";
-import React, { useContext } from "react";
-import { StyleSheet, View } from "react-native";
-import { Input } from "react-native-elements";
+import { Authentication } from "geom-api-ts-client";
+import React, { useContext, useState } from "react";
+import {
+  Linking,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Caption, Text } from "react-native-paper";
 import * as Yup from "yup";
 
-import { ChooseOperator, SimpleCard } from "../../components";
-import { AuthContext, makeUser, ApiContext } from "../../stores";
+import { BackgroundCenter, Button, Header, Logo } from "../../components/Auth";
+import {
+  PasswordFormField,
+  UsernameFormField,
+} from "../../components/FormField";
+import { Snackbar } from "../../components/Snackbar";
+import { ApiContext, AuthContext, makeUser } from "../../stores";
 import { makeSettings } from "../../util/api";
 import { API_KEY } from "../../util/constants";
-import { generalErrorToast } from "../../util/ui";
+import { teFold, teLeft, teRight } from "../../util/fp";
+import { theme } from "../../util/theme";
 
 const validationSchema = Yup.object({
-  username: Yup.string().required().min(4),
-  password: Yup.string().required().min(4),
+  username: Yup.string().required().min(1),
+  password: Yup.string().required().min(1),
 });
+
+interface FormValues {
+  username: string;
+  password: string;
+}
+
+const initialValues = { username: "", password: "" };
 
 export const Login = (): React.ReactElement => {
   const { callPublic } = useContext(ApiContext);
   const { login } = useContext(AuthContext);
 
+  const [isError, setError] = useState(false);
+
+  const handleLogin = (values: FormValues) =>
+    pipe(
+      callPublic(Authentication.login)({
+        value: {
+          username: values.username,
+          password: values.password,
+          grant_type: "password",
+          client_id: API_KEY,
+        },
+        settings: makeSettings(),
+      }),
+      teFold(
+        (err: Error) => {
+          setError(true);
+          return teLeft(err);
+        },
+        (res) => {
+          login(makeUser(values.username)(res));
+          return teRight(res);
+        }
+      )
+    )();
+
   return (
-    <Container>
-      <Content padder>
-        <SimpleCard>
-          <H1>Login</H1>
-          <Text>
-            Scegli il tuo username ed inserisci la password. Se il tuo operatore
-            non è presente puoi provare a digitare manualmente l&apos;username
-            nell&apos;apposita casella di testo.
-          </Text>
-        </SimpleCard>
-        <SimpleCard>
-          <Formik
-            initialValues={{ username: "", password: "" }}
-            validationSchema={validationSchema}
-            onSubmit={(values) =>
-              pipe(
-                callPublic(Authentication.login)({
-                  value: {
-                    username: values.username,
-                    password: values.password,
-                    grant_type: "password",
-                    client_id: API_KEY,
-                  },
-                  settings: makeSettings(),
-                }),
-                TE.fold(
-                  () => {
-                    Toast.show(generalErrorToast);
-                    return T.never;
-                  },
-                  (res) => {
-                    login(makeUser(values.username)(res));
-                    return T.of(res);
-                  }
-                )
-              )()
-            }
-          >
-            {({
-              handleSubmit,
-              handleChange,
-              handleBlur,
-              errors,
-              isSubmitting,
-              isValid,
-              setFieldValue,
-              values,
-            }) => {
-              return (
-                <>
-                  <View style={{ width: "100%" }}>
-                    <H2>Operatori</H2>
-                    <Field
-                      name="username"
-                      as={ChooseOperator}
-                      onSelect={(x: Operator.Operator) =>
-                        setFieldValue("username", x.UserName)
-                      }
-                    />
-                  </View>
+    <BackgroundCenter>
+      <Logo />
 
-                  <View style={{ marginTop: 20, width: "100%" }}>
-                    <H2>Credenziali</H2>
-                    <View style={styles.item}>
-                      <Field
-                        name="username"
-                        as={Input}
-                        placeholder="Username"
-                        onChangeText={handleChange("username")}
-                        value={values.username}
-                        onBlur={handleBlur("username")}
-                        errorMessage={errors.username}
-                      />
-                    </View>
-                    <View style={styles.last}>
-                      <Field
-                        name="password"
-                        as={Input}
-                        onChangeText={handleChange("password")}
-                        onBlur={handleBlur("password")}
-                        placeholder="Password"
-                        secureTextEntry={true}
-                        errorMessage={errors.password}
-                      />
-                    </View>
+      <Header>Welcome back.</Header>
 
-                    <View>
-                      <Button
-                        full
-                        primary
-                        onPress={handleSubmit}
-                        disabled={isSubmitting || !isValid}
-                      >
-                        <Text>Login</Text>
-                      </Button>
-                    </View>
-                  </View>
-                </>
-              );
-            }}
-          </Formik>
-        </SimpleCard>
-      </Content>
-    </Container>
+      <Formik<FormValues>
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleLogin}
+      >
+        {(formikProps) => {
+          const { handleSubmit, isSubmitting, isValid } = formikProps;
+
+          return (
+            <View style={{ elevation: 0, width: "100%" }}>
+              <UsernameFormField {...formikProps} />
+              <PasswordFormField {...formikProps} />
+
+              <Button
+                mode="contained"
+                disabled={!isValid || isSubmitting}
+                loading={isSubmitting}
+                onPress={handleSubmit}
+              >
+                Login
+              </Button>
+            </View>
+          );
+        }}
+      </Formik>
+
+      <View style={styles.row}>
+        <Caption>Non trovi il tuo account? Contatta il </Caption>
+        <TouchableOpacity
+          onPress={() => {
+            Linking.openURL("mailto:support@nexio.cloud");
+          }}
+        >
+          <Caption style={styles.link}>supporto</Caption>
+        </TouchableOpacity>
+        <Caption>.</Caption>
+      </View>
+
+      <Snackbar
+        visible={isError}
+        onDismiss={() => {
+          setError(false);
+        }}
+      >
+        <Text>Coff coff, qualcosa è andato storto</Text>
+      </Snackbar>
+    </BackgroundCenter>
   );
 };
 
 const styles = StyleSheet.create({
-  item: {
-    marginBottom: 0,
+  forgotPassword: {
+    width: "100%",
+    alignItems: "flex-end",
+    marginBottom: 24,
   },
-  last: {
-    marginBottom: 10,
+  row: {
+    flexDirection: "row",
+    marginTop: 4,
+  },
+  label: {
+    color: theme.colors.secondary,
+  },
+  link: {
+    fontWeight: "bold",
+    color: theme.colors.primary,
   },
 });

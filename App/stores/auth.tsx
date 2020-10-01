@@ -11,26 +11,29 @@ import { User } from "../types";
 import { makeSettings, logErrorIfAny } from "../util/api";
 import { noop } from "../util/noop";
 import { ErrorContext } from "./error";
+import { API_KEY } from "../util/constants";
 
 const USER_STORAGE_KEY = "user";
 
 type Token = Auth.Token;
 
 interface Context {
-  user: () => User | undefined;
+  user: User | undefined;
   logout: () => void;
   login: (data: User) => void;
   /**
    * Refresh the token. If force is true, the token is refreshed even if it is not expiring.
    */
   refresh: (force?: boolean) => void;
+  isReady: boolean;
 }
 
 export const AuthContext = createContext<Context>({
-  user: () => undefined,
+  user: undefined,
   logout: noop,
   login: noop,
   refresh: noop,
+  isReady: false,
 });
 
 export function AuthContextProvider({
@@ -40,6 +43,7 @@ export function AuthContextProvider({
 }): React.ReactElement {
   const { setError } = useContext(ErrorContext);
   const [_user, setUser] = useState<undefined | User>(undefined);
+  const [isReady, setReady] = useState<boolean>(false);
 
   const getRefresh = (u: User): TE.TaskEither<Error, Token> =>
     pipe(
@@ -47,6 +51,7 @@ export function AuthContextProvider({
         value: {
           refresh_token: u.token.refresh_token,
           grant_type: "refresh_token",
+          client_id: API_KEY,
         },
         settings: makeSettings(),
       }),
@@ -69,7 +74,9 @@ export function AuthContextProvider({
       } catch (err) {
         setUser(undefined);
       }
-    })();
+    })().then(() => {
+      setReady(true);
+    });
   }, []);
 
   useEffect(() => {
@@ -86,9 +93,7 @@ export function AuthContextProvider({
     })();
   }, [_user]);
 
-  const user = () => {
-    return _user;
-  };
+  const user = _user;
 
   const login = (user: User): void => {
     setUser(user);
@@ -120,7 +125,13 @@ export function AuthContextProvider({
 
   return (
     <AuthContext.Provider
-      value={{ user: user, logout: logout, login: login, refresh: refresh }}
+      value={{
+        user: user,
+        logout: logout,
+        login: login,
+        refresh: refresh,
+        isReady: isReady,
+      }}
     >
       {children}
     </AuthContext.Provider>
@@ -137,7 +148,7 @@ export const makeUser = (username: string) => (token: Token): User => {
 
 const isTokenExpiring = (user: User): boolean =>
   moment().isAfter(
-    user.timestamp.clone().add((user.token.expires_in * 80) / 100)
+    user.timestamp.clone().add((user.token.expires_in * 80) / 100, "seconds")
   );
 
 const refreshTokenIfIsExpiring = (

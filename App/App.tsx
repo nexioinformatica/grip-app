@@ -1,43 +1,37 @@
-import React, { useEffect, useState } from "react";
-import * as Font from "expo-font";
-import { ThemeProvider } from "react-native-elements";
-import { Ionicons } from "@expo/vector-icons";
-import { Splash as SplashScreen } from "./Screens/Splash";
+import React from "react";
+
 import { Screens } from "./Screens";
-import { theme } from "./util/theme";
-import { ErrorContextProvider, AuthContextProvider } from "./stores";
-import { ApiContextProvider } from "./stores/api";
-import { init as sentryInit } from "./util/sentry";
+import {
+  ApiContextProvider,
+  AuthContextProvider,
+  ErrorContextProvider,
+  PaperContextProvider,
+  PreferencesContextProvider,
+} from "./stores";
+import { intercept } from "./util/axios";
 import { IS_SENTRY_SET_UP } from "./util/constants";
+import { init as sentryInit } from "./util/sentry";
 
 if (IS_SENTRY_SET_UP) {
   sentryInit();
 }
 
+// Axios interceptors enabled for the initial phase.
+intercept();
+
 const App = (): React.ReactElement => {
-  const [isFontReady, setFontReady] = useState(false);
-
-  useEffect(() => {
-    (async function () {
-      await Font.loadAsync({
-        Roboto: require("native-base/Fonts/Roboto.ttf"),
-        Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-        ...Ionicons.font,
-      });
-      setFontReady(true);
-    })();
-  }, [setFontReady]);
-
   return (
-    <ThemeProvider theme={theme}>
-      <ErrorContextProvider>
+    <ErrorContextProvider>
+      <PreferencesContextProvider>
         <AuthContextProvider>
           <ApiContextProvider>
-            {isFontReady ? <Screens /> : <SplashScreen />}
+            <PaperContextProvider>
+              <Screens />
+            </PaperContextProvider>
           </ApiContextProvider>
         </AuthContextProvider>
-      </ErrorContextProvider>
-    </ThemeProvider>
+      </PreferencesContextProvider>
+    </ErrorContextProvider>
   );
 };
 

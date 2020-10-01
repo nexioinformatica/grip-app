@@ -2,7 +2,7 @@ import { BarCodeEvent, BarCodeScanner } from "expo-barcode-scanner";
 import * as Permissions from "expo-permissions";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Button } from "react-native-elements";
+import { Button } from "react-native-paper";
 
 import { noop } from "../../util/noop";
 
@@ -58,11 +58,9 @@ export const BarcodeScanner = ({
       {scanned && (
         <View style={styles.result}>
           <Text style={{ padding: 10 }}>{barcode ? barcode.data : ""}</Text>
-          <Button
-            type="clear"
-            title="SCANSIONA DI NUOVO"
-            onPress={() => setScanned(false)}
-          />
+          <Button mode="outlined" onPress={() => setScanned(false)}>
+            Scansiona di nuovo
+          </Button>
         </View>
       )}
     </BarCodeScanner>

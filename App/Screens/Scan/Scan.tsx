@@ -1,20 +1,19 @@
-import React from "react";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RouteProp } from "@react-navigation/native";
-import { RootStackParamList } from "../Screens";
-import { BarcodeScanner } from "../../components";
 import { BarCodeEvent } from "expo-barcode-scanner";
-import { noop } from "../../util/noop";
+import React from "react";
 
-type ScanNavigationProp = StackNavigationProp<RootStackParamList, "Scan">;
-type ScanRouteProp = RouteProp<RootStackParamList, "Scan">;
-// type T = StackNavigationOptions;
-type ScanProps = {
-  navigation: ScanNavigationProp;
-  route: ScanRouteProp;
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+import { BarcodeScanner } from "../../components/BarcodeScanner";
+import { noop } from "../../util/noop";
+import { RootNavigatorParamList } from "../Navigators";
+
+type Props = {
+  navigation: StackNavigationProp<RootNavigatorParamList, "Scan">;
+  route: RouteProp<RootNavigatorParamList, "Scan">;
 };
 
-export const Scan = (props: ScanProps): React.ReactElement => {
+export const Scan = (props: Props): React.ReactElement => {
   const { navigation, route } = props;
 
   // Need to check

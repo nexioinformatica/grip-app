@@ -1,6 +1,19 @@
-import { Theme } from "react-native-elements";
+import { DefaultTheme, DarkTheme } from "react-native-paper";
 
-type IconSet = "material-community" | "material";
+export const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
 
-export const theme: Theme = {};
-export const iconSet: IconSet = "material-community";
+    secondary: "#414757",
+    error: "#f13a59",
+  },
+};
+
+export const lightTheme = {
+  ...theme,
+};
+
+export const darkTheme = {
+  ...DarkTheme,
+};
