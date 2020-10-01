@@ -95,20 +95,6 @@ const DrawerContent = (props: Props): React.ReactElement => {
           </Surface>
 
           <Caption style={styles.caption}>@{user.username}</Caption>
-          <Surface style={styles.row}>
-            <Surface style={styles.section}>
-              <Paragraph style={[styles.paragraph, styles.caption]}>
-                202
-              </Paragraph>
-              <Caption style={styles.caption}>Following</Caption>
-            </Surface>
-            <Surface style={styles.section}>
-              <Paragraph style={[styles.paragraph, styles.caption]}>
-                159
-              </Paragraph>
-              <Caption style={styles.caption}>Followers</Caption>
-            </Surface>
-          </Surface>
         </Surface>
         <Drawer.Section style={styles.drawerSection} focusable={false}>
           <List.Item
