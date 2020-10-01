@@ -3,6 +3,7 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   StyleSheet,
+  View,
 } from "react-native";
 import { useTheme, Surface } from "react-native-paper";
 
@@ -49,12 +50,7 @@ const Background = ({ containerStyle, children }: Props) => {
 
   return (
     <BackgroundWrapper theme={theme}>
-      <KeyboardAvoidingView
-        style={{ ...styles.container, ...containerStyle }}
-        behavior="padding"
-      >
-        {children}
-      </KeyboardAvoidingView>
+      <View style={[styles.container, containerStyle]}>{children}</View>
     </BackgroundWrapper>
   );
 };

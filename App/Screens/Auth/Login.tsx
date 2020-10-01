@@ -2,7 +2,13 @@ import { Formik } from "formik";
 import { pipe } from "fp-ts/lib/pipeable";
 import { Authentication } from "geom-api-ts-client";
 import React, { useContext, useState } from "react";
-import { Linking, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Linking,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Caption, Text } from "react-native-paper";
 import * as Yup from "yup";
 
@@ -95,7 +101,7 @@ export const Login = (): React.ReactElement => {
         <Caption>Non trovi il tuo account? Contatta il </Caption>
         <TouchableOpacity
           onPress={() => {
-            Linking.openURL("https://grip.nexioapp.com/support");
+            Linking.openURL("mailto:support@nexio.cloud");
           }}
         >
           <Caption style={styles.link}>supporto</Caption>
