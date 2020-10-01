@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import {
   Button,
   Card,
@@ -51,15 +51,17 @@ const DecodeBarcodeCard = () => {
           <Dialog.Title>Barcode Decode</Dialog.Title>
           <Dialog.Content>
             <Surface style={{ height: 200, marginTop: 24 }}>
-              {barcodeData.map((x, i) => {
-                return (
-                  <Surface style={styles.mt16} key={i}>
-                    <Title>{barcode}</Title>
-                    <Text>Tipo: {x.Tipo}</Text>
-                    <Text>Contenuto: {JSON.stringify(x.Oggetto)}</Text>
-                  </Surface>
-                );
-              })}
+              <ScrollView>
+                {barcodeData.map((x, i) => {
+                  return (
+                    <Surface style={styles.mt16} key={i}>
+                      <Title>{barcode}</Title>
+                      <Text>Tipo: {x.Tipo}</Text>
+                      <Text>Contenuto: {JSON.stringify(x.Oggetto)}</Text>
+                    </Surface>
+                  );
+                })}
+              </ScrollView>
             </Surface>
           </Dialog.Content>
           <Dialog.Actions>
