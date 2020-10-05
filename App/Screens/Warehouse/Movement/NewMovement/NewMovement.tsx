@@ -22,6 +22,7 @@ import { TextInputPicker } from "../../../../components/Dropdown";
 import { NewSubdivisionButton } from "../../../../components/FormComponent/NewSubdivisionButton";
 import {
   FreshmanFormField,
+  PhaseFormField,
   SubdivisionFormField,
 } from "../../../../components/FormField";
 import { ExecutiveOrderFormSection } from "../../../../components/FormSection";
@@ -100,6 +101,7 @@ const validationSchema = (reasonType: ReasonType) => {
     : {};
   return Yup.object({
     freshman: Yup.mixed().required("Il campo Matricola è richiesto"),
+    phase: Yup.mixed().required("Il campo Fase è richiesto"),
     ...reason,
     ...subdivision,
   });
@@ -201,10 +203,7 @@ const NewMovement = ({ route }: Props): React.ReactElement => {
                             />
                           )}
 
-                          <FreshmanFormField
-                            {...formikProps}
-                            label="Matricola*"
-                          />
+                          <FreshmanFormField {...formikProps} />
 
                           {isRequiringSubdivision(reasonType) &&
                             values.freshman && (
@@ -218,6 +217,8 @@ const NewMovement = ({ route }: Props): React.ReactElement => {
                                 />
                               </>
                             )}
+
+                          <PhaseFormField {...formikProps} />
                         </List.Accordion>
 
                         <List.Accordion
