@@ -1,6 +1,6 @@
 {
   "name": "grip-app",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "author": "Luca Parolari <luca.parolari@nexio.cloud>",
   "contributors": [
     "Nexio Informatica S.r.l."
@@ -17,6 +17,10 @@
     "eject": "expo eject",
     "lint": "tsc --noEmit --skipLibCheck && eslint --ext .ts,.tsx App",
     "test": "echo Skipped"
+  },
+  "android": {
+    "package": "com.nexioinformatica.grip.app",
+    "versionCode": 3
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
