@@ -13,15 +13,16 @@
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "gen": "node scripts/generateAppJson.js",
-    "start": "node scripts/generateAppJson.js && expo start",
-    "start-no-https": "node scripts/generateAppJson.js && expo start --no-https",
-    "android": "node scripts/generateAppJson.js && expo start --android",
-    "ios": "node scripts/generateAppJson.js && expo start --ios",
-    "web": "node scripts/generateAppJson.js && expo start --web",
+    "gen:dotenv": "node scripts/generateAppJson.js",
+    "start": "expo start",
+    "start:android": "expo start --android",
+    "start:ios": "expo start --ios",
+    "start:web": "expo start --web",
     "eject": "expo eject",
     "lint": "tsc --noEmit --skipLibCheck && eslint --ext .ts,.tsx App",
-    "test": "echo Skipped"
+    "test": "echo Skipped",
+    "publish:staging": "expo publish --release-channel default",
+    "publish:prod": "expo publish --release-channel production"
   },
   "husky": {
     "hooks": {
