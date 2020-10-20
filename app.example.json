@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "grip-app",
+    "name": "Grip App",
     "slug": "grip-app",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.0",
-    "orientation": "portrait",
+    "version": "0.1.0",
     "icon": "./assets/logo.png",
+    "githubUrl": "https://github.com/nexioinformatica/grip-app",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -16,8 +16,9 @@
     },
     "assetBundlePatterns": ["**/*"],
     "android": {
-      "package": "com.nexioapp.grip",
-      "versionCode": 3
+      "package": "com.nexioinformatica.grip.app",
+      "versionCode": 1,
+      "permissions": []
     },
     "ios": {
       "supportsTablet": true
