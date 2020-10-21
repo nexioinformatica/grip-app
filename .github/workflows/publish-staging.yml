@@ -1,0 +1,37 @@
+name: publish-prod
+
+on:
+  push:
+    branches:
+      - "staging"
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn
+      - run: yarn lint
+      - run: yarn test
+
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn
+      - run: yarn global add expo-cli
+      - run: expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}
+        env:
+          EXPO_USERNAME: ${{secrets.EXPO_USERNAME}}
+          EXPO_PASSWORD: ${{secrets.EXPO_PASSWORD}}
+      - run: expo publish --release-channel production --non-interactive

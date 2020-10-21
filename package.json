@@ -13,7 +13,8 @@
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "gen:dotenv": "node scripts/generateAppJson.js",
+    "gen:manifest": "node scripts/generateAppJson.js",
+    "gen:dotenv": "source scripts/generateEnv.sh",
     "start": "expo start",
     "start:android": "expo start --android",
     "start:ios": "expo start --ios",
