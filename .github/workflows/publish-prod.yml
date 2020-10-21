@@ -29,12 +29,11 @@ jobs:
         with:
           node-version: 12
       - run: yarn
-      - run: yarn global add expo-cli
-      - run: expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}
+      - run: npx expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}
         env:
           EXPO_USERNAME: ${{secrets.EXPO_USERNAME}}
           EXPO_PASSWORD: ${{secrets.EXPO_PASSWORD}}
-      - run: expo publish --release-channel production --non-interactive
+      - run: npx expo publish --release-channel production --non-interactive
       # - run: yarn gen:dotenv
       #   env:
       #     SENTRY_PUBLIC_DNS: ${{secrets.SENTRY_PUBLIC_DNS}}
