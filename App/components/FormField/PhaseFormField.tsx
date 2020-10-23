@@ -1,9 +1,8 @@
 import { FormikProps } from "formik";
-import { pipe } from "fp-ts/lib/pipeable";
 import { Barcode } from "geom-api-ts-client";
 import React from "react";
 
-import { ScanCode } from "../ScanInput";
+import { ScanPhase } from "../ScanInput";
 
 interface PhaseFormValues {
   phase?: Barcode.PhaseDecode;
@@ -21,15 +20,10 @@ export const PhaseFormField = <T extends PhaseFormValues>({
   errors,
 }: FormikProps<T>): React.ReactElement => {
   return (
-    <ScanCode
+    <ScanPhase
       label="Fase"
       onChangeText={(x?: string) => handleChange("barcode.phase")(x ?? "")}
-      onDecodeValue={(x) =>
-        setFieldValue(
-          "phase",
-          pipe(x, Barcode.Util.getDecode<Barcode.PhaseDecode>("F"))
-        )
-      }
+      onDecodeValue={(x) => setFieldValue("phase", x)}
       value={values.barcode.phase}
       returnKeyType="next"
       onBlur={handleBlur("phase")}
