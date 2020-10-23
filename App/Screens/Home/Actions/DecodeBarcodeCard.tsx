@@ -11,7 +11,7 @@ import {
   Title,
 } from "react-native-paper";
 
-import { ScanFreshman } from "../../../components/ScanInput";
+import { ScanCode } from "../../../components/ScanInput";
 import { BarcodeDecode } from "../../../types/Barcode";
 
 const DecodeBarcodeCard = () => {
@@ -35,7 +35,7 @@ const DecodeBarcodeCard = () => {
           <Paragraph>
             Visualizza le informazioni relative ad un barcode.
           </Paragraph>
-          <ScanFreshman
+          <ScanCode
             label="Barcode"
             onChangeText={(x?: string) => setBarcode(x ?? "")}
             onDecodeValue={handleDecodeValue}

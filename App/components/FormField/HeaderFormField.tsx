@@ -3,7 +3,7 @@ import { pipe } from "fp-ts/lib/pipeable";
 import { Barcode } from "geom-api-ts-client";
 import React from "react";
 
-import { ScanFreshman } from "../ScanInput";
+import { ScanCode } from "../ScanInput";
 
 interface HeaderFormValues {
   header?: Barcode.HeaderDecode;
@@ -24,7 +24,7 @@ export const HeaderFormField = <T extends HeaderFormValues>(
     errors,
   } = formikProps;
   return (
-    <ScanFreshman
+    <ScanCode
       label="Testata"
       onChangeText={(x?: string) => handleChange("barcode.header")(x ?? "")}
       onDecodeValue={(x) =>

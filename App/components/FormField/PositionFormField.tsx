@@ -3,7 +3,7 @@ import { pipe } from "fp-ts/lib/pipeable";
 import { Barcode } from "geom-api-ts-client";
 import React from "react";
 
-import { ScanFreshman } from "../ScanInput";
+import { ScanCode } from "../ScanInput";
 
 interface PositionFormValues {
   position?: Barcode.PositionDecode;
@@ -24,7 +24,7 @@ export const PositionFormField = <T extends PositionFormValues>(
     errors,
   } = formikProps;
   return (
-    <ScanFreshman
+    <ScanCode
       label="Posizione"
       onChangeText={(x?: string) => handleChange("barcode.position")(x ?? "")}
       onDecodeValue={(x) =>

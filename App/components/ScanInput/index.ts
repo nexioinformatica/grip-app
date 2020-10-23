@@ -1,1 +1,1 @@
-export * from "./ScanFreshman";
+export * from "./ScanCode";

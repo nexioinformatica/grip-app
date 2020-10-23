@@ -1,6 +1,6 @@
 import React from "react";
 import { FormikProps } from "formik";
-import { ScanFreshman } from "../ScanInput";
+import { ScanCode } from "../ScanInput";
 import { pipe } from "fp-ts/lib/pipeable";
 import { Barcode } from "geom-api-ts-client";
 
@@ -11,7 +11,7 @@ interface FreshmanFormValues {
   };
 }
 
-type ScanFreshmanProps = Partial<React.ComponentProps<typeof ScanFreshman>>;
+type ScanFreshmanProps = Partial<React.ComponentProps<typeof ScanCode>>;
 
 export const FreshmanFormField = <T extends FreshmanFormValues>({
   handleChange,
@@ -21,7 +21,7 @@ export const FreshmanFormField = <T extends FreshmanFormValues>({
   errors,
   ...rest
 }: FormikProps<T> & ScanFreshmanProps): React.ReactElement => (
-  <ScanFreshman
+  <ScanCode
     label="Matricola"
     onChangeText={(x?: string) => handleChange("barcode.freshman")(x ?? "")}
     onDecodeValue={(x) =>

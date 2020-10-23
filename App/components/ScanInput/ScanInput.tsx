@@ -27,11 +27,11 @@ type Props<T> = React.ComponentProps<typeof TextInput> & {
 
 const DecodingStatusIcon = () => <TextInputIcon name="magnify" />;
 
-const ReadyStatusInput = ({ onPress }: { onPress: () => void }) => (
+const ReadyStatusIcon = (onPress: () => void) => (
   <TextInputIcon name="camera" onPress={onPress} />
 );
 
-const FailedStatusIcon = ({ onPress }: { onPress: () => void }) => (
+const FailedStatusIcon = (onPress: () => void) => (
   <TextInputIcon name="alert-circle" onPress={onPress} />
 );
 
@@ -55,7 +55,7 @@ export const ScanInput = <T,>({
   const theme = useTheme();
 
   const [status, setStatus] = useState<DecodeStatus>(DecodeStatus.Ready);
-  const [statusIcon, setStatusIcon] = useState(<></>); // default icon setted in use effect
+  const [statusIcon, setStatusIcon] = useState(<></>);
 
   const decodeValue = (value: string): Promise<T> =>
     decode(value).then((decoded) => {
@@ -76,11 +76,11 @@ export const ScanInput = <T,>({
     scanOnIconPress();
   };
 
-  const setDecodingStatusIcon = () => setStatusIcon(<DecodingStatusIcon />);
+  const setDecodingStatusIcon = () => setStatusIcon(DecodingStatusIcon());
   const setReadyStatusIcon = () =>
-    setStatusIcon(<ReadyStatusInput onPress={scanOnIconPress} />);
+    setStatusIcon(ReadyStatusIcon(scanOnIconPress));
   const setFailedStatusIcon = () =>
-    setStatusIcon(<FailedStatusIcon onPress={retryOnIconPress} />);
+    setStatusIcon(FailedStatusIcon(retryOnIconPress));
 
   const handleValueChange = (value?: string): void => {
     if (!value) return;

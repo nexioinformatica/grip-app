@@ -3,7 +3,7 @@ import { pipe } from "fp-ts/lib/pipeable";
 import { Barcode } from "geom-api-ts-client";
 import React from "react";
 
-import { ScanFreshman } from "../ScanInput";
+import { ScanCode } from "../ScanInput";
 
 type MachineFormValues = {
   machine?: { IdMacchina: number };
@@ -20,7 +20,7 @@ export const MachineFormField = <T extends MachineFormValues>({
   errors,
 }: FormikProps<T>): React.ReactElement => {
   return (
-    <ScanFreshman
+    <ScanCode
       label="Macchina"
       onChangeText={(x?: string) => handleChange("barcode.machine")(x ?? "")}
       onDecodeValue={(x) =>

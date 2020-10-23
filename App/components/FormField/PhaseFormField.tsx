@@ -3,7 +3,7 @@ import { pipe } from "fp-ts/lib/pipeable";
 import { Barcode } from "geom-api-ts-client";
 import React from "react";
 
-import { ScanFreshman } from "../ScanInput";
+import { ScanCode } from "../ScanInput";
 
 interface PhaseFormValues {
   phase?: Barcode.PhaseDecode;
@@ -21,7 +21,7 @@ export const PhaseFormField = <T extends PhaseFormValues>({
   errors,
 }: FormikProps<T>): React.ReactElement => {
   return (
-    <ScanFreshman
+    <ScanCode
       label="Fase"
       onChangeText={(x?: string) => handleChange("barcode.phase")(x ?? "")}
       onDecodeValue={(x) =>
