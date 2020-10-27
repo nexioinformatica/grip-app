@@ -1,6 +1,6 @@
 {
   "name": "grip-app",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "GeOM client application for on-site operators.",
   "author": "NEXIO INFORMATICA SRL",
   "contributors": [
@@ -23,7 +23,9 @@
     "lint": "tsc --noEmit --skipLibCheck && eslint --ext .ts,.tsx App",
     "test": "echo Skipped",
     "publish:staging": "expo publish --release-channel default",
-    "publish:prod": "expo publish --release-channel production"
+    "publish:prod": "expo publish --release-channel production",
+    "build:staging": "source scripts/didYouCheck.sh && expo:build -t app-bundle --release-channel default",
+    "build:prod": "./scripts/didYouCheck.sh && expo:build -t app-bundle --release-channel production"
   },
   "husky": {
     "hooks": {
