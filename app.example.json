@@ -3,7 +3,7 @@
     "name": "Grip App",
     "slug": "grip-app",
     "platforms": ["ios", "android", "web"],
-    "version": "0.1.0",
+    "version": "0.1.1",
     "icon": "./assets/logo.png",
     "githubUrl": "https://github.com/nexioinformatica/grip-app",
     "splash": {
@@ -17,8 +17,8 @@
     "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "com.nexioinformatica.grip.app",
-      "versionCode": 2,
-      "permissions": []
+      "versionCode": 3,
+      "permissions": ["CAMERA"]
     },
     "ios": {
       "supportsTablet": true
