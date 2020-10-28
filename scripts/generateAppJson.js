@@ -10,8 +10,11 @@
 
 const APP_EXAMPLE_JSON = "app.example.json";
 const APP_JSON = "app.json";
+const DOTENV = ".env";
 
-require("dotenv").config(); // load .env file by default
+require("dotenv").config({
+  path: !!process.env.DOTENV ? process.env.DOTENV : DOTENV,
+}); // load .env file by default
 const jsonfile = require("jsonfile");
 const merge = require("lodash/merge");
 

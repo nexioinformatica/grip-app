@@ -14,7 +14,8 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "gen:manifest": "node scripts/generateAppJson.js",
-    "gen:dotenv": "source scripts/generateEnv.sh",
+    "gen:manifest:dev": "DOTENV='.env.local' yarn gen:manifest",
+    "gen:dotenv": "./scripts/generateEnv.sh",
     "start": "expo start",
     "start:android": "expo start --android",
     "start:ios": "expo start --ios",
