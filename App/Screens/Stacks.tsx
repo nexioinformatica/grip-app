@@ -5,10 +5,12 @@ import { Appbar } from "../components/Appbar";
 import { Profile } from "./Auth";
 import { Scan } from "./Scan";
 import { BarcodeEvent } from "../types";
+import { Info } from "./Info";
 
 export type HomeStackParamList = {
   Home: undefined;
   Scan: { onBarcodeScanned?: (barcode: BarcodeEvent) => void };
+  Info: undefined;
 };
 
 export const HomeStack = (): React.ReactElement => {
@@ -32,6 +34,7 @@ export const HomeStack = (): React.ReactElement => {
         component={Scan}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name="Info" component={Info} />
     </Stack.Navigator>
   );
 };

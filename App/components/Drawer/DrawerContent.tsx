@@ -127,6 +127,15 @@ const DrawerContent = (props: Props): React.ReactElement => {
               props.navigation.navigate("Profile");
             }}
           />
+          <List.Item
+            left={(props) => (
+              <List.Icon {...props} icon="information-outline" />
+            )}
+            title="Info"
+            onPress={() => {
+              props.navigation.navigate("Info");
+            }}
+          />
         </Drawer.Section>
         <Drawer.Section title="Prefrenze" focusable={false}>
           <TouchableRipple onPress={preferences.theme.toggle}>

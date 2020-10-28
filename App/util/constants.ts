@@ -51,3 +51,8 @@ export const IS_SENTRY_SET_UP =
   // We also added sentry on staging btw
   (IS_PROD || IS_STAGING) &&
   typeof Constants.manifest.extra.sentryPublicDsn === "string";
+
+/**
+ * Native app version declared in app.json file.
+ */
+export const APP_VERSION = Constants.manifest.version;
