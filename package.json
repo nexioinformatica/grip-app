@@ -25,8 +25,8 @@
     "test": "echo Skipped",
     "publish:staging": "expo publish --release-channel default",
     "publish:prod": "expo publish --release-channel production",
-    "build:staging": "./scripts/didYouCheck.sh && expo build:android -t app-bundle --release-channel default",
-    "build:prod": "./scripts/didYouCheck.sh && expo build:android -t app-bundle --release-channel production"
+    "build:staging": "./scripts/didYouCheck.sh && yarn gen:manifest && expo build:android -t app-bundle --release-channel default",
+    "build:prod": "./scripts/didYouCheck.sh && yarn gen:manifest && expo build:android -t app-bundle --release-channel production"
   },
   "husky": {
     "hooks": {

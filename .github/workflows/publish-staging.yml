@@ -29,9 +29,18 @@ jobs:
         with:
           node-version: 12
       - run: yarn
-      - run: yarn global add expo-cli
-      - run: expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}
+      - run: npx expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}
         env:
           EXPO_USERNAME: ${{secrets.EXPO_USERNAME}}
           EXPO_PASSWORD: ${{secrets.EXPO_PASSWORD}}
-      - run: expo publish --release-channel production --non-interactive
+      - run: yarn gen:dotenv
+        env:
+          SENTRY_PUBLIC_DNS: ${{secrets.SENTRY_PUBLIC_DNS}}
+          SENTRY_ORG: ${{secrets.SENTRY_ORG}}
+          SENTRY_PROJECT: ${{secrets.SENTRY_PROJECT}}
+          SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
+          AGILECOM_API_KEY: ${{secrets.AGILECOM_API_KEY}}
+          AGILECOM_API_BASE_URL: ${{secrets.AGILECOM_API_BASE_URL}}
+          AGILECOM_API_USE_HTTP: ${{secrets.AGILECOM_API_USE_HTTP}}
+      - run: yarn gen:manifest
+      - run: npx expo publish --release-channel default --non-interactive
