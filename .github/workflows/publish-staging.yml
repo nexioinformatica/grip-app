@@ -29,8 +29,7 @@ jobs:
         with:
           node-version: 12
       - run: yarn
-      - run: yarn global add expo-cli
-      - run: expo login --non-interactive -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}
+      - run: yes | npx expo login --non-interactive -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}
         env:
           EXPO_USERNAME: ${{secrets.EXPO_USERNAME}}
           EXPO_PASSWORD: ${{secrets.EXPO_PASSWORD}}
@@ -44,4 +43,4 @@ jobs:
           AGILECOM_API_BASE_URL: ${{secrets.AGILECOM_API_BASE_URL}}
           AGILECOM_API_USE_HTTP: ${{secrets.AGILECOM_API_USE_HTTP}}
       - run: yarn gen:manifest
-      - run: expo publish --release-channel default --non-interactive
+      - run: yes | npx expo publish --release-channel default --non-interactive
