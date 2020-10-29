@@ -1,4 +1,4 @@
-name: publish-prod
+name: publish-staging
 
 on:
   push:
