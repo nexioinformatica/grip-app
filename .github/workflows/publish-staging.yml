@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: 12
       - run: yarn
-      - run: npx expo login -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}
+      - run: npx expo login --non-interactive -u ${EXPO_USERNAME} -p ${EXPO_PASSWORD}
         env:
           EXPO_USERNAME: ${{secrets.EXPO_USERNAME}}
           EXPO_PASSWORD: ${{secrets.EXPO_PASSWORD}}
