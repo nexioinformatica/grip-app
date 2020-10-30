@@ -10,7 +10,7 @@
 <p align="center">
     <img src="https://david-dm.org/nexioinformatica/geom-api-ts-client.svg" alt="david-dm" />
     <img src="https://github.com/nexioinformatica/grip-app/workflows/publish-prod/badge.svg" alt="github-actions-tests" />
-    <img src="https://github.com/nexioinformatica/grip-app/workflows/test-and-lint/badge.svg" alt="github-actions-deploy" />
+    <img src="https://github.com/nexioinformatica/grip-app/workflows/test/badge.svg" alt="github-actions-deploy" />
     <img src="https://img.shields.io/github/last-commit/nexioinformatica/grip-app.svg" alt="github-last-commit">
 </p>
 
