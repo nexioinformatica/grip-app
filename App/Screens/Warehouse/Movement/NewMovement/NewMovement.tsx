@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import { pipe } from "fp-ts/lib/pipeable";
-import { Barcode, Warehouse } from "geom-api-ts-client";
+import { Barcode, Job, Warehouse } from "geom-api-ts-client";
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import {
@@ -60,7 +60,7 @@ interface FormValues {
   reasonTitle: string;
 
   freshman?: Barcode.FreshmanDecode;
-  phase?: Barcode.PhaseDecode;
+  phase?: Job.Job;
   position?: Barcode.PositionDecode;
   header?: Barcode.HeaderDecode;
   subdivision?: Subdivision;
