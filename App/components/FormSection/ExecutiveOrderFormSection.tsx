@@ -1,5 +1,5 @@
 import { FormikProps } from "formik";
-import { Barcode } from "geom-api-ts-client";
+import { Barcode, Job } from "geom-api-ts-client";
 import React from "react";
 
 import {
@@ -9,7 +9,7 @@ import {
 } from "../FormField";
 
 interface ExecutiveOrderFormValues {
-  phase?: Barcode.PhaseDecode;
+  phase?: Job.Job;
   position?: Barcode.PositionDecode;
   header?: Barcode.HeaderDecode;
 

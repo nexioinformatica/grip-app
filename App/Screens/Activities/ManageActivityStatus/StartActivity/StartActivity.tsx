@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import { pipe } from "fp-ts/lib/pipeable";
-import { Activities, Barcode } from "geom-api-ts-client";
+import { Activities, Barcode, Job } from "geom-api-ts-client";
 import { ActionTypeKey } from "geom-api-ts-client/dist/resources/activities";
 import React, { useContext, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
@@ -46,7 +46,7 @@ type Props = {
 interface FormValues {
   machine?: { IdMacchina: number };
   activityType?: ActivityType;
-  phase?: Barcode.PhaseDecode;
+  phase?: Job.Job;
   position?: Barcode.PositionDecode;
   header?: Barcode.HeaderDecode;
 
@@ -211,7 +211,7 @@ const makeValue = (actionType: ActionTypeKey) => (
   /* eslint-disable @typescript-eslint/no-non-null-assertion */
   IdTipoAttivita: formValues.activityType!.IdTipoAttivita,
   IdMacchina: formValues.machine?.IdMacchina,
-  IdFaseLavorazioneOrdine: formValues.phase?.Oggetto.IdFase,
+  IdFaseLavorazioneOrdine: formValues.phase?.IdFase,
   IdPosizioneOrdine: formValues.position?.Oggetto.IdPosizione,
   IdTestataOrdine: formValues.header?.Oggetto.IdTestata,
 });

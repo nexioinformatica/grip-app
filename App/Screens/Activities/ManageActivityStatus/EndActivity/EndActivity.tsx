@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import { pipe } from "fp-ts/lib/pipeable";
-import { Barcode } from "geom-api-ts-client";
+import { Barcode, Job } from "geom-api-ts-client";
 import React, { useContext, useState } from "react";
 import { ScrollView } from "react-native";
 import { Card } from "react-native-paper";
@@ -24,7 +24,7 @@ import { makeSettings } from "../../../../util/api";
 import { toResultTask } from "../../../../util/fp";
 
 interface FormValues {
-  phase?: Barcode.PhaseDecode;
+  phase?: Job.Job;
   barcode: {
     phase: string;
   };
@@ -55,7 +55,7 @@ export const EndActivity = (): React.ReactElement => {
 
     return pipe(
       /* eslint-disable @typescript-eslint/no-non-null-assertion */
-      pipe(values.phase!.Oggetto.IdFase, apiMethod, toResultTask)(),
+      pipe(values.phase!.IdFase, apiMethod, toResultTask)(),
       makeCancellable
     )
       .then(() => setSuccess(true))

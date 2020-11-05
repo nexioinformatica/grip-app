@@ -1,11 +1,11 @@
 import { FormikProps } from "formik";
-import { Barcode } from "geom-api-ts-client";
+import { Barcode, Job } from "geom-api-ts-client";
 import React from "react";
 
 import { ScanPhase } from "../ScanInput";
 
 interface PhaseFormValues {
-  phase?: Barcode.PhaseDecode;
+  phase?: Job.Job;
 
   barcode: {
     phase: string;
