@@ -4007,10 +4007,10 @@ gensync@^1.0.0-beta.1:
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.1.tgz#58f4361ff987e5ff6e1e7a210827aa371eaac269"
   integrity sha512-r8EC6NO1sngH/zdD9fiRDLdcgnbayXah+mLgManTaIZJqEC1MZstmnox8KpnI2/fxQwrp5OpCOYWLp4rBl4Jcg==
 
-geom-api-ts-client@^1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/geom-api-ts-client/-/geom-api-ts-client-1.9.0.tgz#58dc0b0ddc5e5a694df8a55116f0cc9be25a0a9a"
-  integrity sha512-qiLNJ8h+TJLnZzgWsMhEGQHS2M7/dZXlR6U5wsEiAsP8FQ5SDLfAC4lV/qFzu+kbhtmPk1kGc0DXtSP/zs5vdg==
+geom-api-ts-client@^1.9.1:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/geom-api-ts-client/-/geom-api-ts-client-1.9.1.tgz#a9530136c85d3af0a80f309d60b8d260bf218425"
+  integrity sha512-7p2LKdM2NQN8MmInCG9PyqAKufpOtnUkIySTS3Fd3flTCs3bw1d3sziB+hyKCMaGUZ6kZ9uKbNPUDzbW7qU7hw==
   dependencies:
     "@types/qs" "^6.9.5"
     axios "^0.19.2"
