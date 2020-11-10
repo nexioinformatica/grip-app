@@ -17,7 +17,7 @@ export const SuccessSnackbar = ({
       onDismiss={() => {
         setSuccess(false);
       }}
-      duration={3000}
+      duration={5000}
     >
       <Text>Operazione effettuata con successo</Text>
     </Snackbar>

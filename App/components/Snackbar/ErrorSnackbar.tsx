@@ -17,7 +17,7 @@ export const ErrorSnackbar = ({
       onDismiss={() => {
         setSuccess(false);
       }}
-      duration={3000}
+      duration={5000}
     >
       <Text>Coff coff, qualcosa è andato storto</Text>
     </Snackbar>
