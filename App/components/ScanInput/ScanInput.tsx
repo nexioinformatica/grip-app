@@ -1,15 +1,9 @@
-import { pipe } from "fp-ts/lib/pipeable";
-import * as T from "fp-ts/lib/Task";
-import * as TE from "fp-ts/lib/TaskEither";
-import { Barcode } from "geom-api-ts-client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "react-native-paper";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { ApiContext } from "../../stores/api";
 import { BarcodeEvent } from "../../types";
-import { makeSettings } from "../../util/api";
 import { TextInput, TextInputIcon } from "../TextInput";
 
 enum DecodeStatus {
@@ -31,10 +25,7 @@ const ReadyStatusIcon = (onPress: () => void) => (
   <TextInputIcon name="camera" onPress={onPress} />
 );
 
-const FailedStatusIcon = (onPress: () => void) => (
-  <TextInputIcon name="alert-circle" onPress={onPress} />
-);
-
+const FailedStatusIcon = ReadyStatusIcon;
 /**
  * Collect user input as text or 2D code and provide the decoded object using
  * `barcode-decode` api.
